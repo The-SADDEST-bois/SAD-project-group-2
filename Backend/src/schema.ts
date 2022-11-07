@@ -1,8 +1,11 @@
-import { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
-const UserSchema = new Schema({
+export interface IUser {
     name: String,
     email: String,
-});
+}
 
-export default UserSchema;
+export const userSchema = new Schema<IUser>({
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+});

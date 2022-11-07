@@ -1,9 +1,8 @@
 import express from "express";
 import cors from "cors";
-import { User } from "../types/types";
 import mongoose from "mongoose";
 import * as dotenv from 'dotenv'
-import UserSchema from "./Schema";
+import {userSchema, IUser} from "./Schema";
 dotenv.config()
 
 const app = express();
@@ -18,9 +17,9 @@ const db = mongoose.connection;
 
 db.on("error", console.log.bind(console, "MongoDB connection error:"));
 
-const Schema = mongoose.model("userSchema", UserSchema);
+const Schema = mongoose.model<IUser>("userSchema", userSchema);
 
-const user: User ={
+const user: IUser = {
     name: "John",
     email: "test@test.com",
 }
@@ -42,7 +41,7 @@ app.get( "/", ( req, res ) => {
 // listen for get requests on the / route and return user
 app.get("/user", (req, res) => {
     // use mongoose to get all users in the database
-    Schema.find({}, (err: any, users: User) => {
+    Schema.find({}, (err: unknown, users: IUser) => {
         if (err) {
             res.send(err);
         }
