@@ -22,7 +22,6 @@ const Schema = mongoose.model<IUser>("userSchema", userSchema);
 const user: IUser = {
     name: "John",
     email: "test@test.com",
-    roles: "admin"
 }
 
 // start the Express server

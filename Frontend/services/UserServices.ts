@@ -1,13 +1,30 @@
-import type { User } from "../types/types";
+import type { IUser } from "../types/types";
 
-export async function fetchUser(): Promise<User | undefined> {
-    try {
-        const data = await fetch('http://localhost:8080/user');
-        //cast data to a User
-        const user: User = await data.json();
-        return user;
-    } catch (err) {
-        console.log(err);
+
+function assertIsUser(user: any): asserts user is IUser {
+    if (user.name === undefined) {
+        throw new Error("user.name is undefined");
     }
-    return undefined;
+    if (user.email === undefined) {
+        throw new Error("user.email is undefined");
+    }
+}
+
+export async function fetchUser(){
+    const responce = await fetch('http://localhost:8080/user');
+    if (!responce.ok)
+        {
+            throw new Error('Problem fetching data');
+        }
+    const data = await responce.json();
+
+    let user: IUser = {
+        name: data[0].name,
+        email: data[0].email,
+    }
+
+    console.log(user);
+
+    assertIsUser(user);
+    return user;
 }
