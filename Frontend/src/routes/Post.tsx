@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 
-function Post() {
+function TestUseQuery() {
     const { isLoading, error, data } = useQuery({
         queryKey: ['repoData'],
         queryFn: () =>
@@ -23,4 +23,4 @@ function Post() {
         </div>
       )
 }
-export default Post
+export default TestUseQuery
