@@ -1,15 +1,26 @@
 import './App.css'
 import {Routes, Route, NavLink} from 'react-router-dom';
-import React, { lazy } from 'react';
+import React, { lazy, Suspense } from 'react';
 import Home from './routes/Home';
-import TestUseQuery from './routes/Post';
+import { RotatingLines } from 'react-loader-spinner';
+const TestUseQuery = lazy(() => import('./routes/Post'));
 
 const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Home/>}/>
-      <Route path="/post" element={<TestUseQuery/>}/>
-    </Routes>
+    <Suspense fallback={
+      <RotatingLines
+        strokeColor="grey"
+        strokeWidth="5"
+        animationDuration="0.75"
+        width="96"
+        visible={true}
+      />
+    }>
+      <Routes>
+        <Route path="/" element={<Home/>}/>
+          <Route path="/TestUseQuery" element={<TestUseQuery/>}/>
+      </Routes>
+    </Suspense>
   )
 }
 
