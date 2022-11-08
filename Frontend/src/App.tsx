@@ -1,6 +1,6 @@
 import './App.css'
-import {Routes, Route, NavLink} from 'react-router-dom';
-import React, { lazy, Suspense } from 'react';
+import {Routes, Route} from 'react-router-dom';
+import { lazy, Suspense } from 'react';
 import Home from './routes/Home';
 import { RotatingLines } from 'react-loader-spinner';
 const TestUseQuery = lazy(() => import('./routes/Post'));

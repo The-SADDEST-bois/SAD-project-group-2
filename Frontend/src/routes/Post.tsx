@@ -1,3 +1,4 @@
+import { RotatingLines } from 'react-loader-spinner'
 import { useQuery } from 'react-query'
 
 function TestUseQuery() {
@@ -9,9 +10,17 @@ function TestUseQuery() {
           )
       })
     
-      if (isLoading) return <div>'Loading...'</div>
+      if (isLoading) return (
+        <RotatingLines
+        strokeColor="grey"
+        strokeWidth="5"
+        animationDuration="0.75"
+        width="96"
+        visible={true}
+        />
+      )
     
-      if (error) return <div>'An error has occurred: ' + error</div>
+      if (error) return (<div>'An error has occurred: ' + error</div>)
     
       return (
         <div>
