@@ -1,30 +1,15 @@
-import { useEffect, useState } from 'react'
-import { IUser } from '../types/types'
-import { fetchUser } from '../services/UserServices'
 import './App.css'
+import {Routes, Route, NavLink} from 'react-router-dom';
+import React, { lazy } from 'react';
+import Home from './routes/Home';
+import Post from './routes/Post';
 
-function App() {
-  const [count, setCount] = useState(0)
-  const [user, setUser] = useState<IUser[]>()
-
-  //get user from http://localhost:8080/user
-  useEffect( () => {
-      const getData = async () => {
-      await fetchUser().then((user) => {
-        console.log(user)
-        setUser(user)
-      })
-    }
-    getData();
-  }, [])
-
+const App = () => {
   return (
-    <div className="App">
-        <h1>{user?.at(0)?.name + " " +user?.at(0)?.email}</h1>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-    </div>
+    <Routes>
+      <Route path="/" element={<Home/>}/>
+      <Route path="/post" element={<Post/>}/>
+    </Routes>
   )
 }
 
