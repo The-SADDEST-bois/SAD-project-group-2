@@ -4,27 +4,27 @@ import { fetchUser }from '../../services/UserServices'
 import { IUser } from '../../types/types'
 
 function TestUseQuery() {
-    const { isLoading, error, data } = useQuery<IUser, Error>({
-        queryFn: fetchUser
-    })
+  const { isLoading, error, data } = useQuery<IUser, Error>({
+      queryFn: fetchUser
+  })
     
-      if (isLoading) return (
-        <RotatingLines
-        strokeColor="grey"
-        strokeWidth="5"
-        animationDuration="0.75"
-        width="96"
-        visible={true}
-        />
-      )
+  if (isLoading) return (
+    <RotatingLines
+    strokeColor="grey"
+    strokeWidth="5"
+    animationDuration="0.75"
+    width="96"
+    visible={true}
+    />
+  )
     
-      if (error) return (error.message)
+  if (error) return (<div>error.message</div>)
     
-      return (
-        <div>
-          <h1>{data?.name}</h1>
-          <p>{data?.email}</p>
-        </div>
-      )
+  return (
+    <div>
+      <h1>{data?.name}</h1>
+      <p>{data?.email}</p>
+    </div>
+  )
 }
 export default TestUseQuery

@@ -1,9 +1,9 @@
 import './App.css'
 import {Routes, Route} from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+import { Component, lazy, Suspense } from 'react';
 import Home from './routes/Home';
 import { RotatingLines } from 'react-loader-spinner';
-const TestUseQuery = lazy(() => import('./routes/TestUseQuery'));
+const TestUseQuery = lazy(() => import('../src/routes/TestUseQuery'));
 
 const App = () => {
   return (

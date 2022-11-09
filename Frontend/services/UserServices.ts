@@ -10,21 +10,17 @@ function assertIsUser(user: any): asserts user is IUser {
     }
 }
 
+
 export async function fetchUser(){
     const responce = await fetch('http://localhost:8080/user');
     if (!responce.ok)
-        {
-            throw new Error('Problem fetching data');
-        }
-    const data = await responce.json();
-
-    let user: IUser = {
-        name: data[0].name,
-        email: data[0].email,
+    {
+        throw new Error('Problem fetching data');
     }
+    const data = await responce.json() as IUser;
 
-    console.log(user);
+    console.log(data);
 
-    assertIsUser(user);
-    return user;
+    assertIsUser(data);
+    return data;
 }
