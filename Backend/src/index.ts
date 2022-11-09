@@ -41,7 +41,7 @@ app.get( "/", ( req, res ) => {
 // listen for get requests on the / route and return user
 app.get("/user", (req, res) => {
     // use mongoose to get all users in the database
-    Schema.find({}, (err: unknown, users: IUser) => {
+    Schema.findOne({}, (err: unknown, users: IUser) => {
         if (err) {
             res.send(err);
         }
