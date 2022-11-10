@@ -3,6 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import * as dotenv from 'dotenv'
 import {userSchema, IUser} from "./Schema";
+import {userController} from "./Controllers/UserController";
 dotenv.config()
 
 const app = express();
@@ -39,12 +40,4 @@ app.get( "/", ( req, res ) => {
 } );
 
 // listen for get requests on the / route and return user
-app.get("/user", (req, res) => {
-    // use mongoose to get all users in the database
-    Schema.findOne({}, (err: unknown, users: IUser) => {
-        if (err) {
-            res.send(err);
-        }
-        res.status(200).send(JSON.stringify(users));
-    });
-});
+app.get("/user", userController);
