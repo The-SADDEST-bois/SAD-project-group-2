@@ -1,9 +1,9 @@
 import { RotatingLines } from 'react-loader-spinner'
 import { useQuery } from 'react-query'
-import { fetchUser }from '../../services/UserServices'
-import { IUser } from '../../types/types'
+import { fetchUser }from '../../../api/UserServices'
+import { IUser } from '../../../types/types'
 
-function TestUseQuery() {
+const TestUseQuery = () => {
   const { isLoading, error, data } = useQuery<IUser, Error>({
       queryFn: fetchUser
   })
@@ -18,8 +18,8 @@ function TestUseQuery() {
     />
   )
     
-  if (error) return (<div>error.message</div>)
-    
+  if (error) return (<div>{error.message}</div>)
+  
   return (
     <div>
       <h1>{data?.name}</h1>
