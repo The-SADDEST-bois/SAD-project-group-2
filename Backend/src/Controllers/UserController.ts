@@ -6,6 +6,8 @@ const Schema = mongoose.model<IUser>("userSchema", userSchema);
 
 export async function userController(request: express.Request, response: express.Response) {
     // use mongoose to get all users in the database
+
+    console.log("Hit")
     Schema.findOne({}, (err: unknown, users: IUser) => {
         if (err) {
             response.send(err);
