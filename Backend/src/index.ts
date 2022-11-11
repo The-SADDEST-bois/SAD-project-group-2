@@ -12,6 +12,7 @@ dotenv.config()
 const app = express();
 const port = 8080; // default port to listen
 app.use(cors());
+app.use(express.json());
 
 mongoose.connect(
     process.env.MONGODB_URI
@@ -30,7 +31,5 @@ app.listen( port, () => {
 // listen for get requests on the / route and return user
 app.get("/user", userController);
 
-app.post("/session", (req, res) => {
-    console.log(req.body);
-});
+app.post("/session", sessionController);
 

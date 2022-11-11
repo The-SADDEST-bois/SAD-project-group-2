@@ -8,6 +8,11 @@ const instance = axios.create({
 })
 
 export const newSessionApi = async (session: ISession) => {
-    const res = await instance.post<ISession>('session', {name: session.sessionName, session: session.date})
+    const res = await instance.post<ISession>('session', session, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      },)
     console.log(res);
 }
