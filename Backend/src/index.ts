@@ -3,8 +3,8 @@ import cors from "cors";
 import mongoose, { Schema } from "mongoose";
 import * as dotenv from "dotenv";
 import { userSchema, IUser } from "./Schema";
-import { userController } from "./Controllers/UserController";
 import { sessionController } from "./Controllers/SessionController";
+import bcrypt from "bcrypt";
 
 dotenv.config();
 
@@ -26,12 +26,14 @@ app.listen(port, () => {
 });
 
 // listen for get requests on the / route and return user
-app.post("/user", (req, res) => {
+app.post("/user", async (req, res) => {
   const newUserSchema = mongoose.model<IUser>("userSchema", userSchema);
 
   const userObj = req.body;
 
   const newUser = new newUserSchema(userObj);
+  const salt = await bcrypt.genSalt(10);
+  newUser.password = await bcrypt.hash(newUser.password, salt);
 
   newUser.save((err: any) => {
     if (err) {
