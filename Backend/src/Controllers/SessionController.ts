@@ -5,6 +5,8 @@ import { sessionSchema, ISession } from "../Schema";
 const Schema = mongoose.model<ISession>("sessionSchema", sessionSchema);
 const sessionController = express.Router();
 
+// Session controller post endpoint (adds session to database) (can rename to /createSession if necessary)
+
 sessionController.post("/", (request, response) => {
   const session = request.body;
   const newSession = new Schema(session);

@@ -18,6 +18,7 @@ userController.get("/", (req, response) => {
   }
 });
 
+// User Controller post endpoint (adds user to database) (can rename to /createUser if necessary)
 userController.post("/", (req, res) => {
   const newUserSchema = mongoose.model<IUser>("userSchema", userSchema);
 
