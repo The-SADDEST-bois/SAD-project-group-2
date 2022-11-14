@@ -1,9 +1,11 @@
 export interface IUser {
-    name: string,
-    email: string,
+  email: string;
+  password: string;
+  role: Roles;
+  name?: string;
 }
 
 export interface ISession {
-    sessionName: string,
-    date: string,
+  sessionName: string;
+  date: string;
 }
