@@ -1,4 +1,5 @@
 import type { IUser } from "../../types/types";
+import api from "../config";
 
 function assertIsUser(user: any): asserts user is IUser {
   if (user.name === undefined) {
@@ -21,3 +22,16 @@ export async function fetchUser() {
   assertIsUser(data);
   return data;
 }
+
+export const addUserToDatabase = async (payload: IUser) => {
+  const res = await api.post<IUser>("/user", payload, {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  });
+
+  console.log(res);
+
+  return;
+};

@@ -2,20 +2,36 @@ import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Flex, VStack } from "@chakra-ui/layout";
+import { Select } from "@chakra-ui/react";
 import { useState } from "react";
+import { addUserToDatabase } from "../../../api/userApi/userApi";
 
+enum Roles {
+  Admin = "Admin",
+  Student = "Student",
+  Tutor = "Tutor",
+  ModuleLeader = "ModuleLeader",
+  AcademicAdvisor = "AcademicAdvisor",
+  CourseLeader = "CourseLeader",
+}
 interface ICredentials {
-  username: string;
+  email: string;
   password: string;
+  role: Roles;
+  name?: string;
 }
 
 const Home = () => {
   const initialState = {
-    username: "",
+    email: "",
     password: "",
+    role: Roles.Admin,
+    name: "",
   };
 
-  const onSubmit = () => {};
+  const onSubmit = () => {
+    addUserToDatabase(credentials);
+  };
 
   const [credentials, setCredentials] = useState<ICredentials>(initialState);
 
@@ -36,15 +52,16 @@ const Home = () => {
         overflowY="auto"
         justifyContent={"center"}
       >
-        <FormControl onSubmit={onSubmit}>
+        <FormControl>
           <FormLabel>Log In</FormLabel>
           <Input
-            placeholder="Username"
-            value={credentials.username}
+            placeholder="Email"
+            value={credentials.email}
             onChange={(e) =>
-              setCredentials({ ...credentials, username: e.target.value })
+              setCredentials({ ...credentials, email: e.target.value })
             }
           ></Input>
+
           <Input
             placeholder="Password"
             type={"password"}
@@ -54,7 +71,20 @@ const Home = () => {
             }
           ></Input>
 
-          <Button type="submit"> Submit</Button>
+          <Select
+            placeholder="Select a Role"
+            onChange={(e) =>
+              setCredentials({
+                ...credentials,
+                role: Roles[e.target.value as keyof typeof Roles],
+              })
+            }
+          >
+            <option value={Roles.Student}>Student</option>
+            <option value={Roles.Tutor}>Tutor</option>
+          </Select>
+
+          <Button onClick={onSubmit}> Submit</Button>
         </FormControl>
       </VStack>
     </Flex>
