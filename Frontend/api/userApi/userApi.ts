@@ -24,7 +24,7 @@ export async function fetchUser() {
 }
 
 export const addUserToDatabase = async (payload: IUser) => {
-  const res = await api.post<IUser>("/user", payload, {
+  const res = await api.post<IUser>("/user/register", payload, {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -41,6 +41,8 @@ interface ICredentials {
   password: string;
 }
 
+// Promise<{ data?: INoteTag[]; error?: Error }>
+
 export const getUser = async (credentials: ICredentials) => {
   await api
     .post(`/user`, {
@@ -54,6 +56,9 @@ export const getUser = async (credentials: ICredentials) => {
       },
     })
     .then((response) => {
-      return response.data;
+      console.log(response);
+      const user = response.data.other;
+      console.log(user);
+      return user;
     });
 };

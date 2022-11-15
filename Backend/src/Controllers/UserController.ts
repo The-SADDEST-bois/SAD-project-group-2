@@ -22,7 +22,8 @@ userController.post("/", async (req, response) => {
     if (validPassword) {
       console.log("VALID");
       // TODO redirect to main page
-      response.status(200).json({ message: "Valid password" });
+      const data = {email: user.email, password: '', role: user.role};
+      response.status(200).json({ messasge: 'Success', other: data }).send();
     } else {
       console.log("NOT VALID");
 
