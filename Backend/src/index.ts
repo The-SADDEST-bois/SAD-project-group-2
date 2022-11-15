@@ -21,23 +21,23 @@ app.listen(port, () => {
 });
 
 // listen for get requests on the / route and return user
-app.post("/user", async (req, res) => {
-  const userObj = req.body;
-  const newUserSchema = mongoose.model<IUser>("userSchema", userSchema);
+// app.post("/user", async (req, res) => {
+//   const userObj = req.body;
+//   const newUserSchema = mongoose.model<IUser>("userSchema", userSchema);
 
-  const newUser = new newUserSchema(userObj);
-  const salt = await bcrypt.genSalt(10);
-  newUser.password = await bcrypt.hash(newUser.password, salt);
+//   const newUser = new newUserSchema(userObj);
+//   const salt = await bcrypt.genSalt(10);
+//   newUser.password = await bcrypt.hash(newUser.password, salt);
 
-  newUser.save((err: any, document: any) => {
-    if (err) {
-      console.log("ERRRROR", err);
-      res.send(err);
-    }
-    console.log("success", document);
-    res.status(200).send("ok");
-  });
-});
+//   newUser.save((err: any, document: any) => {
+//     if (err) {
+//       console.log("ERRRROR", err);
+//       res.send(err);
+//     }
+//     console.log("success", document);
+//     res.status(200).send("ok");
+//   });
+// });
 
 // DB Connection Callbacks
 

@@ -35,3 +35,25 @@ export const addUserToDatabase = async (payload: IUser) => {
 
   return;
 };
+
+interface ICredentials {
+  email: string;
+  password: string;
+}
+
+export const getUser = async (credentials: ICredentials) => {
+  const res = await api
+    .post(`/user`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      data: {
+        email: credentials.email,
+        password: credentials.password,
+      },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
