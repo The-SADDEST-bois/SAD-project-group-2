@@ -4,9 +4,9 @@ import { Input } from "@chakra-ui/input";
 import { Flex, VStack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/react";
 import { useState } from "react";
-import { addUserToDatabase, getUser } from "../../../api/userApi/userApi";
+import { getUser } from "../../../api/userApi/userApi";
 import { useUsers } from '../../context/useUsers';
-import { useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 
 interface ICredentials {
   email: string;
@@ -15,29 +15,21 @@ interface ICredentials {
 
 const Home = () => {
 
-  const {data, refetch} = useQuery({
-    queryFn: () => getUser(credentials),
-    refetchOnWindowFocus: false,
-    enabled: false
-});
+  const mutation = useMutation({
+    mutationFn: getUser,
+  });
 
-  const {setUsersData} = useUsers();
   const initialState = {
     email: "",
     password: "",
   };
 
-  const HandleLogin = (res: any) => {
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!' + res); 
-    // setUsersData(res.body);
-  }
-
-  const onSubmit = async () => {
-    refetch();
-    HandleLogin(data);
-  };
-
   const [credentials, setCredentials] = useState<ICredentials>(initialState);
+
+  const handleSubmit = () => {
+    mutation.mutate(credentials);
+    console.log(mutation.data?.data.other);
+  }
 
   return (
     <Flex h="100vh" justify="space-between">
@@ -73,7 +65,7 @@ const Home = () => {
             }
           ></Input>
 
-          <Button onClick={onSubmit}>Submit</Button>
+          <Button onClick={handleSubmit}>Submit</Button>
         </FormControl>
       </VStack>
     </Flex>

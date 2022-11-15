@@ -44,7 +44,7 @@ interface ICredentials {
 // Promise<{ data?: INoteTag[]; error?: Error }>
 
 export const getUser = async (credentials: ICredentials) => {
-  await api
+  return await api
     .post(`/user`, {
       headers: {
         "Content-Type": "application/json",
@@ -55,10 +55,4 @@ export const getUser = async (credentials: ICredentials) => {
         password: credentials.password,
       },
     })
-    .then((response) => {
-      console.log(response);
-      const user = response.data.other;
-      console.log(user);
-      return user;
-    });
 };

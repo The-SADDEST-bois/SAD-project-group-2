@@ -11,7 +11,7 @@ const userController = express.Router();
 userController.post("/", async (req, response) => {
   const body = req.body.data;
   const { email, password } = body;
-  const user = await Schema.findOne({ email: email });
+  const user = await Schema.findOne({ email });
 
   if (user) {
     // check user password with hashed password stored in the database
