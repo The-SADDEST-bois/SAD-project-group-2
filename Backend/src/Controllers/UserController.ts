@@ -13,7 +13,9 @@ userController.get("/", (req, response) => {
       if (err) {
         response.send(err);
       }
-      response.status(200).send(JSON.stringify(users));
+      else {
+        response.status(200).send(JSON.stringify(users));
+      }
     });
   }
 });
@@ -30,8 +32,9 @@ userController.post("/", (req, res) => {
     if (err) {
       res.send(err);
     }
-
-    res.status(200).send("ok");
+    else {
+      res.status(200).send("ok");
+    }
   });
 });
 

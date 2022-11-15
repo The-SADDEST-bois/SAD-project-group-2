@@ -14,7 +14,9 @@ sessionController.post("/", (request, response) => {
     if (err) {
       response.send(err);
     }
-    response.status(200).send("OK");
+    else {
+      response.status(200).send("OK");
+    }
   });
 });
 
