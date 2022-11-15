@@ -1,10 +1,11 @@
 import express from "express";
 import cors from "cors";
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 import { userSchema, IUser } from "./Schema";
-import { sessionController } from "./Controllers/SessionController";
 import bcrypt from "bcrypt";
+import userController from "./Controllers/UserController";
+import sessionController from "./Controllers/SessionController";
 
 dotenv.config();
 
@@ -12,12 +13,6 @@ const app = express();
 const port = 8080; // default port to listen
 app.use(cors());
 app.use(express.json());
-
-mongoose.connect(process.env.MONGODB_URI);
-
-const db = mongoose.connection;
-
-db.on("error", console.log.bind(console, "MongoDB connection error:"));
 
 // start the Express server
 app.listen(port, () => {
@@ -27,21 +22,43 @@ app.listen(port, () => {
 
 // listen for get requests on the / route and return user
 app.post("/user", async (req, res) => {
-  const newUserSchema = mongoose.model<IUser>("userSchema", userSchema);
-
   const userObj = req.body;
+  const newUserSchema = mongoose.model<IUser>("userSchema", userSchema);
 
   const newUser = new newUserSchema(userObj);
   const salt = await bcrypt.genSalt(10);
   newUser.password = await bcrypt.hash(newUser.password, salt);
 
-  newUser.save((err: any) => {
+  newUser.save((err: any, document: any) => {
     if (err) {
+      console.log("ERRRROR", err);
       res.send(err);
     }
-
+    console.log("success", document);
     res.status(200).send("ok");
   });
 });
 
-app.post("/session", sessionController);
+// DB Connection Callbacks
+
+mongoose.connect(process.env.MONGODB_URI).then(() => {
+  console.log("Connected to database at port 27017"); // tslint:disable-line:no-console
+});
+mongoose.connection.on("error", () => {
+  console.log("Error connecting to database"); // tslint:disable-line:no-console
+});
+
+mongoose.connection.on("disconnected", () => {
+  console.log("Disconnected from database"); // tslint:disable-line:no-console
+});
+
+process.on("SIGINT", () => {
+  mongoose.connection.close(() => {
+    console.log("Disconnected from database due to application termination"); // tslint:disable-line:no-console
+    process.exit(0);
+  });
+});
+
+app.use("/user", userController);
+
+app.use("/session", sessionController);
