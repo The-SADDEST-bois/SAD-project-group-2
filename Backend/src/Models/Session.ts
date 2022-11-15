@@ -6,6 +6,6 @@ export const sessionSchema = new Schema<ISession>({
   date: { type: String, required: true },
 });
 
-var Sessions = mongoose.model("Session", sessionSchema);
+const Sessions = mongoose.model("Session", sessionSchema);
 
 export default Sessions;
