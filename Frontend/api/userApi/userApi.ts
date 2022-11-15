@@ -22,7 +22,6 @@ export async function fetchUser() {
   assertIsUser(data);
   return data;
 }
-//test
 
 export const addUserToDatabase = async (payload: IUser) => {
   const res = await api.post<IUser>("/user", payload, {
