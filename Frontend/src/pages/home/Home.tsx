@@ -5,6 +5,8 @@ import { Flex, VStack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/react";
 import { useState } from "react";
 import { addUserToDatabase, getUser } from "../../../api/userApi/userApi";
+import { useUsers } from '../../context/useUsers';
+import { useQuery } from 'react-query';
 
 interface ICredentials {
   email: string;
@@ -12,13 +14,27 @@ interface ICredentials {
 }
 
 const Home = () => {
+
+  const {data, refetch} = useQuery({
+    queryFn: () => getUser(credentials),
+    refetchOnWindowFocus: false,
+    enabled: false
+});
+
+  const {setUsersData} = useUsers();
   const initialState = {
     email: "",
     password: "",
   };
 
-  const onSubmit = () => {
-    getUser(credentials);
+  const HandleLogin = (res: any) => {
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!' + res); 
+    // setUsersData(res.body);
+  }
+
+  const onSubmit = async () => {
+    refetch();
+    HandleLogin(data);
   };
 
   const [credentials, setCredentials] = useState<ICredentials>(initialState);
