@@ -42,7 +42,7 @@ interface ICredentials {
 }
 
 export const getUser = async (credentials: ICredentials) => {
-  const res = await api
+  await api
     .post(`/user`, {
       headers: {
         "Content-Type": "application/json",
