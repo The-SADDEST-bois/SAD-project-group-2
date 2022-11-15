@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
+import { userSchema, IUser } from "./Schema";
+import bcrypt from "bcrypt";
 import userController from "./Controllers/UserController";
 import sessionController from "./Controllers/SessionController";
 
@@ -14,14 +16,34 @@ app.use(express.json());
 
 // start the Express server
 app.listen(port, () => {
-  console.log(`server started at http://localhost:${port}`); // tslint:disable-line:no-console
-  mongoose.connect(process.env.MONGODB_URI).then(() => {
-    console.log("Connected to database at port 27017"); // tslint:disable-line:no-console
+  // tslint:disable-next-line:no-console
+  console.log(`server started at http://localhost:${port}`);
+});
+
+// listen for get requests on the / route and return user
+app.post("/user", async (req, res) => {
+  const userObj = req.body;
+  const newUserSchema = mongoose.model<IUser>("userSchema", userSchema);
+
+  const newUser = new newUserSchema(userObj);
+  const salt = await bcrypt.genSalt(10);
+  newUser.password = await bcrypt.hash(newUser.password, salt);
+
+  newUser.save((err: any, document: any) => {
+    if (err) {
+      console.log("ERRRROR", err);
+      res.send(err);
+    }
+    console.log("success", document);
+    res.status(200).send("ok");
   });
 });
 
 // DB Connection Callbacks
 
+mongoose.connect(process.env.MONGODB_URI).then(() => {
+  console.log("Connected to database at port 27017"); // tslint:disable-line:no-console
+});
 mongoose.connection.on("error", () => {
   console.log("Error connecting to database"); // tslint:disable-line:no-console
 });

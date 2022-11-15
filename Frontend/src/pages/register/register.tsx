@@ -6,18 +6,32 @@ import { Select } from "@chakra-ui/react";
 import { useState } from "react";
 import { addUserToDatabase } from "../../../api/userApi/userApi";
 
+enum Roles {
+  Admin = "Admin",
+  Student = "Student",
+  Tutor = "Tutor",
+  ModuleLeader = "ModuleLeader",
+  AcademicAdvisor = "AcademicAdvisor",
+  CourseLeader = "CourseLeader",
+}
 interface ICredentials {
   email: string;
   password: string;
+  role: Roles;
+  name?: string;
 }
 
-const Home = () => {
+const Register = () => {
   const initialState = {
     email: "",
     password: "",
+    role: Roles.Admin,
+    name: "",
   };
 
-  const onSubmit = () => {};
+  const onSubmit = () => {
+    addUserToDatabase(credentials);
+  };
 
   const [credentials, setCredentials] = useState<ICredentials>(initialState);
 
@@ -37,7 +51,7 @@ const Home = () => {
         justifyContent={"center"}
       >
         <FormControl>
-          <FormLabel>Login</FormLabel>
+          <FormLabel>Create An Account</FormLabel>
           <Input
             placeholder="Email"
             value={credentials.email}
@@ -55,10 +69,23 @@ const Home = () => {
             }
           ></Input>
 
+          <Select
+            placeholder="Select a Role"
+            onChange={(e) =>
+              setCredentials({
+                ...credentials,
+                role: Roles[e.target.value as keyof typeof Roles],
+              })
+            }
+          >
+            <option value={Roles.Student}>Student</option>
+            <option value={Roles.Tutor}>Tutor</option>
+          </Select>
+
           <Button onClick={onSubmit}>Submit</Button>
         </FormControl>
       </VStack>
     </Flex>
   );
 };
-export default Home;
+export default Register;
