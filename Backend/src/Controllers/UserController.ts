@@ -1,40 +1,54 @@
 import express from "express";
 import mongoose from "mongoose";
 import { userSchema, IUser } from "../Schema";
+import bcrypt from "bcrypt";
 
 const Schema = mongoose.model<IUser>("userSchema", userSchema);
 const userController = express.Router();
 
 // User Controller test endpoint (returns first user in database)
 
-userController.get("/", (req, response) => {
-  {
-    Schema.findOne({}, (err: unknown, users: IUser) => {
-      if (err) {
-        response.send(err);
-      }
-      else {
-        response.status(200).send(JSON.stringify(users));
-      }
-    });
+userController.post("/", async (req, response) => {
+  const body = req.body.data;
+  const { email, password } = body;
+  const user = await Schema.findOne({ email: email });
+
+  if (user) {
+    // check user password with hashed password stored in the database
+    const validPassword = await bcrypt.compare(
+      password as string,
+      user.password
+    );
+    if (validPassword) {
+      console.log("VALID");
+      // TODO redirect to main page
+      response.status(200).json({ message: "Valid password" });
+    } else {
+      console.log("NOT VALID");
+
+      response.status(400).json({ error: "Invalid Password" });
+    }
+  } else {
+    response.status(401).json({ error: "User does not exist" });
   }
 });
 
 // User Controller post endpoint (adds user to database) (can rename to /createUser if necessary)
-userController.post("/", (req, res) => {
+userController.post("/register", async (req, res) => {
+  const userObj = req.body;
   const newUserSchema = mongoose.model<IUser>("userSchema", userSchema);
 
-  const userObj = req.body;
-
   const newUser = new newUserSchema(userObj);
+  const salt = await bcrypt.genSalt(10);
+  newUser.password = await bcrypt.hash(newUser.password, salt);
 
-  newUser.save((err: any) => {
+  newUser.save((err: any, document: any) => {
     if (err) {
+      console.log("ERRRROR", err);
       res.send(err);
     }
-    else {
-      res.status(200).send("ok");
-    }
+    console.log("success", document);
+    res.status(200).send("ok");
   });
 });
 
