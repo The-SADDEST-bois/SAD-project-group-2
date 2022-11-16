@@ -1,5 +1,5 @@
-export enum Roles {
+export enum SessionTypes {
     Lecture = "Lecture",
-    LabWork = "LabWork",
-    AdvisorMeeting = "AdvisorMeeting"
+    LabWork = "Lab Work",
+    AdvisorMeeting = "Advisor Meeting"
   }
