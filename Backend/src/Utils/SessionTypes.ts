@@ -1,5 +1,4 @@
 export enum SessionTypes {
     Lecture = "Lecture",
-    LabWork = "Lab Work",
-    AdvisorMeeting = "Advisor Meeting"
+    LabWork = "Lab Work"
   }
