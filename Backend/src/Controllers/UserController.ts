@@ -1,9 +1,7 @@
 import express from "express";
-import mongoose from "mongoose";
-import { userSchema, IUser } from "../Schema";
+import Users from "../Models/User";
 import bcrypt from "bcrypt";
 
-const Schema = mongoose.model<IUser>("userSchema", userSchema);
 const userController = express.Router();
 
 // User Controller test endpoint (returns first user in database)
@@ -11,7 +9,7 @@ const userController = express.Router();
 userController.post("/", async (req, response) => {
   const body = req.body.data;
   const { email, password } = body;
-  const user = await Schema.findOne({ email });
+  const user = await Users.findOne({ email });
 
   if (user) {
     // check user password with hashed password stored in the database
@@ -37,19 +35,17 @@ userController.post("/", async (req, response) => {
 // User Controller post endpoint (adds user to database) (can rename to /createUser if necessary)
 userController.post("/register", async (req, res) => {
   const userObj = req.body;
-  const newUserSchema = mongoose.model<IUser>("userSchema", userSchema);
-
-  const newUser = new newUserSchema(userObj);
   const salt = await bcrypt.genSalt(10);
-  newUser.password = await bcrypt.hash(newUser.password, salt);
+  userObj.password = await bcrypt.hash(userObj.password, salt);
 
-  newUser.save((err: any, document: any) => {
+  Users.create(userObj, (err: any, document: any) => {
     if (err) {
-      console.log("ERRRROR", err);
+      console.log("error registering", err);
       res.send(err);
+    } else {
+      console.log("successful register", document);
+      res.status(200).send("ok");
     }
-    console.log("success", document);
-    res.status(200).send("ok");
   });
 });
 

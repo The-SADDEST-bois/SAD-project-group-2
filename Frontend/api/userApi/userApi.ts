@@ -1,5 +1,5 @@
 import type { IUser } from "../../types/types";
-import api from "../config";
+import api from "../config/apiconfig";
 
 function assertIsUser(user: any): asserts user is IUser {
   if (user.name === undefined) {
@@ -11,11 +11,11 @@ function assertIsUser(user: any): asserts user is IUser {
 }
 
 export async function fetchUser() {
-  const responce = await fetch("http://localhost:8080/user");
-  if (!responce.ok) {
+  const response = await fetch("http://localhost:8080/user");
+  if (!response.ok) {
     throw new Error("Problem fetching data");
   }
-  const data = (await responce.json()) as IUser;
+  const data = (await response.json()) as IUser;
 
   console.log(data);
 
@@ -24,12 +24,7 @@ export async function fetchUser() {
 }
 
 export const addUserToDatabase = async (payload: IUser) => {
-  const res = await api.post<IUser>("/user/register", payload, {
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-  });
+  const res = await api.post<IUser>("/user/register", payload);
 
   console.log(res);
 
@@ -46,10 +41,6 @@ interface ICredentials {
 export const getUser = async (credentials: ICredentials) => {
   return await api
     .post(`/user`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
       data: {
         email: credentials.email,
         password: credentials.password,
