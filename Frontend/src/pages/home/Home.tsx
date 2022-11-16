@@ -4,7 +4,7 @@ import { Input } from "@chakra-ui/input";
 import { Flex, VStack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/react";
 import { useState } from "react";
-import { addUserToDatabase, getUser } from "../../../api/userApi/userApi";
+import { addUserToDatabase, login } from "../../../api/userApi/userApi";
 
 interface ICredentials {
   email: string;
@@ -18,7 +18,7 @@ const Home = () => {
   };
 
   const onSubmit = () => {
-    getUser(credentials);
+    login(credentials);
   };
 
   const [credentials, setCredentials] = useState<ICredentials>(initialState);

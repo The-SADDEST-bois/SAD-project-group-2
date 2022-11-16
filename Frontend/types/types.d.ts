@@ -1,5 +1,5 @@
 export interface IUser {
-  _id: string;
+  _id?: string;
   email: string;
   password: string;
   role: Roles;
@@ -7,16 +7,16 @@ export interface IUser {
 }
 
 export interface ISession {
-  _id: string;
+  _id?: string;
   sessionName: string;
   date: string;
 }
 
 export interface ICourse {
-  _id: string;
+  _id?: string;
   courseName: string;
   courseLeader: {
-    _id: Schema.Types.ObjectId,
+    _id?: Schema.Types.ObjectId,
     firstName: string,
     lastName: string
   };
@@ -24,7 +24,7 @@ export interface ICourse {
   modules:
   [
     {
-      _id: string,
+      _id?: string,
       moduleName: string,
       moduleLeader: string
     }
@@ -32,17 +32,17 @@ export interface ICourse {
 }
 
 export interface IModule {
-  _id: string;
+  _id?: string;
   moduleName: string;
   moduleLeader: {
-    _id: string,
+    _id?: string,
     firstName: string,
     lastName: string
   };
   tutors:
   [
     {
-      _id: string,
+      _id?: string,
       firstName: string,
       lastName: string
     }

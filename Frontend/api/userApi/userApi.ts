@@ -36,7 +36,7 @@ interface ICredentials {
   password: string;
 }
 
-export const getUser = async (credentials: ICredentials) => {
+export const login = async (credentials: ICredentials) => {
   await api
     .post(`/user`, {
       data: {

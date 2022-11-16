@@ -1,10 +1,10 @@
 import { Schema } from "mongoose";
 
 export interface ICourse {
-    _id: Schema.Types.ObjectId;
+    _id?: Schema.Types.ObjectId;
     courseName: string;
     courseLeader: {
-        _id: Schema.Types.ObjectId,
+        _id?: Schema.Types.ObjectId,
         firstName: string,
         lastName: string
     };
@@ -12,7 +12,7 @@ export interface ICourse {
     modules:
     [
         {
-            _id: Schema.Types.ObjectId,
+            _id?: Schema.Types.ObjectId,
             moduleName: string,
             moduleLeader: string
         }

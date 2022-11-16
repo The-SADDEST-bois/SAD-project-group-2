@@ -2,7 +2,6 @@ import mongoose, { Schema } from "mongoose";
 import { ICourse } from "../Interfaces/ICourse";
 
 const userSchema = new Schema<ICourse>({
-    _id: { type: Schema.Types.ObjectId, required: true },
     courseName: { type: String, required: true },
     courseLeader: {
         _id: { type: Schema.Types.ObjectId, required: true },
@@ -20,6 +19,6 @@ const userSchema = new Schema<ICourse>({
     ]
   });
 
-const Course = mongoose.model("Course", userSchema);
+const Courses = mongoose.model("Course", userSchema);
 
-export default Course;
+export default Courses;
