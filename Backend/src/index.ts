@@ -2,8 +2,6 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
-import { userSchema, IUser } from "./Schema";
-import bcrypt from "bcrypt";
 import userController from "./Controllers/UserController";
 import sessionController from "./Controllers/SessionController";
 

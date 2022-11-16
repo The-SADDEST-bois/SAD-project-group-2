@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-import { sessionSchema, ISession } from "../Schema";
+import { ISession } from "../Interfaces/ISession";
+import { sessionSchema } from "../Models/Session";
 
 const Schema = mongoose.model<ISession>("sessionSchema", sessionSchema);
 const sessionController = express.Router();
@@ -13,8 +14,7 @@ sessionController.post("/", (request, response) => {
   newSession.save((err: unknown) => {
     if (err) {
       response.send(err);
-    }
-    else {
+    } else {
       response.status(200).send("OK");
     }
   });
