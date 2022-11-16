@@ -1,6 +1,4 @@
 import express from "express";
-import mongoose, { Schema } from "mongoose";
-import { ISession } from "../Interfaces/ISession";
 import Sessions from "../Models/Session";
 const sessionController = express.Router();
 
@@ -20,6 +18,5 @@ sessionController.post("/", (request, response) => {
     }
   });
 });
-
 
 export default sessionController;
