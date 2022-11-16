@@ -2,8 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
-import userController from "./Controllers/UserController";
-import sessionController from "./Controllers/SessionController";
+import RouteHandler from "./Utils/RouteHandler";
 
 dotenv.config();
 
@@ -38,6 +37,4 @@ process.on("SIGINT", () => {
   });
 });
 
-app.use("/user", userController);
-
-app.use("/session", sessionController);
+app.use("/", RouteHandler);
