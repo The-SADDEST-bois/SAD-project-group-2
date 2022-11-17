@@ -10,12 +10,12 @@ function assertIsUser(user: any): asserts user is IUser {
   }
 }
 
-export async function fetchUser() {
-  const response = await fetch("http://localhost:8080/user");
-  if (!response.ok) {
+export const fetchUser = async () => {
+  const response = await api.get("/user");
+  if (!response) {
     throw new Error("Problem fetching data");
   }
-  const data = (await response.json()) as IUser;
+  const data = (await response.data) as IUser;
 
   console.log(data);
 
@@ -40,7 +40,7 @@ interface ICredentials {
 
 export const login = async (credentials: ICredentials) => {
   return await api
-    .post(`/user`, {
+    .post(`/user/login`, {
       data: {
         email: credentials.email,
         password: credentials.password,

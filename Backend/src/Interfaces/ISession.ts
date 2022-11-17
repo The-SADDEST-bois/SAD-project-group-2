@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { SessionTypes } from "../Utils/SessionTypes";
+import { SessionTypes } from "../Types/SessionTypes";
 
 export interface ISession {
   sessionType: SessionTypes;

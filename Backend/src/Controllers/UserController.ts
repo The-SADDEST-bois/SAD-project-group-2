@@ -6,7 +6,7 @@ const userController = express.Router();
 
 // User Controller test endpoint (returns first user in database)
 
-userController.post("/", async (req, response) => {
+userController.post("/login", async (req, response) => {
   const body = req.body.data;
   const { email, password } = body;
   const user = await Users.findOne({ email });
