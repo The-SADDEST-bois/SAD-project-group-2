@@ -8,15 +8,22 @@ export interface IUser {
 
 export interface ISession {
   _id?: string;
-  sessionName: string;
-  date: string;
+  sessionType: SessionTypes;
+  tutor: {
+    _id?: string,
+    firstName: string,
+    lastName: string
+  };
+  startTime: Date;
+  duration?: number;
+  isOpen: boolean;
 }
 
 export interface ICourse {
   _id?: string;
   courseName: string;
   courseLeader: {
-    _id?: Schema.Types.ObjectId,
+    _id?: string,
     firstName: string,
     lastName: string
   };
@@ -48,4 +55,21 @@ export interface IModule {
     }
   ];
   sessionID: [string]
+}
+
+export interface ICohort {
+  _id?: string;
+  module: {
+    _id?: string,
+    moduleName: string,
+    moduleLeader: string
+  };
+  students:
+  [
+    {
+      _id?: string,
+      firstName: string,
+      lastName: string
+    }
+  ];
 }

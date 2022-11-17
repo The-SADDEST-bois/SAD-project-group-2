@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { IModule } from "../Interfaces/IModule";
 
-const userSchema = new Schema<IModule>({
+const moduleSchema = new Schema<IModule>({
     moduleName: { type: String, required: true },
     moduleLeader: {
         _id: { type: Schema.Types.ObjectId, required: true },
@@ -19,6 +19,6 @@ const userSchema = new Schema<IModule>({
     sessionID: { type: [String], required: true}
   });
 
-const Modules = mongoose.model("Module", userSchema);
+const Modules = mongoose.model("Module", moduleSchema);
 
 export default Modules;
