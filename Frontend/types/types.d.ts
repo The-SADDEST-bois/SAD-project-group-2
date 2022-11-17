@@ -1,31 +1,30 @@
 export interface IUser {
-  _id?: string;
   email: string;
   password: string;
   role: Roles;
   name?: string;
+  _id?: string;
 }
 
 export interface ISession {
-  _id?: string;
   sessionType: SessionTypes;
   tutor: {
-    _id?: string,
     firstName: string,
     lastName: string
+    _id?: string,
   };
   startTime: Date;
   duration?: number;
   isOpen: boolean;
+  _id?: string;
 }
 
 export interface ICourse {
-  _id?: string;
   courseName: string;
   courseLeader: {
-    _id?: string,
     firstName: string,
     lastName: string
+    _id?: string,
   };
   studentID: string[];
   modules:
@@ -36,53 +35,54 @@ export interface ICourse {
       moduleLeader: string
     }
   ];  
+  _id?: string;
 }
 
 export interface IModule {
-  _id?: string;
   moduleName: string;
   moduleLeader: {
-    _id?: string,
     firstName: string,
     lastName: string
+    _id?: string,
   };
   tutors:
   [
     {
-      _id?: string,
       firstName: string,
       lastName: string
+      _id?: string,
     }
   ];
   sessionID: [string]
+  _id?: string;
 }
 
 export interface ICohort {
-  _id?: string;
   module: {
-    _id?: string,
     moduleName: string,
     moduleLeader: string
+    _id?: string,
   };
   students:
   [
     {
-      _id?: string,
       firstName: string,
       lastName: string
+      _id?: string,
     }
   ];
+  _id?: string;
 }
 
 export interface IAttendanceRegister {
-  _id?: string;
   attendance:
   [
-      {
-          _id?: string,
-          firstName: string,
-          lastName: string,
-          attendend: number
-      }
+    {
+      firstName: string,
+      lastName: string,
+      attendend: number
+      _id?: string,
+    }
   ];
+  _id?: string;
 }

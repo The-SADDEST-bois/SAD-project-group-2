@@ -1,14 +1,14 @@
 import { Schema } from "mongoose";
 
 export interface IAttendanceRegister {
-    _id?: Schema.Types.ObjectId;
     attendance:
     [
         {
-            _id?: Schema.Types.ObjectId,
             firstName: string,
             lastName: string,
-            attendend: number
+            attendend: number,
+            _id?: Schema.Types.ObjectId
         }
     ];
+    _id?: Schema.Types.ObjectId;
   }
