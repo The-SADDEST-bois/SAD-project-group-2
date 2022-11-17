@@ -3,7 +3,7 @@ import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Flex, VStack, Text } from "@chakra-ui/layout";
 import { useEffect, useState } from "react";
-import { getUser } from "../../../api/userApi/userApi";
+import { login } from "../../../api/userApi/userApi";
 import { useMutation } from "react-query";
 import { useStore } from "../../contexts/storeProvider";
 import { IUser } from "../../../types/types";
@@ -22,7 +22,7 @@ const Home = () => {
   const authStore = useStore();
 
   const mutation = useMutation({
-    mutationFn: getUser,
+    mutationFn: login,
   });
 
   const initialState = {

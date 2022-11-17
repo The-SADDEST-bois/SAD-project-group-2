@@ -1,4 +1,15 @@
+import { Schema } from "mongoose";
+import { SessionTypes } from "../Utils/SessionTypes";
+
 export interface ISession {
-  sessionName: string;
-  date: string;
+  sessionType: SessionTypes;
+  tutor: {
+    firstName: string,
+    lastName: string,
+    _id?: Schema.Types.ObjectId
+  };
+  startTime: Date;
+  duration?: number;
+  isOpen: boolean;
+  _id?: Schema.Types.ObjectId;
 }
