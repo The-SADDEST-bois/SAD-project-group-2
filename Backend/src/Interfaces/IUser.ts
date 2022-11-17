@@ -1,5 +1,4 @@
-import { Roles } from "../Utils/Roles";
-import { Schema } from "mongoose";
+import { Roles } from "../Types/Roles";
 
 export interface IUser {
   _id?: Schema.Types.ObjectId;

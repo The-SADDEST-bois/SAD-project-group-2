@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import * as Chakra from '@chakra-ui/react'
+import {HStack, VStack, Text, Input, Button} from '@chakra-ui/react'
 import { ISession, IUser } from '../../../types/types'
 import { newSessionApi } from '../../../api/sessionApi/sessionApi'
 import { useStore } from '../../contexts/storeProvider'
@@ -29,10 +29,10 @@ const newSession = () => {
     }
 
     return (
-        <Chakra.HStack width="full" height="1000px" justify={"center"}>
-            <Chakra.VStack width="full" justify={"center"}>
-                <Chakra.Text>Hello, {currentUser?.name}</Chakra.Text>
-                <Chakra.Input
+        <HStack width="full" height="1000px" justify={"center"}>
+            <VStack width="full" justify={"center"}>
+                <Text>Hello, {currentUser?.name}</Text>
+                <Input
                     placeholder="Username"
                     value={session.sessionName}
                     onChange={(e) =>
@@ -40,16 +40,16 @@ const newSession = () => {
                     }
                 />
 
-                <Chakra.Button
+                <Button
                     colorScheme="blue"
                     variant="outline"
                     width="full"
                     onClick={() => handleSubmit()}
                 >
                     Submit
-                </Chakra.Button>
-            </Chakra.VStack>
-        </Chakra.HStack>
+                </Button>
+            </VStack>
+        </HStack>
     )
 }
 export default newSession

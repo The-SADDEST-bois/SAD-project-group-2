@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
-import RouteHandler from "./Utils/RouteHandler";
+import RouteHandler from "./Routes/RouteHandler";
 
 dotenv.config();
 
@@ -20,19 +20,19 @@ app.listen(port, () => {
 // DB Connection Callbacks
 
 mongoose.connect(process.env.MONGODB_URI).then(() => {
-  console.log("Connected to database at port 27017"); // tslint:disable-line:no-console
+  console.log("Connected to database at port 27017");
 });
 mongoose.connection.on("error", () => {
-  console.log("Error connecting to database"); // tslint:disable-line:no-console
+  console.log("Error connecting to database");
 });
 
 mongoose.connection.on("disconnected", () => {
-  console.log("Disconnected from database"); // tslint:disable-line:no-console
+  console.log("Disconnected from database");
 });
 
 process.on("SIGINT", () => {
   mongoose.connection.close(() => {
-    console.log("Disconnected from database due to application termination"); // tslint:disable-line:no-console
+    console.log("Disconnected from database due to application termination");
     process.exit(0);
   });
 });
