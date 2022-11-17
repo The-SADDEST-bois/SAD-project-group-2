@@ -5,15 +5,8 @@ import { Flex, VStack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/react";
 import { useState } from "react";
 import { addUserToDatabase } from "../../../api/userApi/userApi";
+import { Roles } from "../../../types/roles";
 
-enum Roles {
-  Admin = "Admin",
-  Student = "Student",
-  Tutor = "Tutor",
-  ModuleLeader = "ModuleLeader",
-  AcademicAdvisor = "AcademicAdvisor",
-  CourseLeader = "CourseLeader",
-}
 interface ICredentials {
   email: string;
   password: string;

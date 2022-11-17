@@ -1,9 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as Chakra from '@chakra-ui/react'
-import { ISession } from '../../../types/types'
+import { ISession, IUser } from '../../../types/types'
 import { newSessionApi } from '../../../api/sessionApi/sessionApi'
+import { useStore } from '../../contexts/storeProvider'
 
 const newSession = () => {
+
+    const authStore = useStore();
+
+    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
+  
+    useEffect(() => {
+      setCurrentUser(authStore.auth.user);
+    }, [authStore.auth.user]);
+  
 
     const initialState: ISession = {
         sessionName: "",
@@ -21,6 +31,7 @@ const newSession = () => {
     return (
         <Chakra.HStack width="full" height="1000px" justify={"center"}>
             <Chakra.VStack width="full" justify={"center"}>
+                <Chakra.Text>Hello, {currentUser?.name}</Chakra.Text>
                 <Chakra.Input
                     placeholder="Username"
                     value={session.sessionName}

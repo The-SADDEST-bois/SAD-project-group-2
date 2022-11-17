@@ -36,15 +36,14 @@ interface ICredentials {
   password: string;
 }
 
+// Promise<{ data?: INoteTag[]; error?: Error }>
+
 export const login = async (credentials: ICredentials) => {
-  await api
+  return await api
     .post(`/user`, {
       data: {
         email: credentials.email,
         password: credentials.password,
       },
     })
-    .then((response) => {
-      return response.data;
-    });
 };

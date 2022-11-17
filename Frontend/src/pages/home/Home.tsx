@@ -1,10 +1,14 @@
 import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Flex, VStack } from "@chakra-ui/layout";
-import { Select } from "@chakra-ui/react";
-import { useState } from "react";
-import { addUserToDatabase, login } from "../../../api/userApi/userApi";
+import { Flex, VStack, Text } from "@chakra-ui/layout";
+import { useEffect, useState } from "react";
+import { login } from "../../../api/userApi/userApi";
+import { useMutation } from "react-query";
+import { useStore } from "../../contexts/storeProvider";
+import { IUser } from "../../../types/types";
+import { Link, useNavigate } from "react-router-dom";
+import { UserName } from "../../components/UserName";
 
 interface ICredentials {
   email: string;
@@ -12,16 +16,43 @@ interface ICredentials {
 }
 
 const Home = () => {
+
+  const navigate = useNavigate();
+
+  const authStore = useStore();
+
+  const mutation = useMutation({
+    mutationFn: login,
+  });
+
   const initialState = {
     email: "",
     password: "",
   };
 
-  const onSubmit = () => {
-    login(credentials);
-  };
-
   const [credentials, setCredentials] = useState<ICredentials>(initialState);
+
+  const setAuthStore = (data: any) => {
+    if (authStore){
+      authStore.auth.login(data.data.other as IUser);
+      navigate('/NewSession');
+    }
+    else{
+      console.log("authStore is null");
+    }
+  } 
+
+  const handleSubmit = () => {
+    mutation.mutate(credentials, {
+      onSuccess: (data) => {
+        //console.table(data.data.other);
+        setAuthStore(data);
+      },
+      onError: (error) => {
+        console.log(error);
+      }
+    });
+  };
 
   return (
     <Flex h="100vh" justify="space-between">
@@ -39,6 +70,7 @@ const Home = () => {
         justifyContent={"center"}
       >
         <FormControl>
+          <UserName/>
           <FormLabel>Login</FormLabel>
           <Input
             placeholder="Email"
@@ -57,7 +89,8 @@ const Home = () => {
             }
           ></Input>
 
-          <Button onClick={onSubmit}>Submit</Button>
+          <Button onClick={handleSubmit}>Submit</Button>
+          <Link to="/newSession">New Session</Link>
         </FormControl>
       </VStack>
     </Flex>
