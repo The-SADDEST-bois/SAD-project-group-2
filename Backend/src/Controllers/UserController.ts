@@ -1,6 +1,7 @@
 import express from "express";
 import Users from "../Models/User";
 import bcrypt from "bcrypt";
+import { accessToken, refreshToken } from "../middleware/jwt";
 
 const userController = express.Router();
 
@@ -19,9 +20,9 @@ userController.post("/login", async (req, response) => {
     );
     if (validPassword) {
       console.log("VALID");
-      // TODO redirect to main page
-      const data = {name: user.name, email: user.email, password: '', role: user.role};
-      response.status(200).json({ messasge: 'Success', other: data }).send();
+      const cleanUser = {name: user.name, email: user.email, password: '', role: user.role}
+      const userAccess = accessToken(cleanUser);
+      response.status(200).json({ messasge: 'Success', user: cleanUser, accessToken: userAccess }).send();
     } else {
       console.log("NOT VALID");
 
