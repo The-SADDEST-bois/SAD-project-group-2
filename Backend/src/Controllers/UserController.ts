@@ -1,7 +1,9 @@
-import express from "express";
+import express, { response } from "express";
 import Users from "../Models/User";
 import bcrypt from "bcrypt";
-import { accessToken, refreshToken } from "../middleware/jwt";
+import { accessToken, verifyToken, decodeToken } from "../middleware/jwt";
+import { IUser } from "../Interfaces/IUser";
+import { Jwt } from "jsonwebtoken";
 
 const userController = express.Router();
 
@@ -20,9 +22,12 @@ userController.post("/login", async (req, response) => {
     );
     if (validPassword) {
       console.log("VALID");
-      const cleanUser = {name: user.name, email: user.email, password: '', role: user.role}
-      const userAccess = accessToken(cleanUser);
-      response.status(200).json({ messasge: 'Success', user: cleanUser, accessToken: userAccess }).send();
+
+      const cleanUser: IUser = {name: user.name, email: user.email, password: '', role: user.role}
+
+      const newToken = accessToken(user.email);
+
+      response.status(200).json({ messasge: 'Success', user: cleanUser, accessToken: newToken}).send();
     } else {
       console.log("NOT VALID");
 
@@ -32,6 +37,14 @@ userController.post("/login", async (req, response) => {
     response.status(401).json({ error: "User does not exist" });
   }
 });
+
+userController.post("/refresh", async (request, response) => {
+  const cookie: string = request.body.accessToken;
+
+  //console.log(cookie);
+  console.log(await verifyToken(JSON.parse(cookie)));
+  response.status(200).json({ message: "Success" });
+})
 
 // User Controller post endpoint (adds user to database) (can rename to /createUser if necessary)
 userController.post("/register", async (req, res) => {

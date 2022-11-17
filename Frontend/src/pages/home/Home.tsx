@@ -33,8 +33,7 @@ const Home = () => {
 
   const setAuthStore = (data: any) => {
     if (authStore){
-      console.log(data);
-      authStore.auth.login(data.user as IUser);
+      authStore.auth.login(data.user as IUser, data.accessToken);
       navigate('/NewSession');
     }
     else{
@@ -89,7 +88,6 @@ const Home = () => {
           ></Input>
 
           <Button onClick={handleSubmit}>Submit</Button>
-          <Link to="/newSession">New Session</Link>
         </FormControl>
       </VStack>
     </Flex>

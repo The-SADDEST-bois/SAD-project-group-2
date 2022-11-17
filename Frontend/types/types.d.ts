@@ -1,9 +1,10 @@
 export interface IUser {
+  _id?: string;
+  name?: string;
   email: string;
   password: string;
   role: Roles;
-  name?: string;
-  _id?: string;
+  accessToken?: string;
 }
 
 export interface ISession {

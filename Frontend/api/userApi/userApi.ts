@@ -24,7 +24,7 @@ export const fetchUser = async () => {
 }
 
 export const addUserToDatabase = async (payload: IUser) => {
-  const res = await api.post<IUser>("/user/register", payload);
+  const res = await api.post<IUser>(`/user/register`, payload);
 
   console.log(res);
 
