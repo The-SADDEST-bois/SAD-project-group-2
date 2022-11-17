@@ -73,3 +73,16 @@ export interface ICohort {
     }
   ];
 }
+
+export interface IAttendanceRegister {
+  _id?: string;
+  attendance:
+  [
+      {
+          _id?: string,
+          firstName: string,
+          lastName: string,
+          attendend: number
+      }
+  ];
+}

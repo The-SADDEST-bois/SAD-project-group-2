@@ -17,6 +17,6 @@ const cohortSchema = new Schema<ICohort>({
     ],
   });
 
-const Modules = mongoose.model("Cohort", cohortSchema);
+const Cohorts = mongoose.model("Cohort", cohortSchema);
 
-export default Modules;
+export default Cohorts;
