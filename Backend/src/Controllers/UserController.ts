@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { accessToken, verifyToken, decodeToken } from "../middleware/jwt";
 import { IUser } from "../Interfaces/IUser";
 import { Jwt } from "jsonwebtoken";
+import { ITokenData } from "../Interfaces/ITokenData";
 
 const userController = express.Router();
 
@@ -22,11 +23,10 @@ userController.post("/login", async (req, response) => {
     );
     if (validPassword) {
       console.log("VALID");
-
+      
       const cleanUser: IUser = {name: user.name, email: user.email, password: '', role: user.role}
-
-      const newToken = accessToken(user.email);
-
+      const tokenData: ITokenData = { _id: user.id, role: user.role }
+      const newToken = accessToken(tokenData);
       response.status(200).json({ messasge: 'Success', user: cleanUser, accessToken: newToken}).send();
     } else {
       console.log("NOT VALID");

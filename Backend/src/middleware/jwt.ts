@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
+import { ITokenData } from "../Interfaces/ITokenData";
 
 dotenv.config();
 
-export const accessToken = (data: string) => jwt.sign({data}, process.env.ACCESS_KEY, {
+export const accessToken = (data: ITokenData) => jwt.sign({data}, process.env.ACCESS_KEY, {
     algorithm: 'HS256',
     expiresIn: '24h',
 });
