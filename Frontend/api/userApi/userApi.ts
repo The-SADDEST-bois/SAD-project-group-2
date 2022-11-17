@@ -38,7 +38,7 @@ interface ICredentials {
 
 // Promise<{ data?: INoteTag[]; error?: Error }>
 
-export const getUser = async (credentials: ICredentials) => {
+export const login = async (credentials: ICredentials) => {
   return await api
     .post(`/user`, {
       data: {
