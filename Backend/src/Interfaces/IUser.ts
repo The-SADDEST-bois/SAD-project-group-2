@@ -1,4 +1,4 @@
-import { Roles } from "../Utils/Roles";
+import { Roles } from "../Types/Roles";
 
 export interface IUser {
   email: string;
