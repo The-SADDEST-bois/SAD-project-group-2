@@ -1,41 +1,51 @@
-import React, { useEffect, useState } from 'react'
-import {HStack, VStack, Text, Input, Button} from '@chakra-ui/react'
-import { ISession, IUser } from '../../../types/types'
-import { newSessionApi } from '../../../api/sessionApi/sessionApi'
-import { useStore } from '../../contexts/storeProvider'
-import api from '../../../api/config/apiconfig'
-import Cookies from 'js-cookie'
+import { useEffect, useState } from "react";
+import { VStack, Text, Button, Flex } from "@chakra-ui/react";
+import { IUser } from "../../../types/types";
+import { useStore } from "../../contexts/storeProvider";
+import api from "../../../api/config/apiconfig";
+import Cookies from "js-cookie";
+import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 
 const newSession = () => {
+  const authStore = useStore();
 
-    const authStore = useStore();
+  const [currentUser, setCurrentUser] = useState<IUser | null>(null);
 
-    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
-  
-    useEffect(() => {
-      setCurrentUser(authStore.auth.user);
-    }, [authStore.auth.user]);
-  
-    const handleSubmit = async () => {
-        const cookie = Cookies.get("accessToken");
-        const response = await api.post('/user/refresh', {accessToken: cookie});
-        console.log(response);
-    }
+  useEffect(() => {
+    setCurrentUser(authStore.auth.user);
+  }, [authStore.auth.user]);
 
-    return (
-        <HStack width="full" height="1000px" justify={"center"}>
-            <VStack width="full" justify={"center"}>
-                <Text>Hello, {currentUser?.name}</Text>
+  const handleSubmit = async () => {
+    const cookie = Cookies.get("accessToken");
+    const response = await api.post("/user/refresh", { accessToken: cookie });
+    console.log(response);
+  };
 
-                <Button
-                    colorScheme="blue"
-                    variant="outline"
-                    width="full"
-                    onClick={() => handleSubmit()}>
-                    Submit
-                </Button>
-            </VStack>
-        </HStack>
-    )
-}
-export default newSession
+  return (
+    <PageWithSideBar
+      leftSection={<></>}
+      rightSection={
+        <>
+          <Flex
+            height="300px"
+            width="300px"
+            justifyContent={"center"}
+            direction={"column"}
+          >
+            <Text>Helloooo, {currentUser?.name}</Text>
+
+            <Button
+              colorScheme="blue"
+              variant="outline"
+              width="full"
+              onClick={() => handleSubmit()}
+            >
+              Submit
+            </Button>
+          </Flex>
+        </>
+      }
+    />
+  );
+};
+export default newSession;
