@@ -1,18 +1,17 @@
 export interface IUser {
-  _id?: string;
-  name?: string;
   email: string;
   password: string;
   role: Roles;
-  accessToken?: string;
+  name?: string;
+  _id?: string;
 }
 
 export interface ISession {
   sessionType: SessionTypes;
   tutor: {
-    firstName: string,
-    lastName: string
-    _id?: string,
+    firstName: string;
+    lastName: string;
+    _id?: string;
   };
   startTime: Date;
   duration?: number;
@@ -23,67 +22,64 @@ export interface ISession {
 export interface ICourse {
   courseName: string;
   courseLeader: {
-    firstName: string,
-    lastName: string
-    _id?: string,
+    firstName: string;
+    lastName: string;
+    _id?: string;
   };
   studentID: string[];
-  modules:
-  [
+  modules: [
     {
-      _id?: string,
-      moduleName: string,
-      moduleLeader: string
+      _id?: string;
+      moduleName: string;
+      moduleLeader: string;
     }
-  ];  
+  ];
   _id?: string;
 }
 
 export interface IModule {
   moduleName: string;
   moduleLeader: {
-    firstName: string,
-    lastName: string
-    _id?: string,
+    firstName: string;
+    lastName: string;
+    _id?: string;
   };
-  tutors:
-  [
+  tutors: [
     {
-      firstName: string,
-      lastName: string
-      _id?: string,
+      firstName: string;
+      lastName: string;
+      _id?: string;
     }
   ];
-  sessionID: [string]
+  sessionID: [string];
   _id?: string;
 }
 
 export interface ICohort {
   module: {
-    moduleName: string,
-    moduleLeader: string
-    _id?: string,
+    moduleName: string;
+    moduleLeader: string;
+    _id?: string;
   };
-  students:
-  [
+  students: [
     {
-      firstName: string,
-      lastName: string
-      _id?: string,
+      firstName: string;
+      lastName: string;
+      _id?: string;
     }
   ];
   _id?: string;
 }
 
 export interface IAttendanceRegister {
-  attendance:
-  [
+  attendance: [
     {
-      firstName: string,
-      lastName: string,
-      attendend: number
-      _id?: string,
+      firstName: string;
+      lastName: string;
+      attendend: number;
+      _id?: string;
     }
   ];
+  sessionID: string;
   _id?: string;
 }
