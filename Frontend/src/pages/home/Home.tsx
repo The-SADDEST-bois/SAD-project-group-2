@@ -9,6 +9,7 @@ import { useStore } from "../../contexts/storeProvider";
 import { IUser } from "../../../types/types";
 import { Link, useNavigate } from "react-router-dom";
 import { UserName } from "../../components/UserName";
+import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTemplate";
 
 interface ICredentials {
   email: string;
@@ -16,7 +17,6 @@ interface ICredentials {
 }
 
 const Home = () => {
-
   const navigate = useNavigate();
 
   const authStore = useStore();
@@ -33,14 +33,13 @@ const Home = () => {
   const [credentials, setCredentials] = useState<ICredentials>(initialState);
 
   const setAuthStore = (data: any) => {
-    if (authStore){
+    if (authStore) {
       authStore.auth.login(data.data.other as IUser);
-      navigate('/NewSession');
-    }
-    else{
+      navigate("/NewSession");
+    } else {
       console.log("authStore is null");
     }
-  } 
+  };
 
   const handleSubmit = () => {
     mutation.mutate(credentials, {
@@ -50,27 +49,16 @@ const Home = () => {
       },
       onError: (error) => {
         console.log(error);
-      }
+      },
     });
   };
 
   return (
-    <Flex h="100vh" justify="space-between">
-      <VStack h="full" w="full" bg={"#17BEBB"}></VStack>
-
-      <VStack
-        bg="white"
-        h="full"
-        maxW="450px"
-        w="full"
-        px="16"
-        borderLeft="1px"
-        borderColor="black"
-        overflowY="auto"
-        justifyContent={"center"}
-      >
-        <FormControl>
-          <UserName/>
+    <LoginPageTemplate
+      leftSection={<></>}
+      height="200px"
+      rightSection={
+        <>
           <FormLabel>Login</FormLabel>
           <Input
             placeholder="Email"
@@ -89,11 +77,18 @@ const Home = () => {
             }
           ></Input>
 
-          <Button onClick={handleSubmit}>Submit</Button>
+          <Button
+            onClick={handleSubmit}
+            width="full"
+            background="#17BEBB"
+            _hover={{ bg: "#58edea" }}
+          >
+            Submit
+          </Button>
           <Link to="/newSession">New Session</Link>
-        </FormControl>
-      </VStack>
-    </Flex>
+        </>
+      }
+    />
   );
 };
 export default Home;

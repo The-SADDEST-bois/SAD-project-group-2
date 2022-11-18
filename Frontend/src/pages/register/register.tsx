@@ -1,25 +1,27 @@
 import { Button } from "@chakra-ui/button";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import { FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Flex, VStack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/react";
 import { useState } from "react";
 import { addUserToDatabase } from "../../../api/userApi/userApi";
 import { Roles } from "../../../types/roles";
+import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTemplate";
 
 interface ICredentials {
   email: string;
   password: string;
   role: Roles;
-  name?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 const Register = () => {
   const initialState = {
     email: "",
     password: "",
-    role: Roles.Admin,
-    name: "",
+    role: Roles.Student,
+    firstName: "",
+    lastName: "",
   };
 
   const onSubmit = () => {
@@ -29,30 +31,34 @@ const Register = () => {
   const [credentials, setCredentials] = useState<ICredentials>(initialState);
 
   return (
-    <Flex h="100vh" justify="space-between">
-      <VStack h="full" w="full" bg={"#17BEBB"}></VStack>
-
-      <VStack
-        bg="white"
-        h="full"
-        maxW="450px"
-        w="full"
-        px="16"
-        borderLeft="1px"
-        borderColor="black"
-        overflowY="auto"
-        justifyContent={"center"}
-      >
-        <FormControl>
+    <LoginPageTemplate
+      leftSection={<></>}
+      height={"300px"}
+      rightSection={
+        <>
+          {" "}
           <FormLabel>Create An Account</FormLabel>
+          <Input
+            placeholder="First Name"
+            value={credentials.firstName}
+            onChange={(e) =>
+              setCredentials({ ...credentials, firstName: e.target.value })
+            }
+          />
+          <Input
+            placeholder="Last Name"
+            value={credentials.lastName}
+            onChange={(e) =>
+              setCredentials({ ...credentials, lastName: e.target.value })
+            }
+          />
           <Input
             placeholder="Email"
             value={credentials.email}
             onChange={(e) =>
               setCredentials({ ...credentials, email: e.target.value })
             }
-          ></Input>
-
+          />
           <Input
             placeholder="Password"
             type={"password"}
@@ -60,8 +66,7 @@ const Register = () => {
             onChange={(e) =>
               setCredentials({ ...credentials, password: e.target.value })
             }
-          ></Input>
-
+          />
           <Select
             placeholder="Select a Role"
             onChange={(e) =>
@@ -73,12 +78,21 @@ const Register = () => {
           >
             <option value={Roles.Student}>Student</option>
             <option value={Roles.Tutor}>Tutor</option>
+            <option value={Roles.ModuleLeader}>Module Leader</option>
+            <option value={Roles.AcademicAdvisor}>Academic Advisor</option>
+            <option value={Roles.CourseLeader}>Course Leader</option>
           </Select>
-
-          <Button onClick={onSubmit}>Submit</Button>
-        </FormControl>
-      </VStack>
-    </Flex>
+          <Button
+            onClick={onSubmit}
+            width="full"
+            background="#17BEBB"
+            _hover={{ bg: "#58edea" }}
+          >
+            Submit
+          </Button>
+        </>
+      }
+    />
   );
 };
 export default Register;
