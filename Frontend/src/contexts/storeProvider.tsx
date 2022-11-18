@@ -13,7 +13,8 @@ export const StoreProvider = ({children}: any) => {
         auth: {
             user: auth.user,
             login: auth.login,
-            logout: auth.logout
+            logout: auth.logout,
+            Authenticate: auth.Authenticate
         }
     }
 

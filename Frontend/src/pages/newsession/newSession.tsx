@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import {HStack, VStack, Text, Input, Button} from '@chakra-ui/react'
-import { ISession, IUser } from '../../../types/types'
-import { newSessionApi } from '../../../api/sessionApi/sessionApi'
+import { HStack, VStack, Text, Button } from '@chakra-ui/react'
+import { IUser } from '../../../types/types'
 import { useStore } from '../../contexts/storeProvider'
-import api from '../../../api/config/apiconfig'
-import Cookies from 'js-cookie'
 
 const newSession = () => {
 
@@ -15,25 +12,18 @@ const newSession = () => {
     useEffect(() => {
       setCurrentUser(authStore.auth.user);
     }, [authStore.auth.user]);
-  
-    const handleSubmit = async () => {
-        const cookie = Cookies.get("accessToken");
-        const response = await api.post('/user/refresh', {accessToken: cookie});
-        console.log(response);
+
+    const handleClick = () => {
+        if (authStore) {
+            authStore.auth.Authenticate();
+        }
     }
 
     return (
         <HStack width="full" height="1000px" justify={"center"}>
             <VStack width="full" justify={"center"}>
-                <Text>Hello, {currentUser?.name}</Text>
-
-                <Button
-                    colorScheme="blue"
-                    variant="outline"
-                    width="full"
-                    onClick={() => handleSubmit()}>
-                    Submit
-                </Button>
+                <Text>{'testpage' + currentUser?.email}</Text>
+                <Button onClick={() => handleClick()} >auth</Button>
             </VStack>
         </HStack>
     )
