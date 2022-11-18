@@ -1,13 +1,21 @@
 import { Flex, VStack } from "@chakra-ui/layout";
 import { ReactNode } from "react";
 
-export const PageWithSideBar = (leftSection: any, rightSection: any) => {
+interface IPageWithSideBar {
+  leftSection: ReactNode;
+  rightSection: ReactNode;
+}
+
+export const PageWithSideBar = ({
+  leftSection,
+  rightSection,
+}: IPageWithSideBar) => {
   return (
     <Flex h="100vh" justify="space-between">
       <VStack
-        bg="blue"
+        bg="#58edea"
         h="full"
-        maxW="450px"
+        maxW="100px"
         w="full"
         px="16"
         overflowY="auto"
@@ -16,15 +24,8 @@ export const PageWithSideBar = (leftSection: any, rightSection: any) => {
         {leftSection}
       </VStack>
 
-      <VStack bg="red" h="full" w="full" px="16">
-        <Flex
-          width="full"
-          height="350px"
-          direction={"column"}
-          justify="space-between"
-        >
-          {rightSection}
-        </Flex>
+      <VStack bg="white" h="full" w="full" px="16" justifyContent={"center"}>
+        {rightSection}
       </VStack>
     </Flex>
   );
