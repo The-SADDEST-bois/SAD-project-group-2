@@ -3,6 +3,7 @@ import { FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Select } from "@chakra-ui/react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { addUserToDatabase } from "../../../api/userApi/userApi";
 import { Roles } from "../../../types/roles";
 import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTemplate";
@@ -16,6 +17,9 @@ interface ICredentials {
 }
 
 const Register = () => {
+
+  const navigate = useNavigate();
+
   const initialState = {
     email: "",
     password: "",
@@ -26,6 +30,7 @@ const Register = () => {
 
   const onSubmit = () => {
     addUserToDatabase(credentials);
+    navigate("/");
   };
 
   const [credentials, setCredentials] = useState<ICredentials>(initialState);

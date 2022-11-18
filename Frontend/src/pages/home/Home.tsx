@@ -1,14 +1,12 @@
 import { Button } from "@chakra-ui/button";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import { FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Flex, VStack, Text } from "@chakra-ui/layout";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { login } from "../../../api/userApi/userApi";
 import { useMutation } from "react-query";
 import { useStore } from "../../contexts/storeProvider";
 import { IUser } from "../../../types/types";
 import { Link, useNavigate } from "react-router-dom";
-import { UserName } from "../../components/UserName";
 import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTemplate";
 
 interface ICredentials {
@@ -34,7 +32,7 @@ const Home = () => {
 
   const setAuthStore = (data: any) => {
     if (authStore) {
-      authStore.auth.login(data.data.other as IUser);
+      authStore.auth.login(data.user as IUser, data.accessToken);
       navigate("/NewSession");
     } else {
       console.log("authStore is null");
@@ -43,9 +41,9 @@ const Home = () => {
 
   const handleSubmit = () => {
     mutation.mutate(credentials, {
-      onSuccess: (data) => {
+      onSuccess: (response) => {
         //console.table(data.data.other);
-        setAuthStore(data);
+        setAuthStore(response.data);
       },
       onError: (error) => {
         console.log(error);
