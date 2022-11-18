@@ -8,7 +8,6 @@ import { useMutation } from "react-query";
 import { useStore } from "../../contexts/storeProvider";
 import { IUser } from "../../../types/types";
 import { Link, useNavigate } from "react-router-dom";
-import { UserName } from "../../components/UserName";
 
 interface ICredentials {
   email: string;
@@ -34,7 +33,7 @@ const Home = () => {
 
   const setAuthStore = (data: any) => {
     if (authStore){
-      authStore.auth.login(data.data.other as IUser);
+      authStore.auth.login(data.user as IUser, data.accessToken);
       navigate('/NewSession');
     }
     else{
@@ -44,9 +43,9 @@ const Home = () => {
 
   const handleSubmit = () => {
     mutation.mutate(credentials, {
-      onSuccess: (data) => {
+      onSuccess: (response) => {
         //console.table(data.data.other);
-        setAuthStore(data);
+        setAuthStore(response.data);
       },
       onError: (error) => {
         console.log(error);
@@ -70,7 +69,6 @@ const Home = () => {
         justifyContent={"center"}
       >
         <FormControl>
-          <UserName/>
           <FormLabel>Login</FormLabel>
           <Input
             placeholder="Email"
@@ -90,7 +88,6 @@ const Home = () => {
           ></Input>
 
           <Button onClick={handleSubmit}>Submit</Button>
-          <Link to="/newSession">New Session</Link>
         </FormControl>
       </VStack>
     </Flex>

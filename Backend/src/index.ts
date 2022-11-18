@@ -3,6 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 import RouteHandler from "./Routes/RouteHandler";
+import { accessToken } from "./middleware/jwt"
 
 dotenv.config();
 
@@ -18,7 +19,6 @@ app.listen(port, () => {
 });
 
 // DB Connection Callbacks
-
 mongoose.connect(process.env.MONGODB_URI).then(() => {
   console.log("Connected to database at port 27017");
 });

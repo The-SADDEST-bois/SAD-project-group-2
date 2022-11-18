@@ -3,6 +3,8 @@ import {HStack, VStack, Text, Input, Button} from '@chakra-ui/react'
 import { ISession, IUser } from '../../../types/types'
 import { newSessionApi } from '../../../api/sessionApi/sessionApi'
 import { useStore } from '../../contexts/storeProvider'
+import api from '../../../api/config/apiconfig'
+import Cookies from 'js-cookie'
 
 const newSession = () => {
 
@@ -14,38 +16,22 @@ const newSession = () => {
       setCurrentUser(authStore.auth.user);
     }, [authStore.auth.user]);
   
-
-    const initialState: ISession = {
-        sessionName: "",
-        date: new Date().toISOString()
-    };
-
-    const [session, setSession] = useState<ISession>(initialState);
-
-    console.log(session.sessionName);
-
-    const handleSubmit = () => {
-        newSessionApi(session);
+    const handleSubmit = async () => {
+        const cookie = Cookies.get("accessToken");
+        const response = await api.post('/user/refresh', {accessToken: cookie});
+        console.log(response);
     }
 
     return (
         <HStack width="full" height="1000px" justify={"center"}>
             <VStack width="full" justify={"center"}>
                 <Text>Hello, {currentUser?.name}</Text>
-                <Input
-                    placeholder="Username"
-                    value={session.sessionName}
-                    onChange={(e) =>
-                        setSession({ ...session, sessionName: e.target.value })
-                    }
-                />
 
                 <Button
                     colorScheme="blue"
                     variant="outline"
                     width="full"
-                    onClick={() => handleSubmit()}
-                >
+                    onClick={() => handleSubmit()}>
                     Submit
                 </Button>
             </VStack>
