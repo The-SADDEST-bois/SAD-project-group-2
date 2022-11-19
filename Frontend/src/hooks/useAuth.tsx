@@ -10,7 +10,7 @@ const useAuth = () => {
         const cookie = Cookies.get("accessToken");
         if (cookie) {
             reAuthenticate(cookie).then((response) => {
-                console.log(response.data.user);
+                setUser(response.data.user as IUser);
             });
         }
         setUser(undefined);

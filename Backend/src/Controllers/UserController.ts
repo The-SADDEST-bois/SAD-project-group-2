@@ -49,6 +49,7 @@ userController.post("/reauthenticate", async (request, response) => {
   const data: ITokenData = result
   const user = await Users.findOne( { _id: data.data._id } )
   const cleanUser: IUser = {name: user.name, email: user.email, password: '', role: user.role}
+  console.log('reAuth');
   response.status(200).json({ messasge: 'Success', user: cleanUser}).send();
 })
 

@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 import { ChakraProvider } from '@chakra-ui/react';
 import { StoreProvider } from './contexts/storeProvider';
+import { Authenticate } from './components/Authenticate';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -12,7 +13,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <QueryClientProvider client={new QueryClient()}>
         <ChakraProvider>
           <StoreProvider>
-            <App/>
+            <Authenticate>
+              <App/>
+            </Authenticate>
           </StoreProvider>
         </ChakraProvider>
       </QueryClientProvider>
