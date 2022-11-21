@@ -6,7 +6,6 @@ import { useStore } from "./contexts/storeProvider";
 import { Roles } from "../types/roles";
 import CustomError from "./components/CustomError";
 import StudentDashboard from "./pages/StudentDashboard/StudentDashboard";
-import { IUser } from "../types/types";
 const TestUseQuery = lazy(() => import("./pages/testusequery/TestUseQuery"));
 const NewSession = lazy(
   () => import("./pages/StudentDashboard/StudentDashboard")
@@ -17,11 +16,12 @@ const RouteHandler = () => {
   const store = useStore();
 
   const [routes, setRoutes] = useState<JSX.Element>(
-  <Routes>
-    <Route path="/" element={<Login />} />
-    <Route path="/register" element={<RegisterNewUser />} />
-    <Route path="*" element={<CustomError errorMessage="first" />} />
-  </Routes>);
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/register" element={<RegisterNewUser />} />
+      <Route path="*" element={<CustomError errorMessage="first" />} />
+    </Routes>
+  );
 
   useEffect(() => {
     if (store?.auth.user.role == Roles.Admin) {
