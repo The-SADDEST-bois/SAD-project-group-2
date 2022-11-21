@@ -1,24 +1,37 @@
-import React, { useEffect, useState } from 'react'
-import { HStack, VStack, Text, Button } from '@chakra-ui/react'
-import { IUser } from '../../../types/types'
-import { useStore } from '../../contexts/storeProvider'
+import { useEffect, useState } from "react";
+import { Text, Flex } from "@chakra-ui/react";
+import { IUser } from "../../../types/types";
+import { useStore } from "../../contexts/storeProvider";
+import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
+import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 
 const newSession = () => {
+  const authStore = useStore();
 
-    const authStore = useStore();
+  const [currentUser, setCurrentUser] = useState<IUser | null>(null);
 
-    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
-  
-    useEffect(() => {
-      setCurrentUser(authStore.auth.user);
-    }, [authStore.auth.user]);
+  useEffect(() => {
+    setCurrentUser(authStore.auth.user);
+  }, [authStore.auth.user]);
 
-    return (
-        <HStack width="full" height="1000px" justify={"center"}>
-            <VStack width="full" justify={"center"}>
-                <Text>{'testpage' + currentUser?.email}</Text>
-            </VStack>
-        </HStack>
-    )
-}
-export default newSession
+
+  return (
+    <PageWithSideBar
+      leftSection={<DynamicNavBar role={currentUser?.role.toString()} />}
+      rightSection={
+        <>
+          <Flex
+            height="300px"
+            width="300px"
+            justifyContent={"center"}
+            direction={"column"}
+          >
+            <Text>Helloooo, {currentUser?.name}</Text>
+
+          </Flex>
+        </>
+      }
+    />
+  );
+};
+export default newSession;
