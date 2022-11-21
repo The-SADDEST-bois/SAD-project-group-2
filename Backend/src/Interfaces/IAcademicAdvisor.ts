@@ -1,6 +1,12 @@
 import { Schema } from "mongoose";
 
 export interface IAcademicAdvisor {
-  advisees: Schema.Types.ObjectId[];
+  advisees: [
+    {
+      firstName: string;
+      lastName: string;
+      adviseeId: Schema.Types.ObjectId;
+    }
+  ];
   advisorId: Schema.Types.ObjectId;
 }

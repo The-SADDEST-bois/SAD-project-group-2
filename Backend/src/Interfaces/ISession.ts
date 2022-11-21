@@ -4,9 +4,9 @@ import { SessionTypes } from "../Utils/SessionTypes";
 export interface ISession {
   sessionType: SessionTypes;
   tutor: {
-    firstName: string,
-    lastName: string,
-    _id?: Schema.Types.ObjectId
+    firstName: string;
+    lastName: string;
+    tutorId: Schema.Types.ObjectId;
   };
   startTime: Date;
   duration?: number;

@@ -7,6 +7,7 @@ import Cohorts from "../Models/Cohort";
 import { ICohort } from "../Interfaces/ICohort";
 import Sessions from "../Models/Session";
 import { ISession } from "../Interfaces/ISession";
+import { SessionTypes } from "../Utils/SessionTypes";
 import mongoose from "mongoose";
 
 const DropCollections = async () => {
@@ -16,6 +17,9 @@ const DropCollections = async () => {
   console.log("Users collection dropped");
   await AcademicAdvisor.collection.drop().catch((err) => {
     console.log("AcademicAdvisor collection does not exist");
+  });
+  await Sessions.collection.drop().catch((err) => {
+    console.log("Sessions collection does not exist");
   });
   console.log("AcademicAdvisor collection dropped");
 };
@@ -139,9 +143,11 @@ function delay(ms: number) {
 
 const CreateAcademicAdvisors = async () => {
   // Create AcademicAdvisor document to be added to the database
-  const studentIds = await Users.find({ role: Roles.Student })
-    .select("_id")
+  const students = await Users.find({ role: Roles.Student })
+    .select("_id firstName lastName")
     .limit(5);
+
+  console.log(students);
 
   const advisorId = await Users.findOne({ role: Roles.AcademicAdvisor }).select(
     "_id"
@@ -149,7 +155,7 @@ const CreateAcademicAdvisors = async () => {
 
   const academicAdvisors = [
     {
-      advisees: studentIds,
+      advisees: students,
       advisorId: advisorId,
     },
   ];
@@ -161,12 +167,158 @@ const CreateAcademicAdvisors = async () => {
   console.log("AcademicAdvisors created");
 };
 
+const CreateSessions = async () => {
+  // Create Sessions to be added to the database
+  const tutor = await Users.findOne({ role: Roles.Tutor });
+
+  const sessions: ISession[] = [
+    {
+      sessionType: SessionTypes.Lecture,
+      tutor: {
+        firstName: tutor.firstName,
+        lastName: tutor.lastName,
+        tutorId: tutor._id,
+      },
+      startTime: new Date("2022/09/25 14:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      tutor: {
+        firstName: tutor.firstName,
+        lastName: tutor.lastName,
+        tutorId: tutor._id,
+      },
+      startTime: new Date("2022/10/02 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      tutor: {
+        firstName: tutor.firstName,
+        lastName: tutor.lastName,
+        tutorId: tutor._id,
+      },
+      startTime: new Date("2022/10/09 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      tutor: {
+        firstName: tutor.firstName,
+        lastName: tutor.lastName,
+        tutorId: tutor._id,
+      },
+      startTime: new Date("2022/10/16 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      tutor: {
+        firstName: tutor.firstName,
+        lastName: tutor.lastName,
+        tutorId: tutor._id,
+      },
+      startTime: new Date("2022/10/23 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      tutor: {
+        firstName: tutor.firstName,
+        lastName: tutor.lastName,
+        tutorId: tutor._id,
+      },
+      startTime: new Date("2022/10/30 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      tutor: {
+        firstName: tutor.firstName,
+        lastName: tutor.lastName,
+        tutorId: tutor._id,
+      },
+      startTime: new Date("2022/11/06 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      tutor: {
+        firstName: tutor.firstName,
+        lastName: tutor.lastName,
+        tutorId: tutor._id,
+      },
+      startTime: new Date("2022/11/13 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      tutor: {
+        firstName: tutor.firstName,
+        lastName: tutor.lastName,
+        tutorId: tutor._id,
+      },
+      startTime: new Date("2022/11/20 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      tutor: {
+        firstName: tutor.firstName,
+        lastName: tutor.lastName,
+        tutorId: tutor._id,
+      },
+      startTime: new Date("2022/11/27 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      tutor: {
+        firstName: tutor.firstName,
+        lastName: tutor.lastName,
+        tutorId: tutor._id,
+      },
+      startTime: new Date("2022/12/01 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      tutor: {
+        firstName: tutor.firstName,
+        lastName: tutor.lastName,
+        tutorId: tutor._id,
+      },
+      startTime: new Date("2022/12/8 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+  ];
+  // add each Session to the database
+  sessions.forEach(async (session) => {
+    await Sessions.create(session);
+  });
+  console.log("Sessions created");
+};
+
 const main = async () => {
   await SetUp();
   await DropCollections();
   await CreateUsers();
   await Break();
   await CreateAcademicAdvisors();
+  await CreateSessions();
   console.log("Database seeded");
 };
 
