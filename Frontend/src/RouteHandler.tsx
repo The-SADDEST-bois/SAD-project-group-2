@@ -1,35 +1,33 @@
 import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
-import Home from "./pages/home/Home";
+import Login from "./pages/login/login";
 import { RotatingLines } from "react-loader-spinner";
 import { useStore } from "./contexts/storeProvider";
-import { IUser } from "../types/types";
 import { Roles } from "../types/roles";
 import CustomError from "./components/CustomError";
+import StudentDashboard from "./pages/StudentDashboard/StudentDashboard";
 const TestUseQuery = lazy(() => import("./pages/testusequery/TestUseQuery"));
-const NewSession = lazy(() => import("./pages/newsession/newSession"));
+const NewSession = lazy(
+  () => import("./pages/StudentDashboard/StudentDashboard")
+);
 const RegisterNewUser = lazy(() => import("./pages/register/register"));
 
-const App = () => {
-  const authStore = useStore();
+const RouteHandler = () => {
+  const store = useStore();
 
-  const [routes, setRoutes] = useState<JSX.Element>();
+  const [routes, setRoutes] = useState<JSX.Element>(
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/register" element={<RegisterNewUser />} />
+      <Route path="*" element={<CustomError errorMessage="first" />} />
+    </Routes>
+  );
 
   useEffect(() => {
-    if (authStore.auth.user === null || authStore.auth.user === undefined) {
+    if (store?.auth.user.role == Roles.Admin) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<RegisterNewUser />} />
-          <Route path="*" element={<CustomError errorMessage="first" />} />
-        </Routes>
-      );
-      return;
-    }
-    if (authStore?.auth.user.role == Roles.Admin) {
-      setRoutes(
-        <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
@@ -37,10 +35,10 @@ const App = () => {
         </Routes>
       );
     }
-    if (authStore?.auth.user.role == Roles.CourseLeader) {
+    if (store?.auth.user.role == Roles.CourseLeader) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
@@ -48,10 +46,10 @@ const App = () => {
         </Routes>
       );
     }
-    if (authStore?.auth.user.role == Roles.ModuleLeader) {
+    if (store?.auth.user.role == Roles.ModuleLeader) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
@@ -59,10 +57,10 @@ const App = () => {
         </Routes>
       );
     }
-    if (authStore?.auth.user.role == Roles.AcademicAdvisor) {
+    if (store?.auth.user.role == Roles.AcademicAdvisor) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
@@ -70,10 +68,10 @@ const App = () => {
         </Routes>
       );
     }
-    if (authStore?.auth.user.role == Roles.Tutor) {
+    if (store?.auth.user.role == Roles.Tutor) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
@@ -81,18 +79,19 @@ const App = () => {
         </Routes>
       );
     }
-    if (authStore?.auth.user.role == Roles.Student) {
+    if (store?.auth.user.role == Roles.Student) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="/test" element={<TestUseQuery />} />
+          <Route path="/studentdashboard" element={<StudentDashboard />} />
 
           <Route path="*" element={<CustomError errorMessage="seventh" />} />
         </Routes>
       );
     }
-  }, [authStore.auth.user]);
+  }, [store.auth.user]);
 
   return (
     <Suspense
@@ -111,4 +110,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default RouteHandler;
