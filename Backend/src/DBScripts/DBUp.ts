@@ -362,6 +362,11 @@ const CreateModules = async () => {
   console.log("Modules created");
 };
 
+/* const CreateCohorts = async () => {
+  // Create Cohorts to be added to the database
+  const cohortLeader = await Users.findOne({ role: Roles.CohortLeader });
+  const moduleIds = await Modules.find().select("_id"); */
+
 const main = async () => {
   await SetUp();
   await DropCollections();
@@ -371,6 +376,7 @@ const main = async () => {
   await CreateSessions();
   await Break();
   await CreateModules();
+  await Break();
   console.log("Database seeded");
 };
 
