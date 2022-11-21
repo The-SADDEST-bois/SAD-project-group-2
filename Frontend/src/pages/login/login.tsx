@@ -6,7 +6,7 @@ import {
 } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { useState } from "react";
-import { login } from "../../../api/userApi/userApi";
+import { loginUser } from "../../../api/userApi/userApi";
 import { useMutation } from "react-query";
 import { useStore } from "../../contexts/storeProvider";
 import { IUser } from "../../../types/types";
@@ -19,17 +19,18 @@ interface ICredentials {
   password: string;
 }
 
-const Home = () => {
+const Login = () => {
   const navigate = useNavigate();
   const authStore = useStore();
   const mutation = useMutation({
-    mutationFn: login,
+    mutationFn: loginUser,
   });
 
   const setAuthStore = (data: any) => {
     if (authStore) {
       authStore.auth.login(data.user as IUser, data.accessToken);
-      navigate("/NewSession");
+      //TODO navigate based on role
+      navigate("/studentdashboard");
     } else {
       console.log("authStore is null");
     }
@@ -121,4 +122,4 @@ const Home = () => {
     />
   );
 };
-export default Home;
+export default Login;

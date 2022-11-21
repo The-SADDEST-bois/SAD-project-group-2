@@ -1,10 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
-import Home from "./pages/home/Home";
+import Login from "./pages/login/login";
 import { RotatingLines } from "react-loader-spinner";
 import { useStore } from "./contexts/storeProvider";
 import { Roles } from "../types/roles";
 import CustomError from "./components/CustomError";
+import StudentDashboard from "./pages/StudentDashboard/StudentDashboard";
 const TestUseQuery = lazy(() => import("./pages/testusequery/TestUseQuery"));
 const NewSession = lazy(
   () => import("./pages/StudentDashboard/StudentDashboard")
@@ -20,7 +21,7 @@ const RouteHandler = () => {
     if (store.auth.user === null || store.auth.user === undefined) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="*" element={<CustomError errorMessage="first" />} />
         </Routes>
@@ -30,7 +31,7 @@ const RouteHandler = () => {
     if (store?.auth.user.role == Roles.Admin) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
@@ -41,7 +42,7 @@ const RouteHandler = () => {
     if (store?.auth.user.role == Roles.CourseLeader) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
@@ -52,7 +53,7 @@ const RouteHandler = () => {
     if (store?.auth.user.role == Roles.ModuleLeader) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
@@ -63,7 +64,7 @@ const RouteHandler = () => {
     if (store?.auth.user.role == Roles.AcademicAdvisor) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
@@ -74,7 +75,7 @@ const RouteHandler = () => {
     if (store?.auth.user.role == Roles.Tutor) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
@@ -85,10 +86,10 @@ const RouteHandler = () => {
     if (store?.auth.user.role == Roles.Student) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="/test" element={<TestUseQuery />} />
-          <Route path="/newsession" element={<NewSession />} />
+          <Route path="/studentdashboard" element={<StudentDashboard />} />
 
           <Route path="*" element={<CustomError errorMessage="seventh" />} />
         </Routes>
