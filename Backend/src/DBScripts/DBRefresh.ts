@@ -147,8 +147,6 @@ const CreateAcademicAdvisors = async () => {
     .select("_id firstName lastName")
     .limit(5);
 
-  console.log(students);
-
   const advisorId = await Users.findOne({ role: Roles.AcademicAdvisor }).select(
     "_id"
   );
