@@ -4,9 +4,7 @@ import bcrypt from "bcrypt";
 import { Roles } from "../Types/Roles";
 import AcademicAdvisor from "../Models/AcademicAdvisor";
 import Cohorts from "../Models/Cohort";
-import { ICohort } from "../Interfaces/ICohort";
 import Sessions from "../Models/Session";
-import { ISession } from "../Interfaces/ISession";
 import { SessionTypes } from "../Utils/SessionTypes";
 import Modules from "../Models/Module";
 import AttendanceRegisters from "../Models/AttendanceRegister";
@@ -39,6 +37,10 @@ const DropCollections = async () => {
     console.log("Courses collection does not exist");
   });
   console.log("Courses collection dropped");
+  await Cohorts.collection.drop().catch((err) => {
+    console.log("Cohorts collection does not exist");
+  });
+  console.log("Cohorts collection dropped");
 };
 
 const SetUp = async () => {
@@ -393,14 +395,27 @@ const CreateRegisterSessions = (sessionIds: any, students: any) => {
   return registers;
 };
 
-/* const CreateCohorts = async () => {
+const CreateCohorts = async () => {
   // Create Cohorts to be added to the database
-  const students = await Users.find({ role: Roles.Student }).select(
-    "_id firstName lastName"
-  );
+  const studentsInSoftwareEngineering = await Courses.find({
+    courseName: "Software Engineering",
+  }).select("students");
 
-  const cohorts = [{}];
-}; */
+  const courseIdForSoftwareEngineering = await Courses.findOne({
+    courseName: "Software Engineering",
+  }).select("_id");
+
+  const cohorts = [
+    {
+      courseId: courseIdForSoftwareEngineering._id,
+      students: studentsInSoftwareEngineering[0].students,
+    },
+  ];
+
+  // add each Cohort to the database
+  await Cohorts.create(cohorts);
+  console.log("Cohorts created");
+};
 
 const CreateCourses = async () => {
   // Create Courses to be added to the database
@@ -445,6 +460,8 @@ const main = async () => {
   await CreateAttendanceRegister();
   await Break();
   await CreateCourses();
+  await Break();
+  await CreateCohorts();
   await Break().then(process.exit());
   console.log("Database seeded");
 };
