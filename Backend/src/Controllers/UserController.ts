@@ -1,4 +1,4 @@
-import express, { response } from "express";
+import express from "express";
 import Users from "../Models/User";
 import bcrypt from "bcrypt";
 import { accessToken, verifyToken } from "../middleware/jwt";
