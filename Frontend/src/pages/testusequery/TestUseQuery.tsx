@@ -9,27 +9,20 @@ import {
 import { ISession } from "../../../types/types";
 
 const TestUseQuery = () => {
-  const { isLoading, error, data } = useQuery<ISession[], Error>({
+  const { isLoading, error, data, refetch } = useQuery<ISession[], Error>({
     queryFn: getAllSessionsApi,
-    refetchInterval: 1000,
+    refetchInterval: 10000,
   });
 
   const mutation = useMutation({
     mutationFn: setSessionOpen,
   });
 
-  const [selectedSession, setSelectedSession] = useState<ISession>(
-    {} as ISession
-  );
-
-  const selectSession = (session: ISession) => {
-    setSelectedSession({...session, isOpen: !session.isOpen});
-  };
-
-  const handleSubmit = () => {
-    mutation.mutate(selectedSession, {
+  const handleSubmit = (session: ISession) => {
+    mutation.mutate({...session, isOpen: !session.isOpen}, {
       onSuccess: (response) => {
         console.log(response);
+        refetch();
       },
       onError: (error) => {
         console.log(error);
@@ -55,7 +48,7 @@ const TestUseQuery = () => {
   return (
     <VStack>
       {data?.map((session) => (
-        <Button onClick={() => selectSession(session)}>
+        <Button onClick={() => handleSubmit(session)}>
           {" id:" +
             session._id +
             " tutor:" +
@@ -64,9 +57,6 @@ const TestUseQuery = () => {
             session.isOpen}
         </Button>
       ))}
-      <Button onClick={handleSubmit}>
-        setSession {selectedSession ? selectedSession._id : "null"}
-      </Button>
     </VStack>
   );
 };

@@ -17,9 +17,9 @@ sessionController.post("/toggleSession", (request, response) => {
     { new: true },
     (err, doc) => {
       if (err) {
-        console.log("Something wrong when updating data!");
+        response.status(500).json({ message: "Internal server error" });
       } else {
-        response.status(200);
+        response.status(200).json({message: "Session updated successfully"});
       }
     }
   );
