@@ -1,45 +1,63 @@
 import { Button } from "@chakra-ui/button";
 import {
   FormLabel,
-  FormHelperText,
   FormControl,
+  FormHelperText,
 } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Flex, Select } from "@chakra-ui/react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { addUserToDatabase } from "../../../api/userApi/userApi";
-import { Roles } from "../../../types/roles";
+import { loginUser } from "../../../api/userApi/userApi";
+import { useMutation } from "react-query";
+import { useStore } from "../../contexts/storeProvider";
+import { IUser } from "../../../types/types";
+import { Link, useNavigate } from "react-router-dom";
 import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTemplate";
+import { Flex } from "@chakra-ui/react";
 
 interface ICredentials {
   email: string;
   password: string;
-  role: Roles;
-  firstName?: string;
-  lastName?: string;
 }
 
-const Register = () => {
+const Login = () => {
   const navigate = useNavigate();
+  const authStore = useStore();
+  const mutation = useMutation({
+    mutationFn: loginUser,
+  });
+
+  const setAuthStore = (data: any) => {
+    if (authStore) {
+      authStore.auth.login(data.user as IUser, data.accessToken);
+      //TODO navigate based on role
+      navigate("/studentdashboard");
+    } else {
+      console.log("authStore is null");
+    }
+  };
 
   const initialState = {
     email: "",
     password: "",
-    role: Roles.Student,
-    firstName: "",
-    lastName: "",
   };
 
-  const onSubmit = () => {
-    addUserToDatabase(credentials);
-    navigate("/");
+  const [credentials, setCredentials] = useState<ICredentials>(initialState);
+
+  const handleSubmit = () => {
+    mutation.mutate(credentials, {
+      onSuccess: (response) => {
+        //console.table(data.data.other);
+        setAuthStore(response.data);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
   };
 
   function isValidEmail(email: string) {
     return /\S+@\S+\.\S+/.test(email);
   }
-  const [credentials, setCredentials] = useState<ICredentials>(initialState);
   const errors = {
     email: isValidEmail(credentials.email),
     password: credentials.password.length < 3,
@@ -48,11 +66,11 @@ const Register = () => {
   return (
     <LoginPageTemplate
       leftSection={<></>}
-      height={"300px"}
+      height="200px"
       rightSection={
         <FormControl>
-          {" "}
-          <FormLabel>Create An Account</FormLabel>
+          <FormLabel>Login</FormLabel>
+
           <Flex direction={"column"} height="75px">
             <Input
               placeholder="Email"
@@ -68,6 +86,7 @@ const Register = () => {
               </FormHelperText>
             )}
           </Flex>
+
           <Flex direction={"column"} height="75px">
             <Input
               placeholder="Password"
@@ -83,56 +102,24 @@ const Register = () => {
                 fontStyle={"italic"}
                 alignSelf="auto"
               >
-                Please Enter A Password.
+                Please Enter Your Password.
               </FormHelperText>
             )}
           </Flex>
-          <Flex direction={"column"} height="50px">
-            <Input
-              placeholder="First Name"
-              value={credentials.firstName}
-              onChange={(e) =>
-                setCredentials({ ...credentials, firstName: e.target.value })
-              }
-            />
-          </Flex>
-          <Flex direction={"column"} height="50px">
-            <Input
-              placeholder="Last Name"
-              value={credentials.lastName}
-              onChange={(e) =>
-                setCredentials({ ...credentials, lastName: e.target.value })
-              }
-            />
-          </Flex>
-          <Flex direction={"column"} height="50px">
-            <Select
-              placeholder="Select a Role"
-              onChange={(e) =>
-                setCredentials({
-                  ...credentials,
-                  role: Roles[e.target.value as keyof typeof Roles],
-                })
-              }
-            >
-              <option value={Roles.Student}>Student</option>
-              <option value={Roles.Tutor}>Tutor</option>
-              <option value={Roles.ModuleLeader}>Module Leader</option>
-              <option value={Roles.AcademicAdvisor}>Academic Advisor</option>
-              <option value={Roles.CourseLeader}>Course Leader</option>
-            </Select>
-          </Flex>
+
           <Button
-            onClick={onSubmit}
+            onClick={handleSubmit}
             width="full"
             background="#17BEBB"
             _hover={{ bg: "#58edea" }}
+            isDisabled={!errors.email || errors.password}
           >
             Submit
           </Button>
+          <Link to="/newSession">New Session</Link>
         </FormControl>
       }
     />
   );
 };
-export default Register;
+export default Login;

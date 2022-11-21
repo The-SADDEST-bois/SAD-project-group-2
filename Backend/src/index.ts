@@ -2,7 +2,10 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
-import RouteHandler from "./Routes/RouteHandler";
+import UserRouteHandler from "./Routes/UserRouteHandler";
+import SessionRouteHandler from "./Routes/SessionRouteHandler";
+import { accessToken } from "./middleware/jwt"
+import StudentRouteHandler from "./Routes/StudentRouteHandler";
 
 dotenv.config();
 
@@ -18,7 +21,6 @@ app.listen(port, () => {
 });
 
 // DB Connection Callbacks
-
 mongoose.connect(process.env.MONGODB_URI).then(() => {
   console.log("Connected to database at port 27017");
 });
@@ -37,4 +39,6 @@ process.on("SIGINT", () => {
   });
 });
 
-app.use("/", RouteHandler);
+app.use("/user", UserRouteHandler);
+app.use("/session", SessionRouteHandler);
+app.use("/student", StudentRouteHandler)
