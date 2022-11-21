@@ -12,6 +12,7 @@ import Modules from "../Models/Module";
 import AttendanceRegisters from "../Models/AttendanceRegister";
 import mongoose from "mongoose";
 import AttendanceRegister from "../Models/AttendanceRegister";
+import Courses from "../Models/Course";
 
 const DropCollections = async () => {
   await Users.collection.drop().catch((err) => {
@@ -34,6 +35,10 @@ const DropCollections = async () => {
     console.log("AttendanceRegisters collection does not exist");
   });
   console.log("AttendanceRegisters collection dropped");
+  await Courses.collection.drop().catch((err) => {
+    console.log("Courses collection does not exist");
+  });
+  console.log("Courses collection dropped");
 };
 
 const SetUp = async () => {
@@ -340,7 +345,7 @@ const CreateModules = async () => {
 
   const modules = [
     {
-      moduleName: "Software Engineering",
+      moduleName: "Software Architecture",
       moduleLeader: {
         firstName: moduleLeader.firstName,
         lastName: moduleLeader.lastName,
@@ -388,6 +393,45 @@ const CreateRegisterSessions = (sessionIds: any, students: any) => {
   return registers;
 };
 
+/* const CreateCohorts = async () => {
+  // Create Cohorts to be added to the database
+  const students = await Users.find({ role: Roles.Student }).select(
+    "_id firstName lastName"
+  );
+
+  const cohorts = [{}];
+}; */
+
+const CreateCourses = async () => {
+  // Create Courses to be added to the database
+  const modules = await Modules.find({
+    moduleName: "Software Architecture",
+  }).select("_id moduleName");
+
+  const students = await Users.find({ role: Roles.Student }).select(
+    "_id firstName lastName"
+  );
+
+  const courseLeader = await Users.findOne({ role: Roles.CourseLeader });
+
+  const courses = [
+    {
+      courseName: "Software Engineering",
+      courseLeader: {
+        firstName: courseLeader.firstName,
+        lastName: courseLeader.lastName,
+        _id: courseLeader._id,
+      },
+      students: students,
+      modules: modules,
+    },
+  ];
+
+  // add each Course to the database
+  await Courses.create(courses);
+  console.log("Courses created");
+};
+
 const main = async () => {
   await SetUp();
   await DropCollections();
@@ -399,6 +443,8 @@ const main = async () => {
   await CreateModules();
   await Break();
   await CreateAttendanceRegister();
+  await Break();
+  await CreateCourses();
   await Break().then(process.exit());
   console.log("Database seeded");
 };

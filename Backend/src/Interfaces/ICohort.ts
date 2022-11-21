@@ -1,11 +1,7 @@
 import { Schema } from "mongoose";
 
 export interface ICohort {
-  module: {
-    moduleName: string;
-    moduleLeader: string;
-    moduleId: Schema.Types.ObjectId;
-  };
+  courseId: Schema.Types.ObjectId;
   students: [
     {
       firstName: string;
