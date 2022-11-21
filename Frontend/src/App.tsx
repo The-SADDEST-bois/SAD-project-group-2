@@ -11,89 +11,88 @@ const NewSession = lazy(() => import("./pages/newsession/newSession"));
 const RegisterNewUser = lazy(() => import("./pages/register/register"));
 
 const App = () => {
-
   const authStore = useStore();
-  
+
   const [routes, setRoutes] = useState<JSX.Element>();
 
   useEffect(() => {
-
     if (authStore.auth.user === null || authStore.auth.user === undefined) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<RegisterNewUser />} />
-          <Route path="*" element={<CustomError errorMessage='first'/>} />
+          <Route path="*" element={<CustomError errorMessage="first" />} />
         </Routes>
       );
       return;
     }
-    switch (authStore?.auth.user.role) {
-      case (Roles.Admin):
-        setRoutes(
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<RegisterNewUser />} />
-            <Route path="/test" element={<TestUseQuery />} />
-            <Route path="/newsession" element={<NewSession />} />
-            <Route path="*" element={<CustomError errorMessage='second'/>} />
-          </Routes>
-        );
-      case (Roles.CourseLeader):
-        setRoutes(
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<RegisterNewUser />} />
-            <Route path="/test" element={<TestUseQuery />} />
-            <Route path="/newsession" element={<NewSession />} />
-            <Route path="*" element={<CustomError errorMessage='third'/>} />
-          </Routes>
-        );
-      case (Roles.ModuleLeader):
-        setRoutes(
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<RegisterNewUser />} />
-            <Route path="/test" element={<TestUseQuery />} />
-            <Route path="/newsession" element={<NewSession />} />
-            <Route path="*" element={<CustomError errorMessage='fourth'/>} />
-          </Routes>
-        );
-      case (Roles.AcademicAdvisor):
-        setRoutes(
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<RegisterNewUser />} />
-            <Route path="/test" element={<TestUseQuery />} />
-            <Route path="/newsession" element={<NewSession />} />
-            <Route path="*" element={<CustomError errorMessage='fifth'/>} />
-          </Routes>
-        );
-      case (Roles.Tutor):
-        setRoutes(
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<RegisterNewUser />} />
-            <Route path="/test" element={<TestUseQuery />} />
-            <Route path="/newsession" element={<NewSession />} />
-            <Route path="*" element={<CustomError errorMessage='sixth'/>} />
-          </Routes>
-        );
-      case (Roles.Student):
-        console.log('role' + Roles.Student);
-        console.log('user' + authStore?.auth.user.role);
-        setRoutes(
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<RegisterNewUser />} />
-            <Route path="/test" element={<TestUseQuery />} />
-            
-            <Route path="*" element={<CustomError errorMessage='seventh'/>} />
-          </Routes>
-        );
+    if (authStore?.auth.user.role == Roles.Admin) {
+      setRoutes(
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<RegisterNewUser />} />
+          <Route path="/test" element={<TestUseQuery />} />
+          <Route path="/newsession" element={<NewSession />} />
+          <Route path="*" element={<CustomError errorMessage="second" />} />
+        </Routes>
+      );
+    }
+    if (authStore?.auth.user.role == Roles.CourseLeader) {
+      setRoutes(
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<RegisterNewUser />} />
+          <Route path="/test" element={<TestUseQuery />} />
+          <Route path="/newsession" element={<NewSession />} />
+          <Route path="*" element={<CustomError errorMessage="third" />} />
+        </Routes>
+      );
+    }
+    if (authStore?.auth.user.role == Roles.ModuleLeader) {
+      setRoutes(
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<RegisterNewUser />} />
+          <Route path="/test" element={<TestUseQuery />} />
+          <Route path="/newsession" element={<NewSession />} />
+          <Route path="*" element={<CustomError errorMessage="fourth" />} />
+        </Routes>
+      );
+    }
+    if (authStore?.auth.user.role == Roles.AcademicAdvisor) {
+      setRoutes(
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<RegisterNewUser />} />
+          <Route path="/test" element={<TestUseQuery />} />
+          <Route path="/newsession" element={<NewSession />} />
+          <Route path="*" element={<CustomError errorMessage="fifth" />} />
+        </Routes>
+      );
+    }
+    if (authStore?.auth.user.role == Roles.Tutor) {
+      setRoutes(
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<RegisterNewUser />} />
+          <Route path="/test" element={<TestUseQuery />} />
+          <Route path="/newsession" element={<NewSession />} />
+          <Route path="*" element={<CustomError errorMessage="sixth" />} />
+        </Routes>
+      );
+    }
+    if (authStore?.auth.user.role == Roles.Student) {
+      setRoutes(
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<RegisterNewUser />} />
+          <Route path="/test" element={<TestUseQuery />} />
+
+          <Route path="*" element={<CustomError errorMessage="seventh" />} />
+        </Routes>
+      );
     }
   }, [authStore.auth.user]);
-
 
   return (
     <Suspense
@@ -107,7 +106,7 @@ const App = () => {
         />
       }
     >
-        {routes}
+      {routes}
     </Suspense>
   );
 };
