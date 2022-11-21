@@ -323,7 +323,7 @@ const CreateModules = async () => {
   const tutor = await Users.findOne({ role: Roles.Tutor });
   const sessionIds = await Sessions.find().select("_id");
 
-  const modules: IModule[] = [
+  const modules = [
     {
       moduleName: "Software Engineering",
       moduleLeader: {
@@ -338,28 +338,12 @@ const CreateModules = async () => {
           tutorId: tutor._id,
         },
       ],
-      sessions: [
-        sessionIds[0]._id,
-        sessionIds[1]._id,
-        sessionIds[2]._id,
-        sessionIds[3]._id,
-        sessionIds[4]._id,
-        sessionIds[5]._id,
-        sessionIds[6]._id,
-        sessionIds[7]._id,
-        sessionIds[8]._id,
-        sessionIds[9]._id,
-        sessionIds[10]._id,
-        sessionIds[11]._id,
-      ],
+      sessions: sessionIds,
     },
   ];
 
   // add each Module to the database
-  modules.forEach(async (module) => {
-    await Modules.create(module);
-  });
-  console.log("Modules created");
+  await Modules.create(modules);
 };
 
 /* const CreateCohorts = async () => {
