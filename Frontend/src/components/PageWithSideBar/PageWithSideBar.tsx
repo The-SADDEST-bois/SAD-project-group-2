@@ -15,13 +15,12 @@ export const PageWithSideBar = ({
       <VStack
         bg="#58edea"
         h="full"
-        maxW="100px"
+        maxW="150"
         w="full"
         px="16"
-        overflowY="auto"
         justifyContent={"center"}
       >
-        {leftSection}
+        <Flex direction="column">{leftSection}</Flex>
       </VStack>
 
       <VStack bg="white" h="full" w="full" px="16" justifyContent={"center"}>

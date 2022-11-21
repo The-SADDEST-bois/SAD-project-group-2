@@ -5,6 +5,7 @@ import { useStore } from "../../contexts/storeProvider";
 import api from "../../../api/config/apiconfig";
 import Cookies from "js-cookie";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
+import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 
 const newSession = () => {
   const authStore = useStore();
@@ -23,7 +24,7 @@ const newSession = () => {
 
   return (
     <PageWithSideBar
-      leftSection={<></>}
+      leftSection={<DynamicNavBar role={currentUser?.role.toString()} />}
       rightSection={
         <>
           <Flex
