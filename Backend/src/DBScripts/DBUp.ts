@@ -376,7 +376,7 @@ const main = async () => {
   await CreateSessions();
   await Break();
   await CreateModules();
-  await Break();
+  await Break().then(process.exit());
   console.log("Database seeded");
 };
 
