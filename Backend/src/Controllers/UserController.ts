@@ -24,7 +24,7 @@ userController.post("/login", async (req, response) => {
     if (validPassword) {
       console.log("VALID");
       
-      const cleanUser: IUser = {name: user.name, email: user.email, password: '', role: user.role}
+      const cleanUser: IUser = {firstName: user.firstName, lastName: user.lastName, email: user.email, password: '', role: user.role}
       const data: {_id: string, role: Roles} = { _id: user.id, role: user.role }
       const newToken = accessToken(data);
       response.status(200).json({ messasge: 'Success', user: cleanUser, accessToken: newToken}).send();
@@ -48,7 +48,7 @@ userController.post("/reauthenticate", async (request, response) => {
 
   const data: ITokenData = result
   const user = await Users.findOne( { _id: data.data._id } )
-  const cleanUser: IUser = {name: user.name, email: user.email, password: '', role: user.role}
+  const cleanUser: IUser = {firstName: user.firstName, lastName: user.lastName, email: user.email, password: '', role: user.role}
   console.log('REAUTHENTICATE', Date.now());
   response.status(200).json({ messasge: 'Success', user: cleanUser}).send();
 })

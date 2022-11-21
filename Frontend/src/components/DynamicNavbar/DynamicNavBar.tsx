@@ -41,8 +41,8 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
     <VStack>
       <Flex width="full" alignItems={"center"} direction="column" gap={10}>
         {role === "Student" &&
-          StudentNavbar.map((item: NavbarItems) => (
-            <VStack cursor="pointer">
+          StudentNavbar.map((item: NavbarItems, key: number) => (
+            <VStack key={key} cursor="pointer">
               {item.icon}
               <Text width="100px" align="center" fontSize={"sm"}>
                 {item.label}
@@ -51,8 +51,8 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
           ))}
 
         {role === "Tutor" &&
-          TutorNavbar.map((item: NavbarItems) => (
-            <VStack cursor="pointer">
+          TutorNavbar.map((item: NavbarItems, key: number) => (
+            <VStack key={key} cursor="pointer">
               {item.icon}
               <Text width="100px" align="center" fontSize={"sm"}>
                 {item.label}

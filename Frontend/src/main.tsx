@@ -9,16 +9,16 @@ import { Authenticate } from './components/Authenticate';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <QueryClientProvider client={new QueryClient()}>
-        <ChakraProvider>
-          <StoreProvider>
-            <Authenticate>
-              <App/>
-            </Authenticate>
-          </StoreProvider>
-        </ChakraProvider>
-      </QueryClientProvider>
-    </BrowserRouter>
+    <StoreProvider>
+      <BrowserRouter>
+        <QueryClientProvider client={new QueryClient()}>
+          <ChakraProvider>
+              <Authenticate>
+                <App/>
+              </Authenticate>
+          </ChakraProvider>
+        </QueryClientProvider>
+      </BrowserRouter>
+    </StoreProvider>
   </React.StrictMode>
 )

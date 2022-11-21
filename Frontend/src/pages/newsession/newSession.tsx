@@ -8,16 +8,10 @@ import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 const newSession = () => {
   const authStore = useStore();
 
-  const [currentUser, setCurrentUser] = useState<IUser | null>(null);
-
-  useEffect(() => {
-    setCurrentUser(authStore.auth.user);
-  }, [authStore.auth.user]);
-
 
   return (
     <PageWithSideBar
-      leftSection={<DynamicNavBar role={currentUser?.role.toString()} />}
+      leftSection={<DynamicNavBar role={authStore?.auth.user.role.toString()} />}
       rightSection={
         <>
           <Flex
@@ -26,7 +20,7 @@ const newSession = () => {
             justifyContent={"center"}
             direction={"column"}
           >
-            <Text>Helloooo, {currentUser?.name}</Text>
+            <Text>Helloooo, {authStore.auth.user.email}</Text>
 
           </Flex>
         </>

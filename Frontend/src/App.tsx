@@ -13,15 +13,12 @@ const RegisterNewUser = lazy(() => import("./pages/register/register"));
 const App = () => {
 
   const authStore = useStore();
-
-  const [currentUser, setCurrentUser] = useState<IUser | null>(null);
   
   const [routes, setRoutes] = useState<JSX.Element>();
 
   useEffect(() => {
-    setCurrentUser(authStore.auth.user);
 
-    if (currentUser === null) {
+    if (authStore.auth.user === null || authStore.auth.user === undefined) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Home />} />
@@ -29,9 +26,10 @@ const App = () => {
           <Route path="*" element={<CustomError errorMessage='first'/>} />
         </Routes>
       );
-    } else {
-    switch (currentUser?.role) {
-      case Roles.Admin:
+      return;
+    }
+    switch (authStore?.auth.user.role) {
+      case (Roles.Admin):
         setRoutes(
           <Routes>
             <Route path="/" element={<Home />} />
@@ -41,7 +39,7 @@ const App = () => {
             <Route path="*" element={<CustomError errorMessage='second'/>} />
           </Routes>
         );
-      case Roles.CourseLeader:
+      case (Roles.CourseLeader):
         setRoutes(
           <Routes>
             <Route path="/" element={<Home />} />
@@ -51,7 +49,7 @@ const App = () => {
             <Route path="*" element={<CustomError errorMessage='third'/>} />
           </Routes>
         );
-      case Roles.ModuleLeader:
+      case (Roles.ModuleLeader):
         setRoutes(
           <Routes>
             <Route path="/" element={<Home />} />
@@ -61,7 +59,7 @@ const App = () => {
             <Route path="*" element={<CustomError errorMessage='fourth'/>} />
           </Routes>
         );
-      case Roles.AcademicAdvisor:
+      case (Roles.AcademicAdvisor):
         setRoutes(
           <Routes>
             <Route path="/" element={<Home />} />
@@ -71,7 +69,7 @@ const App = () => {
             <Route path="*" element={<CustomError errorMessage='fifth'/>} />
           </Routes>
         );
-      case Roles.Tutor:
+      case (Roles.Tutor):
         setRoutes(
           <Routes>
             <Route path="/" element={<Home />} />
@@ -81,17 +79,18 @@ const App = () => {
             <Route path="*" element={<CustomError errorMessage='sixth'/>} />
           </Routes>
         );
-      case Roles.Student:
+      case (Roles.Student):
+        console.log('role' + Roles.Student);
+        console.log('user' + authStore?.auth.user.role);
         setRoutes(
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<RegisterNewUser />} />
             <Route path="/test" element={<TestUseQuery />} />
-            <Route path="/newsession" element={<NewSession />} />
+            
             <Route path="*" element={<CustomError errorMessage='seventh'/>} />
           </Routes>
         );
-    }
     }
   }, [authStore.auth.user]);
 
