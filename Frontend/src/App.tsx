@@ -3,7 +3,6 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import Home from "./pages/home/Home";
 import { RotatingLines } from "react-loader-spinner";
 import { useStore } from "./contexts/storeProvider";
-import { IUser } from "../types/types";
 import { Roles } from "../types/roles";
 import CustomError from "./components/CustomError";
 const TestUseQuery = lazy(() => import("./pages/testusequery/TestUseQuery"));
@@ -11,12 +10,12 @@ const NewSession = lazy(() => import("./pages/newsession/newSession"));
 const RegisterNewUser = lazy(() => import("./pages/register/register"));
 
 const App = () => {
-  const authStore = useStore();
+  const store = useStore();
 
   const [routes, setRoutes] = useState<JSX.Element>();
 
   useEffect(() => {
-    if (authStore.auth.user === null || authStore.auth.user === undefined) {
+    if (store.auth.user === null || store.auth.user === undefined) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Home />} />
@@ -26,7 +25,7 @@ const App = () => {
       );
       return;
     }
-    if (authStore?.auth.user.role == Roles.Admin) {
+    if (store?.auth.user.role == Roles.Admin) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Home />} />
@@ -37,7 +36,7 @@ const App = () => {
         </Routes>
       );
     }
-    if (authStore?.auth.user.role == Roles.CourseLeader) {
+    if (store?.auth.user.role == Roles.CourseLeader) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Home />} />
@@ -48,7 +47,7 @@ const App = () => {
         </Routes>
       );
     }
-    if (authStore?.auth.user.role == Roles.ModuleLeader) {
+    if (store?.auth.user.role == Roles.ModuleLeader) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Home />} />
@@ -59,7 +58,7 @@ const App = () => {
         </Routes>
       );
     }
-    if (authStore?.auth.user.role == Roles.AcademicAdvisor) {
+    if (store?.auth.user.role == Roles.AcademicAdvisor) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Home />} />
@@ -70,7 +69,7 @@ const App = () => {
         </Routes>
       );
     }
-    if (authStore?.auth.user.role == Roles.Tutor) {
+    if (store?.auth.user.role == Roles.Tutor) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Home />} />
@@ -81,18 +80,19 @@ const App = () => {
         </Routes>
       );
     }
-    if (authStore?.auth.user.role == Roles.Student) {
+    if (store?.auth.user.role == Roles.Student) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<RegisterNewUser />} />
           <Route path="/test" element={<TestUseQuery />} />
+          <Route path="/newsession" element={<NewSession />} />
 
           <Route path="*" element={<CustomError errorMessage="seventh" />} />
         </Routes>
       );
     }
-  }, [authStore.auth.user]);
+  }, [store.auth.user]);
 
   return (
     <Suspense

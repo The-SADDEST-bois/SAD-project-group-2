@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
-import { Text, Flex } from "@chakra-ui/react";
+import { VStack, Text, Button, Flex } from "@chakra-ui/react";
 import { IUser } from "../../../types/types";
 import { useStore } from "../../contexts/storeProvider";
+import api from "../../../api/config/apiconfig";
+import Cookies from "js-cookie";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 
 const newSession = () => {
-  const authStore = useStore();
+  const store = useStore();
 
+  console.log("TYPE =", store.auth.user);
 
   return (
     <PageWithSideBar
-      leftSection={<DynamicNavBar role={authStore?.auth.user.role.toString()} />}
+      leftSection={<DynamicNavBar role={store.auth.user.role.toString()} />}
       rightSection={
         <>
           <Flex
@@ -20,8 +23,11 @@ const newSession = () => {
             justifyContent={"center"}
             direction={"column"}
           >
-            <Text>Helloooo, {authStore.auth.user.email}</Text>
+            <Text>Helloooo, {store.auth.user?.firstName}</Text>
 
+            <Button colorScheme="blue" variant="outline" width="full">
+              Submit
+            </Button>
           </Flex>
         </>
       }
