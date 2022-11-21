@@ -13,17 +13,10 @@ const newSession = () => {
       setCurrentUser(authStore.auth.user);
     }, [authStore.auth.user]);
 
-    const handleClick = () => {
-        if (authStore) {
-            authStore.auth.Authenticate();
-        }
-    }
-
     return (
         <HStack width="full" height="1000px" justify={"center"}>
             <VStack width="full" justify={"center"}>
                 <Text>{'testpage' + currentUser?.email}</Text>
-                <Button onClick={() => handleClick()} >auth</Button>
             </VStack>
         </HStack>
     )
