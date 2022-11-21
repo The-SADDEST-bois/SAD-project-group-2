@@ -1,13 +1,15 @@
-import { Text, Button, Flex } from "@chakra-ui/react";
+import { Button, Flex, Input, FormLabel, FormControl } from "@chakra-ui/react";
 import { useStore } from "../../contexts/storeProvider";
 
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
+import { useMutation } from "react-query";
+import { useState } from "react";
 
 const StudentDashboard = () => {
   const store = useStore();
 
-  console.log("TYPE =", store.auth.user);
+  const [sessionCode, setSessionCode] = useState<string>("");
 
   return (
     <PageWithSideBar
@@ -15,19 +17,29 @@ const StudentDashboard = () => {
       rightSection={
         <>
           <Flex
-            height="300px"
+            height="500px"
             width="300px"
             justifyContent={"center"}
             direction={"column"}
+            gap={4}
           >
-            {store.auth.user.role.toString() === "Student" && (
-              <>
-                <Text>Helloooo, {store.auth.user?.firstName}</Text>
-                <Button colorScheme="blue" variant="outline" width="full">
-                  Submit
-                </Button>
-              </>
-            )}
+            <FormLabel>Enter Your Session Code</FormLabel>
+            <Input
+              placeholder="Enter Session Code"
+              value={sessionCode}
+              onChange={(e) => setSessionCode(e.target.value)}
+              minLength={6}
+              maxLength={6}
+            />
+
+            <Button
+              width="full"
+              background="#17BEBB"
+              _hover={{ bg: "#58edea" }}
+              isDisabled={sessionCode.length < 6}
+            >
+              Submit
+            </Button>
           </Flex>
         </>
       }
