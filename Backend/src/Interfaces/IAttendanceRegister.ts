@@ -5,7 +5,7 @@ export interface IAttendanceRegister {
     {
       firstName: string;
       lastName: string;
-      attendend: number;
+      attended: number;
       _id?: Schema.Types.ObjectId;
     }
   ];

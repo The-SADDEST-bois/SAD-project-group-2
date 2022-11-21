@@ -6,13 +6,7 @@ import { Select } from "@chakra-ui/react";
 import { useState } from "react";
 import { addUserToDatabase } from "../../../api/userApi/userApi";
 import { Roles } from "../../../types/roles";
-
-interface ICredentials {
-  email: string;
-  password: string;
-  role: Roles;
-  name?: string;
-}
+import { IUser } from "../../../types/types";
 
 const Register = () => {
   const initialState = {
@@ -23,10 +17,10 @@ const Register = () => {
   };
 
   const onSubmit = () => {
-    addUserToDatabase(credentials);
+    addUserToDatabase(newUser);
   };
 
-  const [credentials, setCredentials] = useState<ICredentials>(initialState);
+  const [newUser, setNewUser] = useState<IUser>(initialState);
 
   return (
     <Flex h="100vh" justify="space-between">
@@ -47,26 +41,24 @@ const Register = () => {
           <FormLabel>Create An Account</FormLabel>
           <Input
             placeholder="Email"
-            value={credentials.email}
-            onChange={(e) =>
-              setCredentials({ ...credentials, email: e.target.value })
-            }
+            value={newUser.email}
+            onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
           ></Input>
 
           <Input
             placeholder="Password"
             type={"password"}
-            value={credentials.password}
+            value={newUser.password}
             onChange={(e) =>
-              setCredentials({ ...credentials, password: e.target.value })
+              setNewUser({ ...newUser, password: e.target.value })
             }
           ></Input>
 
           <Select
             placeholder="Select a Role"
             onChange={(e) =>
-              setCredentials({
-                ...credentials,
+              setNewUser({
+                ...newUser,
                 role: Roles[e.target.value as keyof typeof Roles],
               })
             }

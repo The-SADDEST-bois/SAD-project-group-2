@@ -23,7 +23,7 @@ const TestUseQuery = () => {
 
   return (
     <div>
-      <h1>{data?.name}</h1>
+      <h1>{data?.firstName}</h1>
       <p>{data?.email}</p>
     </div>
   );

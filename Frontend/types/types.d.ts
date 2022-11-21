@@ -2,8 +2,17 @@ export interface IUser {
   email: string;
   password: string;
   role: Roles;
-  name?: string;
+  firstName?: string;
+  lastName?: string;
   _id?: string;
+}
+
+interface ICredentials {
+  email: string;
+  password: string;
+  role: Roles;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface ISession {
