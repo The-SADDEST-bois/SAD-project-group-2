@@ -6,7 +6,7 @@ import { reAuthenticate } from "../../api/userApi/userApi";
 const useAuth = () => {
     const [user, setUser] = useState<IUser>();
 
-    const Authenticate = () => {
+    const Authenticate = async () => {
         const cookie = Cookies.get("accessToken");
         if (cookie) {
             reAuthenticate(cookie).then((response) => {
@@ -16,12 +16,12 @@ const useAuth = () => {
         setUser(undefined);
     };
 
-    const login = (user: IUser, accessToken: string) => {
+    const login = async (user: IUser, accessToken: string) => {
         Cookies.set("accessToken", JSON.stringify(accessToken), { expires: 30 });
         setUser(user);
     }
 
-    const logout = () => {
+    const logout = async () => {
         setUser(undefined);
     }
 
