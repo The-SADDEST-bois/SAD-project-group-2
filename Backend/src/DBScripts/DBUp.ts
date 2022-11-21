@@ -10,6 +10,7 @@ import { ISession } from "../Interfaces/ISession";
 import { SessionTypes } from "../Utils/SessionTypes";
 import Modules from "../Models/Module";
 import { IModule } from "../Interfaces/IModule";
+import AttendanceRegisters from "../Models/AttendanceRegister";
 import mongoose from "mongoose";
 
 const DropCollections = async () => {
@@ -350,6 +351,25 @@ const CreateModules = async () => {
   // Create Cohorts to be added to the database
   const cohortLeader = await Users.findOne({ role: Roles.CohortLeader });
   const moduleIds = await Modules.find().select("_id"); */
+
+const CreateAttendanceRegister = async () => {
+  // Create AttendanceRegister to be added to the database
+  const sessionIds = await Sessions.find().select("_id");
+
+  const attendanceRegister = [
+    {
+      sessionId: sessionIds[0],
+      attendance: [
+        {
+          firstName: "",
+          lastName: "",
+          attended: 0,
+          _id: "",
+        },
+      ],
+    },
+  ];
+};
 
 const main = async () => {
   await SetUp();
