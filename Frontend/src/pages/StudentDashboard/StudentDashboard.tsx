@@ -1,13 +1,10 @@
-import { useEffect, useState } from "react";
-import { VStack, Text, Button, Flex } from "@chakra-ui/react";
-import { IUser } from "../../../types/types";
+import { Text, Button, Flex } from "@chakra-ui/react";
 import { useStore } from "../../contexts/storeProvider";
-import api from "../../../api/config/apiconfig";
-import Cookies from "js-cookie";
+
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 
-const newSession = () => {
+const StudentDashboard = () => {
   const store = useStore();
 
   console.log("TYPE =", store.auth.user);
@@ -23,15 +20,18 @@ const newSession = () => {
             justifyContent={"center"}
             direction={"column"}
           >
-            <Text>Helloooo, {store.auth.user?.firstName}</Text>
-
-            <Button colorScheme="blue" variant="outline" width="full">
-              Submit
-            </Button>
+            {store.auth.user.role.toString() === "Student" && (
+              <>
+                <Text>Helloooo, {store.auth.user?.firstName}</Text>
+                <Button colorScheme="blue" variant="outline" width="full">
+                  Submit
+                </Button>
+              </>
+            )}
           </Flex>
         </>
       }
     />
   );
 };
-export default newSession;
+export default StudentDashboard;

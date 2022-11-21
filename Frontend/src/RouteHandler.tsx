@@ -6,10 +6,12 @@ import { useStore } from "./contexts/storeProvider";
 import { Roles } from "../types/roles";
 import CustomError from "./components/CustomError";
 const TestUseQuery = lazy(() => import("./pages/testusequery/TestUseQuery"));
-const NewSession = lazy(() => import("./pages/newsession/newSession"));
+const NewSession = lazy(
+  () => import("./pages/StudentDashboard/StudentDashboard")
+);
 const RegisterNewUser = lazy(() => import("./pages/register/register"));
 
-const App = () => {
+const RouteHandler = () => {
   const store = useStore();
 
   const [routes, setRoutes] = useState<JSX.Element>();
@@ -111,4 +113,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default RouteHandler;
