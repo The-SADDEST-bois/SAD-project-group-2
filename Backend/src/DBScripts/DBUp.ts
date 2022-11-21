@@ -9,9 +9,9 @@ import Sessions from "../Models/Session";
 import { ISession } from "../Interfaces/ISession";
 import { SessionTypes } from "../Utils/SessionTypes";
 import Modules from "../Models/Module";
-import { IModule } from "../Interfaces/IModule";
 import AttendanceRegisters from "../Models/AttendanceRegister";
 import mongoose from "mongoose";
+import AttendanceRegister from "../Models/AttendanceRegister";
 
 const DropCollections = async () => {
   await Users.collection.drop().catch((err) => {
@@ -30,6 +30,10 @@ const DropCollections = async () => {
     console.log("Modules collection does not exist");
   });
   console.log("Modules collection dropped");
+  await AttendanceRegisters.collection.drop().catch((err) => {
+    console.log("AttendanceRegisters collection does not exist");
+  });
+  console.log("AttendanceRegisters collection dropped");
 };
 
 const SetUp = async () => {
@@ -177,9 +181,10 @@ const CreateSessions = async () => {
   // Create Sessions to be added to the database
   const tutor = await Users.findOne({ role: Roles.Tutor });
 
-  const sessions: ISession[] = [
+  const sessions = [
     {
       sessionType: SessionTypes.Lecture,
+      sessionCode: "324512",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -191,6 +196,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
+      sessionCode: "594212",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -202,6 +208,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
+      sessionCode: "974231",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -213,6 +220,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
+      sessionCode: "092347",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -224,6 +232,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
+      sessionCode: "980129",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -235,6 +244,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
+      sessionCode: "409328",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -246,6 +256,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
+      sessionCode: "230498",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -257,6 +268,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
+      sessionCode: "473289",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -268,6 +280,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
+      sessionCode: "120932",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -279,6 +292,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
+      sessionCode: "123892",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -290,6 +304,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
+      sessionCode: "984523",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -301,6 +316,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
+      sessionCode: "120398",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -312,9 +328,7 @@ const CreateSessions = async () => {
     },
   ];
   // add each Session to the database
-  sessions.forEach(async (session) => {
-    await Sessions.create(session);
-  });
+  await Sessions.create(sessions);
   console.log("Sessions created");
 };
 
@@ -347,28 +361,31 @@ const CreateModules = async () => {
   await Modules.create(modules);
 };
 
-/* const CreateCohorts = async () => {
-  // Create Cohorts to be added to the database
-  const cohortLeader = await Users.findOne({ role: Roles.CohortLeader });
-  const moduleIds = await Modules.find().select("_id"); */
-
 const CreateAttendanceRegister = async () => {
   // Create AttendanceRegister to be added to the database
   const sessionIds = await Sessions.find().select("_id");
 
-  const attendanceRegister = [
-    {
-      sessionId: sessionIds[0],
-      attendance: [
-        {
-          firstName: "",
-          lastName: "",
-          attended: 0,
-          _id: "",
-        },
-      ],
-    },
-  ];
+  const students = await Users.find({ role: Roles.Student }).select(
+    "_id firstName lastName"
+  );
+
+  const registers = CreateRegisterSessions(sessionIds, students);
+
+  // add each AttendanceRegister to the database
+  await AttendanceRegister.create(registers);
+
+  console.log("AttendanceRegister created");
+};
+
+const CreateRegisterSessions = (sessionIds: any, students: any) => {
+  var registers: { sessionID: any; attendance: any }[] = [];
+  sessionIds.forEach((id: any) => {
+    registers.push({
+      sessionID: id,
+      attendance: students,
+    });
+  });
+  return registers;
 };
 
 const main = async () => {
@@ -380,6 +397,8 @@ const main = async () => {
   await CreateSessions();
   await Break();
   await CreateModules();
+  await Break();
+  await CreateAttendanceRegister();
   await Break().then(process.exit());
   console.log("Database seeded");
 };

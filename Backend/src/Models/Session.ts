@@ -3,6 +3,7 @@ import { ISession } from "../Interfaces/ISession";
 
 export const sessionSchema = new Schema<ISession>({
   sessionType: { type: String, required: true },
+  sessionCode: { type: String, required: true },
   tutor: {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
