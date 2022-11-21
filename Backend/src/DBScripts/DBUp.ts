@@ -8,6 +8,8 @@ import { ICohort } from "../Interfaces/ICohort";
 import Sessions from "../Models/Session";
 import { ISession } from "../Interfaces/ISession";
 import { SessionTypes } from "../Utils/SessionTypes";
+import Modules from "../Models/Module";
+import { IModule } from "../Interfaces/IModule";
 import mongoose from "mongoose";
 
 const DropCollections = async () => {
@@ -18,10 +20,15 @@ const DropCollections = async () => {
   await AcademicAdvisor.collection.drop().catch((err) => {
     console.log("AcademicAdvisor collection does not exist");
   });
+  console.log("AcademicAdvisor collection dropped");
   await Sessions.collection.drop().catch((err) => {
     console.log("Sessions collection does not exist");
   });
-  console.log("AcademicAdvisor collection dropped");
+  console.log("Sessions collection dropped");
+  await Modules.collection.drop().catch((err) => {
+    console.log("Modules collection does not exist");
+  });
+  console.log("Modules collection dropped");
 };
 
 const SetUp = async () => {
@@ -310,6 +317,51 @@ const CreateSessions = async () => {
   console.log("Sessions created");
 };
 
+const CreateModules = async () => {
+  // Create Modules to be added to the database
+  const moduleLeader = await Users.findOne({ role: Roles.ModuleLeader });
+  const tutor = await Users.findOne({ role: Roles.Tutor });
+  const sessionIds = await Sessions.find().select("_id");
+
+  const modules: IModule[] = [
+    {
+      moduleName: "Software Engineering",
+      moduleLeader: {
+        firstName: moduleLeader.firstName,
+        lastName: moduleLeader.lastName,
+        moduleLeaderId: moduleLeader._id,
+      },
+      tutors: [
+        {
+          firstName: tutor.firstName,
+          lastName: tutor.lastName,
+          tutorId: tutor._id,
+        },
+      ],
+      sessions: [
+        sessionIds[0]._id,
+        sessionIds[1]._id,
+        sessionIds[2]._id,
+        sessionIds[3]._id,
+        sessionIds[4]._id,
+        sessionIds[5]._id,
+        sessionIds[6]._id,
+        sessionIds[7]._id,
+        sessionIds[8]._id,
+        sessionIds[9]._id,
+        sessionIds[10]._id,
+        sessionIds[11]._id,
+      ],
+    },
+  ];
+
+  // add each Module to the database
+  modules.forEach(async (module) => {
+    await Modules.create(module);
+  });
+  console.log("Modules created");
+};
+
 const main = async () => {
   await SetUp();
   await DropCollections();
@@ -317,6 +369,8 @@ const main = async () => {
   await Break();
   await CreateAcademicAdvisors();
   await CreateSessions();
+  await Break();
+  await CreateModules();
   console.log("Database seeded");
 };
 
