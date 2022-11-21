@@ -1,10 +1,10 @@
 import express, { response } from "express";
 import Users from "../Models/User";
 import bcrypt from "bcrypt";
-import { accessToken, verifyToken, decodeToken } from "../middleware/jwt";
+import { accessToken, verifyToken } from "../middleware/jwt";
 import { IUser } from "../Interfaces/IUser";
-import { Jwt } from "jsonwebtoken";
 import { ITokenData } from "../Interfaces/ITokenData";
+import { Roles } from "../../src/Types/Roles";
 
 const userController = express.Router();
 
@@ -24,9 +24,9 @@ userController.post("/login", async (req, response) => {
     if (validPassword) {
       console.log("VALID");
       
-      const cleanUser: IUser = {name: user.name, email: user.email, password: '', role: user.role}
-      const tokenData: ITokenData = { _id: user.id, role: user.role }
-      const newToken = accessToken(tokenData);
+      const cleanUser: IUser = {firstName: user.firstName, lastName: user.lastName, email: user.email, password: '', role: user.role}
+      const data: {_id: string, role: Roles} = { _id: user.id, role: user.role }
+      const newToken = accessToken(data);
       response.status(200).json({ messasge: 'Success', user: cleanUser, accessToken: newToken}).send();
     } else {
       console.log("NOT VALID");
@@ -38,12 +38,19 @@ userController.post("/login", async (req, response) => {
   }
 });
 
-userController.post("/refresh", async (request, response) => {
+userController.post("/reauthenticate", async (request, response) => {
   const cookie: string = request.body.accessToken;
+  const result: any = await verifyToken(JSON.parse(cookie));
 
-  //console.log(cookie);
-  console.log(await verifyToken(JSON.parse(cookie)));
-  response.status(200).json({ message: "Success" });
+  if (result instanceof Error) {
+    response.status(401).json({ error: "Invalid Token" }).send();
+  }
+
+  const data: ITokenData = result
+  const user = await Users.findOne( { _id: data.data._id } )
+  const cleanUser: IUser = {firstName: user.firstName, lastName: user.lastName, email: user.email, password: '', role: user.role}
+  console.log('REAUTHENTICATE', Date.now());
+  response.status(200).json({ messasge: 'Success', user: cleanUser}).send();
 })
 
 // User Controller post endpoint (adds user to database) (can rename to /createUser if necessary)

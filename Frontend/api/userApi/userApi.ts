@@ -47,3 +47,9 @@ export const login = async (credentials: ICredentials) => {
       },
     })
 };
+
+export const reAuthenticate = async (token: string) => {
+  return await api.post(`/user/reauthenticate`, {
+    accessToken: token,
+  });
+}
