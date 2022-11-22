@@ -5,8 +5,8 @@ export interface IAttendanceRegister {
     {
       firstName: string;
       lastName: string;
-      attendend: number;
-      _id?: Schema.Types.ObjectId;
+      attended: number;
+      studentId: Schema.Types.ObjectId;
     }
   ];
   sessionID: Schema.Types.ObjectId;

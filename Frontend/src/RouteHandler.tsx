@@ -6,6 +6,7 @@ import { useStore } from "./contexts/storeProvider";
 import { Roles } from "../types/roles";
 import CustomError from "./components/CustomError";
 import StudentDashboard from "./pages/StudentDashboard/StudentDashboard";
+import TutorDashboard from "./pages/TutorDashboard/TutorDashboard";
 const TestUseQuery = lazy(() => import("./pages/testusequery/TestUseQuery"));
 const NewSession = lazy(
   () => import("./pages/StudentDashboard/StudentDashboard")
@@ -24,7 +25,7 @@ const RouteHandler = () => {
   );
 
   useEffect(() => {
-    if (store?.auth.user.role == Roles.Admin) {
+    if (store?.auth.user.role === Roles.Admin) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Login />} />
@@ -35,7 +36,7 @@ const RouteHandler = () => {
         </Routes>
       );
     }
-    if (store?.auth.user.role == Roles.CourseLeader) {
+    if (store?.auth.user.role === Roles.CourseLeader) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Login />} />
@@ -46,7 +47,7 @@ const RouteHandler = () => {
         </Routes>
       );
     }
-    if (store?.auth.user.role == Roles.ModuleLeader) {
+    if (store?.auth.user.role === Roles.ModuleLeader) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Login />} />
@@ -57,7 +58,7 @@ const RouteHandler = () => {
         </Routes>
       );
     }
-    if (store?.auth.user.role == Roles.AcademicAdvisor) {
+    if (store?.auth.user.role === Roles.AcademicAdvisor) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Login />} />
@@ -68,7 +69,7 @@ const RouteHandler = () => {
         </Routes>
       );
     }
-    if (store?.auth.user.role == Roles.Tutor) {
+    if (store?.auth.user.role === Roles.Tutor) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Login />} />
@@ -76,10 +77,11 @@ const RouteHandler = () => {
           <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
           <Route path="*" element={<CustomError errorMessage="sixth" />} />
+          <Route path="/tutordashboard" element={<TutorDashboard />} />
         </Routes>
       );
     }
-    if (store?.auth.user.role == Roles.Student) {
+    if (store?.auth.user.role === Roles.Student) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Login />} />

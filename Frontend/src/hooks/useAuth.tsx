@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IUser } from "../../types/types";
 import Cookies from "js-cookie";
 import { reAuthenticate } from "../../api/userApi/userApi";
@@ -23,6 +23,7 @@ const useAuth = () => {
 
   const logout = async () => {
     setUser({} as IUser);
+    Cookies.remove("accessToken", { path: "" });
   };
 
   return { user, login, logout, Authenticate };

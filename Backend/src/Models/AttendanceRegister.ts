@@ -4,10 +4,10 @@ import { IAttendanceRegister } from "../Interfaces/IAttendanceRegister";
 const attendanceRegisterSchema = new Schema<IAttendanceRegister>({
   attendance: [
     {
-      _id: { type: Schema.Types.ObjectId, required: true },
+      studentId: { type: Schema.Types.ObjectId, required: false },
       firstName: { type: String, required: true },
       lastName: { type: String, required: true },
-      attended: Number,
+      attended: { type: Number, default: 0 },
     },
   ],
   sessionID: { type: Schema.Types.ObjectId, required: true },

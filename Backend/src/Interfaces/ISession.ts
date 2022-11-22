@@ -3,6 +3,7 @@ import { SessionTypes } from "../Utils/SessionTypes";
 
 export interface ISession {
   sessionType: SessionTypes;
+  sessionCode: string;
   tutor: {
     firstName: string,
     lastName: string,

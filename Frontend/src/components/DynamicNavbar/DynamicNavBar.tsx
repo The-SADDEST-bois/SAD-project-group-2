@@ -3,18 +3,36 @@ import {
   HiOutlineBookOpen,
   HiOutlineLogin,
 } from "react-icons/hi";
-import { Flex, Text, VStack } from "@chakra-ui/react";
+import { Flex, Text, useToast, VStack } from "@chakra-ui/react";
 import { ReactNode } from "react";
+import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { useToasts } from "../../hooks/useToasts/useToasts";
 
 interface NavbarItems {
   label: string;
   icon: ReactNode;
 }
+// TODO add url to navbar items and pass navigate
 
 interface IDynamicNavBar {
   role: string;
 }
 export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const { onSuccessToast, onErrorToast } = useToasts();
+
+  const handleLogout = () => {
+    try {
+      logout();
+      navigate("/");
+      onSuccessToast("Logged Out Succesfully");
+    } catch (err) {
+      onErrorToast("Problem Loggin Out", `${err}`);
+    }
+  };
+
   const StudentNavbar: NavbarItems[] = [
     {
       label: "Join Session",
@@ -28,7 +46,7 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
 
   const TutorNavbar: NavbarItems[] = [
     {
-      label: "Start Session",
+      label: "View Sessions",
       icon: <HiOutlineCalendar size="40" />,
     },
     {
@@ -59,7 +77,7 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
               </Text>
             </VStack>
           ))}
-        <VStack cursor="pointer">
+        <VStack cursor="pointer" onClick={handleLogout}>
           <HiOutlineLogin size="50" />
           <Text width="100px" align="center" fontSize={"sm"}>
             Log out

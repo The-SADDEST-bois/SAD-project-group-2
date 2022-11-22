@@ -7,6 +7,14 @@ export interface IUser {
   _id?: string;
 }
 
+interface ICredentials {
+  email: string;
+  password: string;
+  role: Roles;
+  firstName?: string;
+  lastName?: string;
+}
+
 export interface ISession {
   sessionType: SessionTypes;
   tutor: {

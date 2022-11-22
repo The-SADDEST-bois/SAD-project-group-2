@@ -26,7 +26,7 @@ export const fetchUser = async () => {
 export const addUserToDatabase = async (payload: IUser) => {
   const res = await api.post<IUser>(`/user/register`, payload);
 
-  console.log(res);
+  console.log("after post", res);
 
   return;
 };
@@ -35,8 +35,6 @@ interface ICredentials {
   email: string;
   password: string;
 }
-
-// Promise<{ data?: INoteTag[]; error?: Error }>
 
 export const loginUser = async (credentials: ICredentials) => {
   return await api.post(`/user/login`, {
