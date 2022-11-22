@@ -4,11 +4,11 @@ import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBa
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { useMutation } from "react-query";
 import { useState } from "react";
-import { useToast } from "@chakra-ui/react";
+import { useToasts } from "../../hooks/useToasts/useToasts";
 
 const StudentDashboard = () => {
   const store = useStore();
-  const toast = useToast();
+  const { onSuccessToast, onErrorToast } = useToasts();
 
   const [sessionCode, setSessionCode] = useState<string>("");
 
@@ -24,22 +24,16 @@ const StudentDashboard = () => {
   const handleSubmit = () => {
     mutation.mutate(sessionCode, {
       onSuccess: (response) => {
-        toast({
-          title: "Joined Session",
-          description: `You have successfully joined session ${sessionCode}`,
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
+        onSuccessToast(
+          "Joined Session",
+          `You have successfully joined session ${sessionCode}`
+        );
       },
       onError: (error) => {
-        toast({
-          title: "Error Joining Session",
-          description: `Cannot join session ${sessionCode}`,
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
+        onErrorToast(
+          "Error Joining Session",
+          `Cannot join session ${sessionCode}`
+        );
       },
     });
   };
