@@ -7,8 +7,12 @@ export const newSessionApi = async (session: ISession) => {
   console.log(res);
 };
 
-export const getAllSessionsApi = async () => {
-  const res = await api.get("session/allSessions");
+export const getAllSessionsApi = async (_id: string) => {
+  const res = await api.get("session/sessionByTutor", {
+    params: {
+      _id: _id,
+    }
+  });
   return res.data as ISession[];
 }
 

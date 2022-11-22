@@ -6,7 +6,7 @@ export interface ISession {
   tutor: {
     firstName: string,
     lastName: string,
-    _id?: Schema.Types.ObjectId
+    tutorId?: Schema.Types.ObjectId
   };
   startTime: Date;
   duration?: number;

@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import Users from "../Models/User";
 import { ISession } from "../Interfaces/ISession";
 import Sessions from "../Models/Session";
 const sessionController = express.Router();
@@ -35,6 +36,26 @@ sessionController.get("/allSessions", (request, response) => {
         response.status(200).json(sessions);
       }
     });
+});
+
+sessionController.get("/sessionByTutor", async (request, response) => {
+  const id = request.query._id;
+  const tutor = await Users.findOne({
+    _id: id,
+  }).select("tutorId");
+  console.log(tutor._id);
+
+  Sessions.find({tutor: tutor }, (err: any, document: any) => {
+    if (err) {
+      response
+        .status(err.status || 400)
+        .json({ error: "Error getting sessions", message: err });
+      return;
+    } else {
+      //console.log("successful session retrieval", document);
+      response.status(200).json(document);
+    }
+  });
 });
 
 sessionController.post("/newSession", (request, response) => {

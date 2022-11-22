@@ -7,11 +7,17 @@ import {
   setSessionOpen,
 } from "../../../api/sessionApi/sessionApi";
 import { ISession } from "../../../types/types";
+import { useStore } from "../../contexts/storeProvider";
 
 const TestUseQuery = () => {
+
+  const store = useStore();
+
   const { isLoading, error, data, refetch } = useQuery<ISession[], Error>({
-    queryFn: getAllSessionsApi,
-    refetchInterval: 10000,
+
+    queryFn: () => getAllSessionsApi(store.auth.user?._id as string),
+    refetchInterval: 100000,
+    retry: 1,
   });
 
   const mutation = useMutation({

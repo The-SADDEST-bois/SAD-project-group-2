@@ -4,7 +4,7 @@ import { ISession } from "../Interfaces/ISession";
 export const sessionSchema = new Schema<ISession>({
   sessionType: { type: String, required: true },
   tutor: {
-    _id: { type: Schema.Types.ObjectId, required: true },
+    tutorId: { type: Schema.Types.ObjectId, required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true}
   },
