@@ -6,6 +6,7 @@ import { useStore } from "./contexts/storeProvider";
 import { Roles } from "../types/roles";
 import CustomError from "./components/CustomError";
 import StudentDashboard from "./pages/StudentDashboard/StudentDashboard";
+import TutorDashboard from "./pages/TutorDashboard/TutorDashboard";
 const TestUseQuery = lazy(() => import("./pages/testusequery/TestUseQuery"));
 const NewSession = lazy(
   () => import("./pages/StudentDashboard/StudentDashboard")
@@ -76,6 +77,7 @@ const RouteHandler = () => {
           <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
           <Route path="*" element={<CustomError errorMessage="sixth" />} />
+          <Route path="/tutordashboard" element={<TutorDashboard />} />
         </Routes>
       );
     }

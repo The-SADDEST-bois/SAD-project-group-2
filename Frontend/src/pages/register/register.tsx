@@ -1,4 +1,3 @@
-import { Button } from "@chakra-ui/button";
 import {
   FormLabel,
   FormHelperText,
@@ -11,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { addUserToDatabase } from "../../../api/userApi/userApi";
 import { Roles } from "../../../types/roles";
 import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTemplate";
+import { StyledButton } from "../../components/StyledButton/StyledButton";
 
 interface ICredentials {
   email: string;
@@ -122,14 +122,11 @@ const Register = () => {
               <option value={Roles.CourseLeader}>Course Leader</option>
             </Select>
           </Flex>
-          <Button
+          <StyledButton
+            buttonText={"Submit"}
             onClick={onSubmit}
-            width="full"
-            background="#17BEBB"
-            _hover={{ bg: "#58edea" }}
-          >
-            Submit
-          </Button>
+            isDisabled={!errors.email || errors.password}
+          />
         </FormControl>
       }
     />
