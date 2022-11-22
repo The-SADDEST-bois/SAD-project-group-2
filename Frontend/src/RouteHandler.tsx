@@ -24,7 +24,7 @@ const RouteHandler = () => {
   );
 
   useEffect(() => {
-    if (store?.auth.user.role == Roles.Admin) {
+    if (store?.auth.user.role === Roles.Admin) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Login />} />
@@ -35,7 +35,7 @@ const RouteHandler = () => {
         </Routes>
       );
     }
-    if (store?.auth.user.role == Roles.CourseLeader) {
+    if (store?.auth.user.role === Roles.CourseLeader) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Login />} />
@@ -46,7 +46,7 @@ const RouteHandler = () => {
         </Routes>
       );
     }
-    if (store?.auth.user.role == Roles.ModuleLeader) {
+    if (store?.auth.user.role === Roles.ModuleLeader) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Login />} />
@@ -57,7 +57,7 @@ const RouteHandler = () => {
         </Routes>
       );
     }
-    if (store?.auth.user.role == Roles.AcademicAdvisor) {
+    if (store?.auth.user.role === Roles.AcademicAdvisor) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Login />} />
@@ -68,7 +68,7 @@ const RouteHandler = () => {
         </Routes>
       );
     }
-    if (store?.auth.user.role == Roles.Tutor) {
+    if (store?.auth.user.role === Roles.Tutor) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Login />} />
@@ -79,7 +79,7 @@ const RouteHandler = () => {
         </Routes>
       );
     }
-    if (store?.auth.user.role == Roles.Student) {
+    if (store?.auth.user.role === Roles.Student) {
       setRoutes(
         <Routes>
           <Route path="/" element={<Login />} />

@@ -10,7 +10,7 @@ import { loginUser } from "../../../api/userApi/userApi";
 import { useMutation } from "react-query";
 import { useStore } from "../../contexts/storeProvider";
 import { IUser } from "../../../types/types";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTemplate";
 import { Flex } from "@chakra-ui/react";
 
@@ -58,6 +58,7 @@ const Login = () => {
   function isValidEmail(email: string) {
     return /\S+@\S+\.\S+/.test(email);
   }
+
   const errors = {
     email: isValidEmail(credentials.email),
     password: credentials.password.length < 3,
@@ -116,7 +117,6 @@ const Login = () => {
           >
             Submit
           </Button>
-          <Link to="/newSession">New Session</Link>
         </FormControl>
       }
     />
