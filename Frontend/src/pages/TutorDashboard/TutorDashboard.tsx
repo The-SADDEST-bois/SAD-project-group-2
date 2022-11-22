@@ -22,9 +22,12 @@ const TutorDashboard = () => {
   const [currentSession, setCurrentSession] = useState({} as ISession);
 
   const { isLoading, error, data, refetch } = useQuery<ISession[], Error>({
-    queryFn: () => getAllSessionsApi(store.auth.user?._id as string),
+    queryFn: () => getAllSessionsApi(store.auth.user._id as string),
     refetchInterval: 10000,
   });
+
+  console.log("data = ", data);
+  console.log("user  = ", store.auth.user);
 
   const mutation = useMutation({
     mutationFn: setSessionOpen,

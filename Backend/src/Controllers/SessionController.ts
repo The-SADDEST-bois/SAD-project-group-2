@@ -41,6 +41,8 @@ sessionController.get("/allSessions", (request, response) => {
 sessionController.get("/sessionByTutor", async (request, response) => {
   const id = request.query._id;
 
+  console.log("ID ====>", id);
+
   Sessions.find({ "tutor.tutorId": id }, (err: any, document: any) => {
     if (err) {
       response

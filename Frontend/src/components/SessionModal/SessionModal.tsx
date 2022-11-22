@@ -10,6 +10,8 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
+import { useQuery } from "react-query";
+import { getSessionAttendees } from "../../../api/sessionApi/sessionApi";
 import { ISession } from "../../../types/types";
 
 interface ISessionModal {
@@ -19,6 +21,13 @@ interface ISessionModal {
 }
 
 export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
+  const { isLoading, error, data, refetch } = useQuery<ISession[], Error>({
+    queryFn: () => getSessionAttendees(session._id as string),
+    refetchInterval: 10000,
+  });
+
+  console.log("data =", data);
+
   return (
     <Modal onClose={onClose} size={"full"} isOpen={isOpen}>
       <ModalOverlay />

@@ -8,16 +8,28 @@ export const newSessionApi = async (session: ISession) => {
 };
 
 export const getAllSessionsApi = async (_id: string) => {
+  console.log("id = ", _id);
+
   const res = await api.get("session/sessionByTutor", {
     params: {
       _id: _id,
-    }
+    },
   });
-  console.log(res.data);
+  console.log("response = ", res.data);
   return res.data as ISession[];
-}
+};
 
 export const setSessionOpen = async (session: ISession) => {
   const res = await api.post<ISession>("session/toggleSession", session);
-  return res.data
-}
+  return res.data;
+};
+
+export const getSessionAttendees = async (_id: string) => {
+  const res = await api.get("session/attendance", {
+    params: {
+      _id: _id,
+    },
+  });
+
+  return res.data;
+};
