@@ -54,7 +54,7 @@ sessionController.get("/sessionByTutor", async (request, response) => {
   });
 });
 
-sessionController.get("/register", async (request, response) => {
+sessionController.get("/attendance", async (request, response) => {
   const id = request.query._id;
   var registerQuery = AttendanceRegisters.find({
     sessionID: id,
