@@ -5,9 +5,9 @@ export interface ISession {
   sessionType: SessionTypes;
   sessionCode: string;
   tutor: {
-    firstName: string;
-    lastName: string;
-    tutorId: Schema.Types.ObjectId;
+    firstName: string,
+    lastName: string,
+    tutorId?: Schema.Types.ObjectId
   };
   startTime: Date;
   duration?: number;
