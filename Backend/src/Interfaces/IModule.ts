@@ -14,6 +14,5 @@ export interface IModule {
       tutorId: Schema.Types.ObjectId;
     }
   ];
-  sessions: Schema.Types.ObjectId[];
   _id?: Schema.Types.ObjectId;
 }
