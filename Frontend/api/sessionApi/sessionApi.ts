@@ -13,6 +13,7 @@ export const getAllSessionsApi = async (_id: string) => {
       _id: _id,
     }
   });
+  console.log(res.data);
   return res.data as ISession[];
 }
 

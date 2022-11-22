@@ -16,8 +16,7 @@ const TestUseQuery = () => {
   const { isLoading, error, data, refetch } = useQuery<ISession[], Error>({
 
     queryFn: () => getAllSessionsApi(store.auth.user?._id as string),
-    refetchInterval: 100000,
-    retry: 1,
+    refetchInterval: 10000,
   });
 
   const mutation = useMutation({
@@ -53,6 +52,7 @@ const TestUseQuery = () => {
 
   return (
     <VStack>
+      <h1>{store.auth.user.firstName}</h1>
       {data?.map((session) => (
         <Button onClick={() => handleSubmit(session)}>
           {" id:" +
