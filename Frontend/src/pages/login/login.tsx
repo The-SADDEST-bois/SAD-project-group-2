@@ -6,32 +6,53 @@ import {
 } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { useState } from "react";
-import { login } from "../../../api/userApi/userApi";
+import { loginUser } from "../../../api/userApi/userApi";
 import { useMutation } from "react-query";
 import { useStore } from "../../contexts/storeProvider";
 import { IUser } from "../../../types/types";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTemplate";
 import { Flex } from "@chakra-ui/react";
+import { StyledButton } from "../../components/StyledButton/StyledButton";
 
 interface ICredentials {
   email: string;
   password: string;
 }
 
-const Home = () => {
+interface IUserDetails {
+  email: string;
+  role: string;
+  password: string;
+}
+interface IAuthResponse {
+  accessToken: string;
+  message: string;
+  user: IUserDetails;
+}
+
+const Login = () => {
   const navigate = useNavigate();
   const authStore = useStore();
   const mutation = useMutation({
-    mutationFn: login,
+    mutationFn: loginUser,
   });
 
-  const setAuthStore = (data: any) => {
+  const setAuthStore = (data: IAuthResponse) => {
     if (authStore) {
       authStore.auth.login(data.user as IUser, data.accessToken);
-      navigate("/NewSession");
     } else {
       console.log("authStore is null");
+      return;
+    }
+
+    if (data.user.role === "Student") {
+      navigate("/studentdashboard");
+      return;
+    }
+    if (data.user.role === "Tutor") {
+      navigate("/tutordashboard");
+      return;
     }
   };
 
@@ -57,6 +78,7 @@ const Home = () => {
   function isValidEmail(email: string) {
     return /\S+@\S+\.\S+/.test(email);
   }
+
   const errors = {
     email: isValidEmail(credentials.email),
     password: credentials.password.length < 3,
@@ -106,19 +128,14 @@ const Home = () => {
             )}
           </Flex>
 
-          <Button
+          <StyledButton
+            buttonText={"Submit"}
             onClick={handleSubmit}
-            width="full"
-            background="#17BEBB"
-            _hover={{ bg: "#58edea" }}
             isDisabled={!errors.email || errors.password}
-          >
-            Submit
-          </Button>
-          <Link to="/newSession">New Session</Link>
+          />
         </FormControl>
       }
     />
   );
 };
-export default Home;
+export default Login;

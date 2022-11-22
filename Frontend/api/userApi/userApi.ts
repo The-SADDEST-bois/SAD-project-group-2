@@ -21,12 +21,12 @@ export const fetchUser = async () => {
 
   assertIsUser(data);
   return data;
-}
+};
 
 export const addUserToDatabase = async (payload: IUser) => {
   const res = await api.post<IUser>(`/user/register`, payload);
 
-  console.log(res);
+  console.log("after post", res);
 
   return;
 };
@@ -36,20 +36,17 @@ interface ICredentials {
   password: string;
 }
 
-// Promise<{ data?: INoteTag[]; error?: Error }>
-
-export const login = async (credentials: ICredentials) => {
-  return await api
-    .post(`/user/login`, {
-      data: {
-        email: credentials.email,
-        password: credentials.password,
-      },
-    })
+export const loginUser = async (credentials: ICredentials) => {
+  return await api.post(`/user/login`, {
+    data: {
+      email: credentials.email,
+      password: credentials.password,
+    },
+  });
 };
 
 export const reAuthenticate = async (token: string) => {
   return await api.post(`/user/reauthenticate`, {
     accessToken: token,
   });
-}
+};
