@@ -1,7 +1,6 @@
 import express, { Request, Response } from "express";
 import { ISession } from "../Interfaces/ISession";
 import Sessions from "../Models/Session";
-import AttendanceRegisters from "../Models/AttendanceRegister";
 const sessionController = express.Router();
 
 // Session controller post endpoint (adds session to database) (can rename to /createSession if necessary)
@@ -54,7 +53,7 @@ sessionController.get("/sessionByTutor", async (request, response) => {
   });
 });
 
-sessionController.get("/attendance", async (request, response) => {
+/* sessionController.get("/attendance", async (request, response) => {
   const id = request.query._id;
   var registerQuery = AttendanceRegisters.find({
     sessionID: id,
@@ -70,7 +69,7 @@ sessionController.get("/attendance", async (request, response) => {
       response.status(200).json(document);
     }
   });
-});
+}); */
 
 sessionController.post("/newSession", (request, response) => {
   const session = request.body;

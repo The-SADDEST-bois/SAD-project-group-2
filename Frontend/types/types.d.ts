@@ -62,6 +62,13 @@ export interface IModule {
       _id?: string;
     }
   ];
+  cohorts: [
+    {
+      cohortId: string;
+      courseName: string;
+      cohortAttendance: number;
+    }
+  ];
   _id?: string;
 }
 
@@ -78,18 +85,5 @@ export interface ICohort {
       _id?: string;
     }
   ];
-  _id?: string;
-}
-
-export interface IAttendanceRegister {
-  attendance: [
-    {
-      firstName: string;
-      lastName: string;
-      attendend: number;
-      _id?: string;
-    }
-  ];
-  sessionID: string;
   _id?: string;
 }

@@ -1,15 +1,13 @@
-import Users from "../Models/User";
-import { IUser } from "../Interfaces/IUser";
+import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import { Roles } from "../Types/Roles";
+import { SessionTypes } from "../Utils/SessionTypes";
+import { IUser } from "../Interfaces/IUser";
+import Users from "../Models/User";
 import AcademicAdvisor from "../Models/AcademicAdvisor";
 import Cohorts from "../Models/Cohort";
 import Sessions from "../Models/Session";
-import { SessionTypes } from "../Utils/SessionTypes";
 import Modules from "../Models/Module";
-import AttendanceRegisters from "../Models/AttendanceRegister";
-import mongoose from "mongoose";
-import AttendanceRegister from "../Models/AttendanceRegister";
 import Courses from "../Models/Course";
 
 const DropCollections = async () => {
@@ -29,10 +27,6 @@ const DropCollections = async () => {
     console.log("Modules collection does not exist");
   });
   console.log("Modules collection dropped");
-  await AttendanceRegisters.collection.drop().catch((err) => {
-    console.log("AttendanceRegisters collection does not exist");
-  });
-  console.log("AttendanceRegisters collection dropped");
   await Courses.collection.drop().catch((err) => {
     console.log("Courses collection does not exist");
   });
@@ -184,6 +178,108 @@ const CreateAcademicAdvisors = async () => {
   console.log("AcademicAdvisors created");
 };
 
+const CreateCourses = async () => {
+  // Create Courses to be added to the database
+  const modules = await Modules.find({
+    moduleName: "Software Architecture",
+  }).select("_id moduleName");
+
+  const students = await Users.find({ role: Roles.Student }).select(
+    "_id firstName lastName"
+  );
+
+  const courseLeader = await Users.findOne({ role: Roles.CourseLeader });
+
+  const courses = [
+    {
+      courseName: "Software Engineering",
+      courseLeader: {
+        firstName: courseLeader.firstName,
+        lastName: courseLeader.lastName,
+        _id: courseLeader._id,
+      },
+      students: students,
+      modules: modules,
+    },
+  ];
+
+  // add each Course to the database
+  await Courses.create(courses);
+  console.log("Courses created");
+};
+const CreateCohorts = async () => {
+  // Create Cohorts to be added to the database
+  const studentsInSoftwareEngineering = await Courses.find({
+    courseName: "Software Engineering",
+  }).select("students");
+
+  const courseIdForSoftwareEngineering = await Courses.findOne({
+    courseName: "Software Engineering",
+  }).select("_id");
+
+  const cohorts = [
+    {
+      courseId: courseIdForSoftwareEngineering._id,
+      students: studentsInSoftwareEngineering[0].students,
+    },
+  ];
+
+  // add each Cohort to the database
+  await Cohorts.create(cohorts);
+  console.log("Cohorts created");
+};
+const CreateModules = async () => {
+  // Create Modules to be added to the database
+  const moduleLeader = await Users.findOne({ role: Roles.ModuleLeader });
+  const tutor = await Users.findOne({ role: Roles.Tutor });
+  const softwareEngineeringCourse = await Courses.findOne({
+    courseName: "Software Engineering",
+  });
+  const softwareEngineeringCohortId = await Cohorts.findOne({
+    courseId: softwareEngineeringCourse._id,
+  }).select("_id");
+
+  const modules = [
+    {
+      moduleName: "Software Architecture",
+      moduleLeader: {
+        firstName: moduleLeader.firstName,
+        lastName: moduleLeader.lastName,
+        moduleLeaderId: moduleLeader._id,
+      },
+      tutors: [
+        {
+          firstName: tutor.firstName,
+          lastName: tutor.lastName,
+          tutorId: tutor._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohortId._id,
+          courseName: softwareEngineeringCourse.courseName,
+        },
+      ],
+    },
+  ];
+
+  // add each Module to the database
+  await Modules.create(modules);
+  console.log("Modules created");
+
+  const moduleToAdd = await Modules.findOne({
+    moduleName: "Software Architecture",
+  });
+
+  // add eache Module to courses
+  softwareEngineeringCourse.modules.push({
+    moduleName: moduleToAdd.moduleName,
+    _id: moduleToAdd._id,
+  });
+  await softwareEngineeringCourse.save();
+  console.log("Modules added to courses");
+};
+
 const CreateSessions = async () => {
   // Create Sessions to be added to the database
   const tutor = await Users.findOne({ role: Roles.Tutor });
@@ -198,6 +294,11 @@ const CreateSessions = async () => {
         lastName: tutor.lastName,
         tutorId: tutor._id,
       },
+      courses: [
+        {
+          courseName: "Computer Science",
+        },
+      ],
       startTime: new Date("2022/09/25 14:00"),
       duration: 120,
       isOpen: false,
@@ -351,129 +452,22 @@ const CreateSessions = async () => {
   console.log("Sessions created");
 };
 
-const CreateModules = async () => {
-  // Create Modules to be added to the database
-  const moduleLeader = await Users.findOne({ role: Roles.ModuleLeader });
-  const tutor = await Users.findOne({ role: Roles.Tutor });
-
-  const modules = [
-    {
-      moduleName: "Software Architecture",
-      moduleLeader: {
-        firstName: moduleLeader.firstName,
-        lastName: moduleLeader.lastName,
-        moduleLeaderId: moduleLeader._id,
-      },
-      tutors: [
-        {
-          firstName: tutor.firstName,
-          lastName: tutor.lastName,
-          tutorId: tutor._id,
-        },
-      ],
-    },
-  ];
-
-  // add each Module to the database
-  await Modules.create(modules);
-};
-
-const CreateAttendanceRegister = async () => {
-  // Create AttendanceRegister to be added to the database
-  const sessionIds = await Sessions.find().select("_id");
-
-  const students = await Users.find({ role: Roles.Student }).select(
-    "_id firstName lastName"
-  );
-
-  const registers = CreateRegisterSessions(sessionIds, students);
-
-  // add each AttendanceRegister to the database
-  await AttendanceRegister.create(registers);
-
-  console.log("AttendanceRegister created");
-};
-
-const CreateRegisterSessions = (sessionIds: any, students: any) => {
-  var registers: { sessionID: any; attendance: any }[] = [];
-  sessionIds.forEach((id: any) => {
-    registers.push({
-      sessionID: id,
-      attendance: students,
-    });
-  });
-  return registers;
-};
-
-const CreateCohorts = async () => {
-  // Create Cohorts to be added to the database
-  const studentsInSoftwareEngineering = await Courses.find({
-    courseName: "Software Engineering",
-  }).select("students");
-
-  const courseIdForSoftwareEngineering = await Courses.findOne({
-    courseName: "Software Engineering",
-  }).select("_id");
-
-  const cohorts = [
-    {
-      courseId: courseIdForSoftwareEngineering._id,
-      students: studentsInSoftwareEngineering[0].students,
-    },
-  ];
-
-  // add each Cohort to the database
-  await Cohorts.create(cohorts);
-  console.log("Cohorts created");
-};
-
-const CreateCourses = async () => {
-  // Create Courses to be added to the database
-  const modules = await Modules.find({
-    moduleName: "Software Architecture",
-  }).select("_id moduleName");
-
-  const students = await Users.find({ role: Roles.Student }).select(
-    "_id firstName lastName"
-  );
-
-  const courseLeader = await Users.findOne({ role: Roles.CourseLeader });
-
-  const courses = [
-    {
-      courseName: "Software Engineering",
-      courseLeader: {
-        firstName: courseLeader.firstName,
-        lastName: courseLeader.lastName,
-        _id: courseLeader._id,
-      },
-      students: students,
-      modules: modules,
-    },
-  ];
-
-  // add each Course to the database
-  await Courses.create(courses);
-  console.log("Courses created");
-};
-
 const main = async () => {
   await SetUp();
   await DropCollections();
   await CreateUsers();
   await Break();
   await CreateAcademicAdvisors();
-  await CreateSessions();
-  await Break();
-  await CreateModules();
-  await Break();
-  await CreateAttendanceRegister();
   await Break();
   await CreateCourses();
   await Break();
   await CreateCohorts();
+  await Break();
+  await CreateModules();
+  await Break();
   await Break().then(process.exit());
   console.log("Database seeded");
 };
 
+//await CreateSessions();
 main();
