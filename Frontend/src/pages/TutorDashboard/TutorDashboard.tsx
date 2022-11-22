@@ -2,6 +2,7 @@ import { Button, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
 import { useMutation, useQuery } from "react-query";
 import {
   getAllSessionsApi,
+  getSessionAttendees,
   setSessionOpen,
 } from "../../../api/sessionApi/sessionApi";
 import { ISession } from "../../../types/types";
@@ -12,7 +13,12 @@ import { useStore } from "../../contexts/storeProvider";
 import { useToasts } from "../../hooks/useToasts/useToasts";
 import { formatDate } from "../../utils/formatDate/formatDate";
 import { useDisclosure } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+interface newQueryResponse {
+  tester: ISession[];
+  tester2: any[];
+}
 
 const TutorDashboard = () => {
   const store = useStore();
@@ -21,17 +27,26 @@ const TutorDashboard = () => {
 
   const [currentSession, setCurrentSession] = useState({} as ISession);
 
-  const { isLoading, error, data, refetch } = useQuery<ISession[], Error>({
-    queryFn: () => getAllSessionsApi(store.auth.user._id as string),
-    refetchInterval: 10000,
+  const { isLoading, error, data, refetch } = useQuery({
+    queryFn: () => handleMultipleQueries(),
   });
 
-  console.log("data = ", data);
-  console.log("user  = ", store.auth.user);
+  console.log("Data = ", data);
 
   const mutation = useMutation({
     mutationFn: setSessionOpen,
   });
+
+  const handleMultipleQueries = async () => {
+    const tester = await getAllSessionsApi(store.auth.user._id as string);
+    console.log("tester = ", tester);
+
+    if (!currentSession) return;
+    const tester2 = await getSessionAttendees(currentSession._id as string);
+    console.log("tester2 = ", tester2);
+
+    return { tester, tester2 };
+  };
 
   const handleSubmit = (session: ISession) => {
     mutation.mutate(
@@ -40,8 +55,8 @@ const TutorDashboard = () => {
         onSuccess: (response) => {
           onSuccessToast("Session Started");
           setCurrentSession(session);
-          onOpen();
           refetch();
+          onOpen();
         },
         onError: (error) => {
           onErrorToast("Error Joining Session");
@@ -51,9 +66,16 @@ const TutorDashboard = () => {
     );
   };
 
+  useEffect(() => {
+    console.log("Ping");
+    refetch;
+  }, [currentSession]);
+
+  console.log("data = ", data);
+
   return (
     <PageWithSideBar
-      leftSection={<DynamicNavBar role={store.auth.user.role.toString()} />}
+      leftSection={<DynamicNavBar role={store?.auth?.user?.role as string} />}
       rightSection={
         <>
           {isLoading && (
@@ -77,8 +99,9 @@ const TutorDashboard = () => {
             wrap={"wrap"}
           >
             <>
-              {data &&
-                data.map((item: ISession) => (
+              {!isOpen &&
+                !isLoading &&
+                data?.tester.map((item: ISession) => (
                   <VStack
                     width="300px"
                     height="200px"
@@ -88,14 +111,14 @@ const TutorDashboard = () => {
                   >
                     <Text color="white">
                       <b>Session Type: </b>
-                      {item.sessionType}
+                      {item?.sessionType}
                     </Text>
                     <Text color="white">
-                      <b>Module: </b> {item.moduleName}
+                      <b>Module: </b> {item?.moduleName}
                     </Text>
                     <Text color="white">
                       <>
-                        <b>Date: </b> {formatDate(item.startTime.toString())}
+                        <b>Date: </b> {formatDate(item?.startTime.toString())}
                       </>
                     </Text>
 
