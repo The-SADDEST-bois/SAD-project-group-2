@@ -13,10 +13,22 @@ import { IUser } from "../../../types/types";
 import { useNavigate } from "react-router-dom";
 import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTemplate";
 import { Flex } from "@chakra-ui/react";
+import { StyledButton } from "../../components/StyledButton/StyledButton";
 
 interface ICredentials {
   email: string;
   password: string;
+}
+
+interface IUserDetails {
+  email: string;
+  role: string;
+  password: string;
+}
+interface IAuthResponse {
+  accessToken: string;
+  message: string;
+  user: IUserDetails;
 }
 
 const Login = () => {
@@ -26,13 +38,21 @@ const Login = () => {
     mutationFn: loginUser,
   });
 
-  const setAuthStore = (data: any) => {
+  const setAuthStore = (data: IAuthResponse) => {
     if (authStore) {
       authStore.auth.login(data.user as IUser, data.accessToken);
-      //TODO navigate based on role
-      navigate("/studentdashboard");
     } else {
       console.log("authStore is null");
+      return;
+    }
+
+    if (data.user.role === "Student") {
+      navigate("/studentdashboard");
+      return;
+    }
+    if (data.user.role === "Tutor") {
+      navigate("/tutordashboard");
+      return;
     }
   };
 
@@ -108,15 +128,11 @@ const Login = () => {
             )}
           </Flex>
 
-          <Button
+          <StyledButton
+            buttonText={"Submit"}
             onClick={handleSubmit}
-            width="full"
-            background="#17BEBB"
-            _hover={{ bg: "#58edea" }}
             isDisabled={!errors.email || errors.password}
-          >
-            Submit
-          </Button>
+          />
         </FormControl>
       }
     />

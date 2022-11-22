@@ -46,7 +46,7 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
 
   const TutorNavbar: NavbarItems[] = [
     {
-      label: "Start Session",
+      label: "View Sessions",
       icon: <HiOutlineCalendar size="40" />,
     },
     {
