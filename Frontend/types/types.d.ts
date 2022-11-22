@@ -17,11 +17,13 @@ interface ICredentials {
 
 export interface ISession {
   sessionType: SessionTypes;
+  sessionCode: string;
   tutor: {
     firstName: string;
     lastName: string;
     _id?: string;
   };
+  moduleName: string;
   startTime: Date;
   duration?: number;
   isOpen: boolean;
@@ -60,7 +62,6 @@ export interface IModule {
       _id?: string;
     }
   ];
-  sessionID: [string];
   _id?: string;
 }
 

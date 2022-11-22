@@ -15,7 +15,6 @@ const moduleSchema = new Schema<IModule>({
       lastName: { type: String, required: true },
     },
   ],
-  sessions: { type: [Schema.Types.ObjectId], required: false },
 });
 
 const Modules = mongoose.model("Module", moduleSchema);
