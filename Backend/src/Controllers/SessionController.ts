@@ -20,7 +20,7 @@ sessionController.post("/toggleSession", (request, response) => {
       if (err) {
         response.status(500).json({ message: "Internal server error" });
       } else {
-        response.status(200).json({message: "Session updated successfully"});
+        response.status(200).json({ message: "Session updated successfully" });
       }
     }
   );
@@ -40,7 +40,7 @@ sessionController.get("/allSessions", (request, response) => {
 
 sessionController.get("/sessionByTutor", async (request, response) => {
   const id = request.query._id;
-  
+
   Sessions.find({ "tutor.tutorId": id }, (err: any, document: any) => {
     if (err) {
       response
@@ -67,6 +67,10 @@ sessionController.post("/newSession", (request, response) => {
       response.status(200).json({ message: "Session created successfully" });
     }
   });
+});
+
+sessionController.get("/students", async (request, response) => {
+  const id = request.query._id;
 });
 
 export default sessionController;

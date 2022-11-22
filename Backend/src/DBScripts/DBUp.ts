@@ -192,6 +192,7 @@ const CreateSessions = async () => {
     {
       sessionType: SessionTypes.Lecture,
       sessionCode: "324512",
+      moduleName: "Software Architecture",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -204,6 +205,7 @@ const CreateSessions = async () => {
     {
       sessionType: SessionTypes.Lecture,
       sessionCode: "594212",
+      moduleName: "Software Architecture",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -216,6 +218,7 @@ const CreateSessions = async () => {
     {
       sessionType: SessionTypes.Lecture,
       sessionCode: "974231",
+      moduleName: "Software Architecture",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -228,6 +231,7 @@ const CreateSessions = async () => {
     {
       sessionType: SessionTypes.Lecture,
       sessionCode: "092347",
+      moduleName: "Software Architecture",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -240,6 +244,7 @@ const CreateSessions = async () => {
     {
       sessionType: SessionTypes.Lecture,
       sessionCode: "980129",
+      moduleName: "Software Architecture",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -252,6 +257,7 @@ const CreateSessions = async () => {
     {
       sessionType: SessionTypes.Lecture,
       sessionCode: "409328",
+      moduleName: "Software Architecture",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -264,6 +270,7 @@ const CreateSessions = async () => {
     {
       sessionType: SessionTypes.Lecture,
       sessionCode: "230498",
+      moduleName: "Software Architecture",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -276,6 +283,7 @@ const CreateSessions = async () => {
     {
       sessionType: SessionTypes.Lecture,
       sessionCode: "473289",
+      moduleName: "Software Architecture",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -288,6 +296,7 @@ const CreateSessions = async () => {
     {
       sessionType: SessionTypes.Lecture,
       sessionCode: "120932",
+      moduleName: "Software Architecture",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -300,6 +309,7 @@ const CreateSessions = async () => {
     {
       sessionType: SessionTypes.Lecture,
       sessionCode: "123892",
+      moduleName: "Software Architecture",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -312,6 +322,7 @@ const CreateSessions = async () => {
     {
       sessionType: SessionTypes.Lecture,
       sessionCode: "984523",
+      moduleName: "Software Architecture",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -324,6 +335,7 @@ const CreateSessions = async () => {
     {
       sessionType: SessionTypes.Lecture,
       sessionCode: "120398",
+      moduleName: "Software Architecture",
       tutor: {
         firstName: tutor.firstName,
         lastName: tutor.lastName,
@@ -343,7 +355,6 @@ const CreateModules = async () => {
   // Create Modules to be added to the database
   const moduleLeader = await Users.findOne({ role: Roles.ModuleLeader });
   const tutor = await Users.findOne({ role: Roles.Tutor });
-  const sessionIds = await Sessions.find().select("_id");
 
   const modules = [
     {
@@ -360,7 +371,6 @@ const CreateModules = async () => {
           tutorId: tutor._id,
         },
       ],
-      sessions: sessionIds,
     },
   ];
 
