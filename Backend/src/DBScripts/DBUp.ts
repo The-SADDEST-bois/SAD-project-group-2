@@ -283,6 +283,13 @@ const CreateModules = async () => {
 const CreateSessions = async () => {
   // Create Sessions to be added to the database
   const tutor = await Users.findOne({ role: Roles.Tutor });
+  const softwareEng = await Courses.findOne({
+    courseName: "Software Engineering",
+  });
+  const softwareEngineeringCohort = await Cohorts.findOne({
+    courseId: softwareEng._id,
+  });
+  const attendance = softwareEngineeringCohort.students;
 
   const sessions = [
     {
@@ -296,9 +303,17 @@ const CreateSessions = async () => {
       },
       courses: [
         {
-          courseName: "Computer Science",
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
         },
       ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: attendance,
       startTime: new Date("2022/09/25 14:00"),
       duration: 120,
       isOpen: false,
@@ -312,6 +327,19 @@ const CreateSessions = async () => {
         lastName: tutor.lastName,
         tutorId: tutor._id,
       },
+      courses: [
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: attendance,
       startTime: new Date("2022/10/02 16:00"),
       duration: 120,
       isOpen: false,
@@ -325,6 +353,19 @@ const CreateSessions = async () => {
         lastName: tutor.lastName,
         tutorId: tutor._id,
       },
+      courses: [
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: attendance,
       startTime: new Date("2022/10/09 16:00"),
       duration: 120,
       isOpen: false,
@@ -338,6 +379,19 @@ const CreateSessions = async () => {
         lastName: tutor.lastName,
         tutorId: tutor._id,
       },
+      courses: [
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: attendance,
       startTime: new Date("2022/10/16 16:00"),
       duration: 120,
       isOpen: false,
@@ -351,6 +405,19 @@ const CreateSessions = async () => {
         lastName: tutor.lastName,
         tutorId: tutor._id,
       },
+      courses: [
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: attendance,
       startTime: new Date("2022/10/23 16:00"),
       duration: 120,
       isOpen: false,
@@ -364,6 +431,19 @@ const CreateSessions = async () => {
         lastName: tutor.lastName,
         tutorId: tutor._id,
       },
+      courses: [
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: attendance,
       startTime: new Date("2022/10/30 16:00"),
       duration: 120,
       isOpen: false,
@@ -377,6 +457,19 @@ const CreateSessions = async () => {
         lastName: tutor.lastName,
         tutorId: tutor._id,
       },
+      courses: [
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: attendance,
       startTime: new Date("2022/11/06 16:00"),
       duration: 120,
       isOpen: false,
@@ -390,6 +483,19 @@ const CreateSessions = async () => {
         lastName: tutor.lastName,
         tutorId: tutor._id,
       },
+      courses: [
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: attendance,
       startTime: new Date("2022/11/13 16:00"),
       duration: 120,
       isOpen: false,
@@ -403,6 +509,19 @@ const CreateSessions = async () => {
         lastName: tutor.lastName,
         tutorId: tutor._id,
       },
+      courses: [
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: attendance,
       startTime: new Date("2022/11/20 16:00"),
       duration: 120,
       isOpen: false,
@@ -416,6 +535,19 @@ const CreateSessions = async () => {
         lastName: tutor.lastName,
         tutorId: tutor._id,
       },
+      courses: [
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: attendance,
       startTime: new Date("2022/11/27 16:00"),
       duration: 120,
       isOpen: false,
@@ -429,6 +561,19 @@ const CreateSessions = async () => {
         lastName: tutor.lastName,
         tutorId: tutor._id,
       },
+      courses: [
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: attendance,
       startTime: new Date("2022/12/01 16:00"),
       duration: 120,
       isOpen: false,
@@ -442,6 +587,19 @@ const CreateSessions = async () => {
         lastName: tutor.lastName,
         tutorId: tutor._id,
       },
+      courses: [
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: attendance,
       startTime: new Date("2022/12/8 16:00"),
       duration: 120,
       isOpen: false,
@@ -465,6 +623,7 @@ const main = async () => {
   await Break();
   await CreateModules();
   await Break();
+  await CreateSessions();
   await Break().then(process.exit());
   console.log("Database seeded");
 };

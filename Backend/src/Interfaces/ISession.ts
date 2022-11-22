@@ -25,7 +25,7 @@ export interface ISession {
     {
       firstName: string;
       lastName: string;
-      attendeed: number;
+      status: number;
       studentId: Schema.Types.ObjectId;
     }
   ];

@@ -23,6 +23,26 @@ export interface ISession {
     lastName: string;
     _id?: string;
   };
+  courses: [
+    {
+      courseName: string;
+      _id?: string;
+    }
+  ];
+  cohorts: [
+    {
+      _id: string;
+      cohortName: string;
+    }
+  ];
+  attendance: [
+    {
+      firstName: string;
+      lastName: string;
+      status: number;
+      _id: string;
+    }
+  ];
   moduleName: string;
   startTime: Date;
   duration?: number;
