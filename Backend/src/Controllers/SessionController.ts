@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
-import Users from "../Models/User";
 import { ISession } from "../Interfaces/ISession";
 import Sessions from "../Models/Session";
+import AttendanceRegisters from "../Models/AttendanceRegister";
 const sessionController = express.Router();
 
 // Session controller post endpoint (adds session to database) (can rename to /createSession if necessary)
@@ -54,6 +54,24 @@ sessionController.get("/sessionByTutor", async (request, response) => {
   });
 });
 
+sessionController.get("/attendance", async (request, response) => {
+  const id = request.query._id;
+  var registerQuery = AttendanceRegisters.find({
+    sessionID: id,
+  }).select("attendance.firstName attendance.lastName attendance.attended");
+
+  registerQuery.exec((err: any, document: any) => {
+    if (err) {
+      response
+        .status(err.status || 400)
+        .json({ error: "Error getting register", message: err });
+      return;
+    } else {
+      response.status(200).json(document);
+    }
+  });
+});
+
 sessionController.post("/newSession", (request, response) => {
   const session = request.body;
   Sessions.create(session, (err: any, document: any) => {
@@ -67,10 +85,6 @@ sessionController.post("/newSession", (request, response) => {
       response.status(200).json({ message: "Session created successfully" });
     }
   });
-});
-
-sessionController.get("/students", async (request, response) => {
-  const id = request.query._id;
 });
 
 export default sessionController;
