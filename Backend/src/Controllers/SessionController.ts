@@ -41,8 +41,6 @@ sessionController.get("/allSessions", (request, response) => {
 sessionController.get("/sessionByTutor", async (request, response) => {
   const id = request.query._id;
 
-  console.log("ID ====>", id);
-
   Sessions.find({ "tutor.tutorId": id }, (err: any, document: any) => {
     if (err) {
       response
@@ -69,7 +67,7 @@ sessionController.get("/attendance", async (request, response) => {
         .json({ error: "Error getting register", message: err });
       return;
     } else {
-      response.status(200).json(document);
+      response.status(200).json(document[0].attendance);
     }
   });
 });

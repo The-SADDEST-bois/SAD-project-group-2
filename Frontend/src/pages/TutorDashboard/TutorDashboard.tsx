@@ -1,11 +1,11 @@
 import { Button, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQueries, UseQueryResult } from "react-query";
 import {
   getAllSessionsApi,
   getSessionAttendees,
   setSessionOpen,
 } from "../../../api/sessionApi/sessionApi";
-import { ISession } from "../../../types/types";
+import { ISession, IUser } from "../../../types/types";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { SessionModal } from "../../components/SessionModal/SessionModal";
@@ -15,39 +15,32 @@ import { formatDate } from "../../utils/formatDate/formatDate";
 import { useDisclosure } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
-interface newQueryResponse {
-  tester: ISession[];
-  tester2: any[];
-}
 
 const TutorDashboard = () => {
   const store = useStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { onSuccessToast, onErrorToast } = useToasts();
-
   const [currentSession, setCurrentSession] = useState({} as ISession);
-
-  const { isLoading, error, data, refetch } = useQuery({
-    queryFn: () => handleMultipleQueries(),
-  });
-
-  console.log("Data = ", data);
-
+  
+  const queries = {
+    queries:[
+      {queryKey: "allSessions", queryFn: () => getAllSessionsApi(store.auth.user._id as string), refetchOnWindowFocus: true},
+      {queryKey: "attendees", queryFn: () => getSessionAttendees(currentSession._id as string), enabled: false}
+    ]
+  }
+  
+  const result = useQueries<any[]>(queries.queries);
+  const session: ISession[] = result[0].data as ISession[];
+  const queryResult: UseQueryResult<unknown, unknown> = result[1];
+  
+  useEffect(() => {
+    queryResult.refetch();
+  }, [currentSession]);
+  
   const mutation = useMutation({
     mutationFn: setSessionOpen,
   });
-
-  const handleMultipleQueries = async () => {
-    const tester = await getAllSessionsApi(store.auth.user._id as string);
-    console.log("tester = ", tester);
-
-    if (!currentSession) return;
-    const tester2 = await getSessionAttendees(currentSession._id as string);
-    console.log("tester2 = ", tester2);
-
-    return { tester, tester2 };
-  };
-
+  
   const handleSubmit = (session: ISession) => {
     mutation.mutate(
       { ...session, isOpen: !session.isOpen },
@@ -55,7 +48,6 @@ const TutorDashboard = () => {
         onSuccess: (response) => {
           onSuccessToast("Session Started");
           setCurrentSession(session);
-          refetch();
           onOpen();
         },
         onError: (error) => {
@@ -66,19 +58,14 @@ const TutorDashboard = () => {
     );
   };
 
-  useEffect(() => {
-    console.log("Ping");
-    refetch;
-  }, [currentSession]);
 
-  console.log("data = ", data);
 
   return (
     <PageWithSideBar
       leftSection={<DynamicNavBar role={store?.auth?.user?.role as string} />}
       rightSection={
         <>
-          {isLoading && (
+          {result[0].isLoading && (
             <Spinner
               size="lg"
               justifySelf={"center"}
@@ -99,9 +86,9 @@ const TutorDashboard = () => {
             wrap={"wrap"}
           >
             <>
-              {!isOpen &&
-                !isLoading &&
-                data?.tester.map((item: ISession) => (
+              {(result[0].data &&
+                !result[0].isLoading) &&
+                session.map((item: ISession) => (
                   <VStack
                     width="300px"
                     height="200px"
@@ -114,7 +101,7 @@ const TutorDashboard = () => {
                       {item?.sessionType}
                     </Text>
                     <Text color="white">
-                      <b>Module: </b> {item?.moduleName}
+                      <b>Module: </b> {item.sessionType}
                     </Text>
                     <Text color="white">
                       <>
@@ -133,6 +120,7 @@ const TutorDashboard = () => {
               isOpen={isOpen}
               onClose={onClose}
               session={currentSession}
+              queryResult={queryResult}
             />
           </Flex>
         </>

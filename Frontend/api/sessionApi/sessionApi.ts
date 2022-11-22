@@ -22,11 +22,14 @@ export const setSessionOpen = async (session: ISession) => {
 };
 
 export const getSessionAttendees = async (_id: string) => {
-  const res = await api.get("session/attendance", {
-    params: {
-      _id: _id,
-    },
-  });
-  console.log("attendeeees", res.data);
-  return res.data;
+  if (_id){ 
+    const res = await api.get("session/attendance", {
+      params: {
+        _id: _id,
+      },
+    });
+    return res.data;
+  }
+  return Error("No session id provided");
+  ;
 };
