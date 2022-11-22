@@ -45,7 +45,7 @@ sessionController.get("/sessionByTutor", async (request, response) => {
   }).select("tutorId");
   console.log(tutor._id);
 
-  Sessions.find({tutor: tutor }, (err: any, document: any) => {
+  Sessions.find({ "tutor.tutorId": tutor }, (err: any, document: any) => {
     if (err) {
       response
         .status(err.status || 400)
