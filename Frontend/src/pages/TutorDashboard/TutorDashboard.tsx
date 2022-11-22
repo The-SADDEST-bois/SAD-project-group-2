@@ -7,13 +7,20 @@ import {
 import { ISession } from "../../../types/types";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
+import { SessionModal } from "../../components/SessionModal/SessionModal";
 import { useStore } from "../../contexts/storeProvider";
 import { useToasts } from "../../hooks/useToasts/useToasts";
 import { formatDate } from "../../utils/formatDate/formatDate";
+import { useDisclosure } from "@chakra-ui/react";
+import { useState } from "react";
 
 const TutorDashboard = () => {
   const store = useStore();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { onSuccessToast, onErrorToast } = useToasts();
+
+  const [currentSession, setCurrentSession] = useState({} as ISession);
+
   const { isLoading, error, data, refetch } = useQuery<ISession[], Error>({
     queryFn: () => getAllSessionsApi(store.auth.user?._id as string),
     refetchInterval: 10000,
@@ -29,6 +36,8 @@ const TutorDashboard = () => {
       {
         onSuccess: (response) => {
           onSuccessToast("Session Started");
+          setCurrentSession(session);
+          onOpen();
           refetch();
         },
         onError: (error) => {
@@ -93,6 +102,12 @@ const TutorDashboard = () => {
                   </VStack>
                 ))}
             </>
+
+            <SessionModal
+              isOpen={isOpen}
+              onClose={onClose}
+              session={currentSession}
+            />
           </Flex>
         </>
       }
