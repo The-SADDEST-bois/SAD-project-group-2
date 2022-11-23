@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { ISession } from "../Interfaces/ISession";
+import StatusCode from "../Utils/StatusCodes";
 import Sessions from "../Models/Session";
 const sessionController = express.Router();
 
@@ -17,9 +18,13 @@ sessionController.post("/toggleSession", (request, response) => {
     { new: true },
     (err, doc) => {
       if (err) {
-        response.status(500).json({ message: "Internal server error" });
+        response
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ message: "Internal server error" });
       } else {
-        response.status(200).json({ message: "Session updated successfully" });
+        response
+          .status(StatusCode.OK)
+          .json({ message: "Session updated successfully" });
       }
     }
   );
@@ -30,9 +35,11 @@ sessionController.get("/allSessions", (request, response) => {
     .populate("tutor")
     .exec((err, sessions) => {
       if (err) {
-        response.status(500).json({ message: "Internal server error" });
+        response
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ message: "Internal server error" });
       } else {
-        response.status(200).json(sessions);
+        response.status(StatusCode.OK).json(sessions);
       }
     });
 });
@@ -43,12 +50,12 @@ sessionController.get("/sessionByTutor", async (request, response) => {
   Sessions.find({ "tutor.tutorId": id }, (err: any, document: any) => {
     if (err) {
       response
-        .status(err.status || 400)
+        .status(err.status || StatusCode.BAD_REQUEST)
         .json({ error: "Error getting sessions", message: err });
       return;
     } else {
       //console.log("successful session retrieval", document);
-      response.status(200).json(document);
+      response.status(StatusCode.OK).json(document);
     }
   });
 });
@@ -60,11 +67,11 @@ sessionController.get("/attendance", async (request, response) => {
   attendanceQuery.exec((err: any, document: any) => {
     if (err) {
       response
-        .status(err.status || 400)
+        .status(err.status || StatusCode.BAD_REQUEST)
         .json({ error: "Error getting register", message: err });
       return;
     } else {
-      response.status(200).json(document);
+      response.status(StatusCode.OK).json(document);
     }
   });
 });
@@ -75,11 +82,13 @@ sessionController.post("/newSession", (request, response) => {
     if (err) {
       console.log("error creating session", err);
       response
-        .status(400)
+        .status(StatusCode.INTERNAL_SERVER_ERROR)
         .json({ error: "Error creating session", message: err });
     } else {
       console.log("successful session creation", document);
-      response.status(200).json({ message: "Session created successfully" });
+      response
+        .status(StatusCode.OK)
+        .json({ message: "Session created successfully" });
     }
   });
 });
