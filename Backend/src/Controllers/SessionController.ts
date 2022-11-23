@@ -53,13 +53,11 @@ sessionController.get("/sessionByTutor", async (request, response) => {
   });
 });
 
-/* sessionController.get("/attendance", async (request, response) => {
+sessionController.get("/attendance", async (request, response) => {
   const id = request.query._id;
-  var registerQuery = AttendanceRegisters.find({
-    sessionID: id,
-  }).select("attendance.firstName attendance.lastName attendance.attended");
+  var attendanceQuery = Sessions.findById(id).select("attendance");
 
-  registerQuery.exec((err: any, document: any) => {
+  attendanceQuery.exec((err: any, document: any) => {
     if (err) {
       response
         .status(err.status || 400)
@@ -69,7 +67,7 @@ sessionController.get("/sessionByTutor", async (request, response) => {
       response.status(200).json(document);
     }
   });
-}); */
+});
 
 sessionController.post("/newSession", (request, response) => {
   const session = request.body;
