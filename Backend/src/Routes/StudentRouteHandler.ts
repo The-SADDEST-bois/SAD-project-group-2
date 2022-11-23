@@ -4,7 +4,7 @@ import studentController from "../Controllers/StudentController";
 
 const StudentRouteHandler = express.Router();
 
-// StudentRouteHandler.use(checkAuth);
+StudentRouteHandler.use(checkAuth);
 StudentRouteHandler.use(studentController);
 
 export default StudentRouteHandler;
