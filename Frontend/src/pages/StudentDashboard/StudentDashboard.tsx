@@ -18,16 +18,17 @@ const StudentDashboard = () => {
 
   const [sessionCode, setSessionCode] = useState<string>("");
 
-  const handleResponse = (status: Number) => {
+  const handleResponse = (status: number) => {
     if (status === 200) {
       onSuccessToast(
         "Joined Session",
         `You have successfully joined session ${sessionCode}` );
-    } else {
+        return;
+      }
+      
       onErrorToast(
         "Unable to proceed with - Joining Session",
         `Cannot join session ${sessionCode}`);
-    }
   };
 
   const handleUseMutation = async (sessionCode: string) => {
