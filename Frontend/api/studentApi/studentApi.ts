@@ -6,3 +6,17 @@ export async function GetAllStudents() {
   console.log(response);
   return response;
 }
+
+interface IData {
+  sessionCode: string;
+  userId: string;
+}
+
+export const registerAttendance = async (data: IData) => {
+  return await api.post(`/student/registerAttendance`, {
+    data: {
+      sessionCode: data.sessionCode,
+      userId: data.userId,
+    },
+  });
+};
