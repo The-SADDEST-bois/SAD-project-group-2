@@ -5,6 +5,7 @@ import { accessToken, verifyToken } from "../middleware/jwt";
 import { IUser } from "../Interfaces/IUser";
 import { ITokenData } from "../Interfaces/ITokenData";
 import { Roles } from "../../src/Types/Roles";
+import StatusCode from "../Utils/StatusCodes";
 
 const userController = express.Router();
 
@@ -23,18 +24,34 @@ userController.post("/login", async (req, response) => {
     );
     if (validPassword) {
       console.log("VALID");
-      
-      const cleanUser: IUser = {firstName: user.firstName, lastName: user.lastName, email: user.email, password: '', role: user.role}
-      const data: {_id: string, role: Roles} = { _id: user.id, role: user.role }
+
+      const cleanUser: IUser = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        password: "",
+        role: user.role,
+      };
+      const data: { _id: string; role: Roles } = {
+        _id: user.id,
+        role: user.role,
+      };
       const newToken = accessToken(data);
-      response.status(200).json({ messasge: 'Success', user: cleanUser, accessToken: newToken}).send();
+      response
+        .status(StatusCode.OK)
+        .json({ messasge: "Success", user: cleanUser, accessToken: newToken })
+        .send();
     } else {
       console.log("NOT VALID");
 
-      response.status(400).json({ error: "Invalid Password" });
+      response
+        .status(StatusCode.BAD_REQUEST)
+        .json({ error: "Invalid Password" });
     }
   } else {
-    response.status(401).json({ error: "User does not exist" });
+    response
+      .status(StatusCode.NOT_FOUND)
+      .json({ error: "User does not exist" });
   }
 });
 
@@ -43,15 +60,28 @@ userController.post("/reauthenticate", async (request, response) => {
   const result: any = await verifyToken(JSON.parse(cookie));
 
   if (result instanceof Error) {
-    response.status(401).json({ error: "Invalid Token" }).send();
+    response
+      .status(StatusCode.UNAUTHORIZED)
+      .json({ error: "Invalid Token" })
+      .send();
   }
 
-  const data: ITokenData = result
-  const user = await Users.findOne( { _id: data.data._id } )
-  const cleanUser: IUser = {_id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, password: '', role: user.role}
-  console.log('REAUTHENTICATE', Date.now());
-  response.status(200).json({ messasge: 'Success', user: cleanUser}).send();
-})
+  const data: ITokenData = result;
+  const user = await Users.findOne({ _id: data.data._id });
+  const cleanUser: IUser = {
+    _id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    password: "",
+    role: user.role,
+  };
+  console.log("REAUTHENTICATE", Date.now());
+  response
+    .status(StatusCode.OK)
+    .json({ messasge: "Success", user: cleanUser })
+    .send();
+});
 
 // User Controller post endpoint (adds user to database) (can rename to /createUser if necessary)
 userController.post("/register", async (req, res) => {
@@ -65,7 +95,7 @@ userController.post("/register", async (req, res) => {
       res.send(err);
     } else {
       console.log("successful register", document);
-      res.status(200).send("ok");
+      res.status(StatusCode.OK).send("ok");
     }
   });
 });
