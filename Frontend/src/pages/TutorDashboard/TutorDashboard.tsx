@@ -21,11 +21,12 @@ const TutorDashboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { onSuccessToast, onErrorToast } = useToasts();
   const [currentSession, setCurrentSession] = useState({} as ISession);
+  const [polling, setPolling] = useState(false);
   
   const queries = {
     queries:[
       {queryKey: "allSessions", queryFn: () => getAllSessionsApi(store.auth.user._id as string), refetchOnWindowFocus: true},
-      {queryKey: "attendees", queryFn: () => getSessionAttendees(currentSession._id as string), enabled: false}
+      {queryKey: "attendees", queryFn: () => getSessionAttendees(currentSession._id as string), refetchInterval: 5000, enabled: polling, refetchOnWindowFocus: true}
     ]
   }
   
@@ -34,9 +35,16 @@ const TutorDashboard = () => {
   const queryResult: UseQueryResult<unknown, unknown> = result[1];
   
   useEffect(() => {
-    queryResult.refetch();
+    if (currentSession._id) {
+      setPolling(true);
+      return;
+    }
+    setPolling(false);
+    return;
   }, [currentSession]);
   
+  console.log(queryResult.data);
+
   const mutation = useMutation({
     mutationFn: setSessionOpen,
   });
