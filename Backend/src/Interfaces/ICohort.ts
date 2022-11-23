@@ -7,6 +7,7 @@ export interface ICohort {
       firstName: string;
       lastName: string;
       studentId: Schema.Types.ObjectId;
+      _id: any;
     }
   ];
   _id?: Schema.Types.ObjectId;

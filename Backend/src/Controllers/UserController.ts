@@ -26,6 +26,7 @@ userController.post("/login", async (req, response) => {
       console.log("VALID");
 
       const cleanUser: IUser = {
+        _id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
