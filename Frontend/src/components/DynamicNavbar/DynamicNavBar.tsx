@@ -6,12 +6,13 @@ import {
 import { Flex, Text, useToast, VStack } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import useAuth from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useToasts } from "../../hooks/useToasts/useToasts";
 
 interface NavbarItems {
   label: string;
   icon: ReactNode;
+  url: string;
 }
 // TODO add url to navbar items and pass navigate
 
@@ -22,6 +23,10 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const { onSuccessToast, onErrorToast } = useToasts();
+
+  const handleNavigate = (url: string) => {
+    navigate(url);
+  };
 
   const handleLogout = () => {
     try {
@@ -37,11 +42,13 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
     {
       label: "Join Session",
       icon: <HiOutlineCalendar size="40" />,
+      url: "",
     },
 
     {
       label: "View Attendance",
       icon: <HiOutlineBookOpen size="40" />,
+      url: "",
     },
   ];
 
@@ -49,11 +56,13 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
     {
       label: "View Sessions",
       icon: <HiOutlineCalendar size="40" />,
+      url: "/tutordashboard",
     },
 
     {
       label: "View Attendance",
       icon: <HiOutlineBookOpen size="40" />,
+      url: "/tutorviewattendance",
     },
   ];
 
@@ -61,55 +70,65 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
     {
       label: "Start Session",
       icon: <HiOutlineCalendar size="40" />,
+      url: "",
     },
 
     {
       label: "View Session Attendance",
       icon: <HiOutlineBookOpen size="40" />,
+      url: "",
     },
 
     {
       label: "View Module Attendance",
       icon: <HiOutlineBookOpen size="40" />,
+      url: "",
     },
   ];
 
   const AcademicAdvisorNavbar: NavbarItems[] = [
-      {
-        label: "Start Session",
-        icon: <HiOutlineCalendar size="40" />,
-      },
+    {
+      label: "Start Session",
+      icon: <HiOutlineCalendar size="40" />,
+      url: "",
+    },
 
-      {
-        label: "View Attendance",
-        icon: <HiOutlineBookOpen size="40" />,
-      },
+    {
+      label: "View Attendance",
+      icon: <HiOutlineBookOpen size="40" />,
+      url: "",
+    },
 
-      {
-        label: "View Advisee Attendance",
-        icon: <HiOutlineBookOpen size="40" />,
-      },
+    {
+      label: "View Advisee Attendance",
+      icon: <HiOutlineBookOpen size="40" />,
+      url: "",
+    },
   ];
 
   const CourseLeaderNavbar: NavbarItems[] = [
     {
       label: "Start Session",
       icon: <HiOutlineCalendar size="40" />,
+      url: "",
     },
 
     {
       label: "View Session Attendance",
       icon: <HiOutlineBookOpen size="40" />,
+      url: "",
     },
 
     {
       label: "View Module Attendance",
       icon: <HiOutlineBookOpen size="40" />,
+      url: "",
     },
 
     {
       label: "View Course Attendance",
       icon: <HiOutlineBookOpen size="40" />,
+      url: "",
     },
   ];
 
@@ -129,14 +148,18 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
 
         {role === "Tutor" &&
           TutorNavbar.map((item: NavbarItems, key: number) => (
-            <VStack key={key} cursor="pointer">
+            <VStack
+              key={key}
+              cursor="pointer"
+              onClick={(e) => handleNavigate(item.url)}
+            >
               {item.icon}
               <Text width="100px" align="center" fontSize={"sm"}>
                 {item.label}
               </Text>
             </VStack>
           ))}
-          {role === "ModuleLeader" &&
+        {role === "ModuleLeader" &&
           ModuleLeaderNavbar.map((item: NavbarItems, key: number) => (
             <VStack key={key} cursor="pointer">
               {item.icon}
@@ -146,7 +169,7 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
             </VStack>
           ))}
 
-          {role === "AcademicAdvisor" &&
+        {role === "AcademicAdvisor" &&
           AcademicAdvisorNavbar.map((item: NavbarItems, key: number) => (
             <VStack key={key} cursor="pointer">
               {item.icon}
@@ -156,7 +179,7 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
             </VStack>
           ))}
 
-          {role === "CourseLeader" &&
+        {role === "CourseLeader" &&
           CourseLeaderNavbar.map((item: NavbarItems, key: number) => (
             <VStack key={key} cursor="pointer">
               {item.icon}
