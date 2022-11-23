@@ -26,13 +26,16 @@ const TutorDashboard = () => {
   const queries = {
     queries:[
       {queryKey: "allSessions", queryFn: () => getAllSessionsApi(store.auth.user._id as string), refetchOnWindowFocus: true},
-      {queryKey: "attendees", queryFn: () => getSessionAttendees(currentSession._id as string), refetchInterval: 5000, enabled: polling, refetchOnWindowFocus: true}
+      {queryKey: "attendees", queryFn: () => getSessionAttendees(currentSession._id as string), refetchIntervabl: 20000, enabled: polling, refetchOnWindowFocus: true}
     ]
   }
   
   const result = useQueries<any[]>(queries.queries);
-  const session: ISession[] = result[0].data as ISession[];
-  const queryResult: UseQueryResult<unknown, unknown> = result[1];
+
+  const {isLoading, isError, data, refetch} = result[0]
+  const allSessions = data as ISession[];
+  
+  const attendeesQuery: UseQueryResult<unknown, unknown> = result[1];
   
   useEffect(() => {
     if (currentSession._id) {
@@ -43,7 +46,6 @@ const TutorDashboard = () => {
     return;
   }, [currentSession]);
   
-  console.log(queryResult.data);
 
   const mutation = useMutation({
     mutationFn: setSessionOpen,
@@ -67,6 +69,9 @@ const TutorDashboard = () => {
   };
 
 
+  if (isLoading) return <Spinner />;
+
+  if (isError) return <Text>Something went wrong</Text>;
 
   return (
     <PageWithSideBar
@@ -94,9 +99,9 @@ const TutorDashboard = () => {
             wrap={"wrap"}
           >
             <>
-              {(result[0].data &&
-                !result[0].isLoading) &&
-                session.map((item: ISession) => (
+              {(allSessions &&
+                !isLoading) &&
+                allSessions.map((item: ISession) => (
                   <VStack
                     width="300px"
                     height="200px"
@@ -128,7 +133,7 @@ const TutorDashboard = () => {
               isOpen={isOpen}
               onClose={onClose}
               session={currentSession}
-              queryResult={queryResult}
+              attendeesQuery={attendeesQuery}
             />
           </Flex>
         </>

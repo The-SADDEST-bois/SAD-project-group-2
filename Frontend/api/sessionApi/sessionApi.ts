@@ -33,3 +33,8 @@ export const getSessionAttendees = async (_id: string) => {
   return Error("No session id provided");
   ;
 };
+
+export const setStudentAttendance = async (data: {sessionId: string, firstName: string, surname: string, newAttendance: number}) => {
+  const res = await api.post("Attendance/sessionAttendance", data);
+  return res.data;
+}

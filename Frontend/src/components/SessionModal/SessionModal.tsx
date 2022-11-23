@@ -6,27 +6,44 @@ import {
   ModalContent,
   ModalFooter,
   ModalOverlay,
+  Select,
   Text,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { UseQueryResult } from "react-query";
+import { useMutation, UseQueryResult } from "react-query";
 import { ISession, IUser } from "../../../types/types";
+import { setStudentAttendance } from "../../../api/sessionApi/sessionApi";
 
 interface ISessionModal {
   isOpen: boolean;
   onClose: () => void;
   session: ISession;
-  queryResult: UseQueryResult<unknown, unknown>;
+  attendeesQuery: UseQueryResult<unknown, unknown>;
 }
 
-export const SessionModal = ({ isOpen, onClose, session, queryResult }: ISessionModal) => {
+export const SessionModal = ({ isOpen, onClose, session, attendeesQuery }: ISessionModal) => {
 
   //this needs a type
-  const users: any[] = queryResult.data as any[];
+  const {isLoading, isError, data, refetch} = attendeesQuery;
+  const users: any[] = data as any[];
+  
+  const mutation = useMutation({
+    mutationFn: setStudentAttendance,
+  });
 
-  if (queryResult.isError) return <div>error retriving data</div>;
+  function handleChangeAttendance(user: any, value: string): void {
+    mutation.mutate({...user, attended: value, sessionId: session._id}, {
+      onSuccess: (response) => {
+        if (response.status == 200) {
+        refetch();
+        }
+      }
+    })
+  }
 
-  if (queryResult.isLoading) {
+  if (isError) return <div>error retriving data</div>;
+
+  if (isLoading) {
     return <Text>Loading...</Text>;
   }
 
@@ -41,10 +58,18 @@ export const SessionModal = ({ isOpen, onClose, session, queryResult }: ISession
         </Flex>
         <ModalBody>
           <Flex width={"full"} justifyContent="center" direction={"column"}>
-            {(users && users.length && !queryResult.isLoading) && users.map((user: any) => (
-              <Text paddingY="5px" fontSize={"xl"}>
-                {user.firstName} {user.lastName} - {user.attended}
+            {(users && !isLoading) && users.map((user: any) => (
+              <>
+              <Flex width={"full"} justifyContent="space-evenly" direction={"row"}>
+              <Text paddingY="5px" align={"left"} fontSize={"xl"}>
+                {user.firstName} {user.lastName}
               </Text>
+              <Select width={'70px'} value={user.attended} onChange={(e) => handleChangeAttendance(user, e.target.value)}>
+                <option value="0">❌</option>
+                <option value="1">✅</option>
+              </Select>
+              </Flex>
+              </>
             ),)}
           </Flex>
         </ModalBody>
@@ -55,3 +80,4 @@ export const SessionModal = ({ isOpen, onClose, session, queryResult }: ISession
     </Modal>
   );
 };
+
