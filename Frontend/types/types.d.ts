@@ -86,7 +86,6 @@ export interface IModule {
     {
       cohortId: string;
       courseName: string;
-      cohortAttendance: number;
     }
   ];
   _id?: string;
