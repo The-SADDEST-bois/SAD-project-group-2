@@ -23,6 +23,26 @@ export interface ISession {
     lastName: string;
     _id?: string;
   };
+  courses: [
+    {
+      courseName: string;
+      _id?: string;
+    }
+  ];
+  cohorts: [
+    {
+      _id: string;
+      cohortName: string;
+    }
+  ];
+  attendance: [
+    {
+      firstName: string;
+      lastName: string;
+      status: number;
+      _id: string;
+    }
+  ];
   moduleName: string;
   startTime: Date;
   duration?: number;
@@ -62,6 +82,12 @@ export interface IModule {
       _id?: string;
     }
   ];
+  cohorts: [
+    {
+      cohortId: string;
+      courseName: string;
+    }
+  ];
   _id?: string;
 }
 
@@ -78,18 +104,5 @@ export interface ICohort {
       _id?: string;
     }
   ];
-  _id?: string;
-}
-
-export interface IAttendanceRegister {
-  attendance: [
-    {
-      firstName: string;
-      lastName: string;
-      attendend: number;
-      _id?: string;
-    }
-  ];
-  sessionID: string;
   _id?: string;
 }
