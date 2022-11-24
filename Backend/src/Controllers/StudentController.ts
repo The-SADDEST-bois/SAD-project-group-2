@@ -5,7 +5,7 @@ import StatusCode from "../Utils/StatusCodes";
 
 const studentController = express.Router();
 
-studentController.get("/all", (request, response) => {
+studentController.get("/all", (request: any, response: any) => {
   Users.find({ role: "Student" }, (err: any, document: any) => {
     if (err) {
       console.log("error getting students", err);
@@ -19,9 +19,8 @@ studentController.get("/all", (request, response) => {
   });
 });
 
-studentController.post("/registerAttendance", (request, response) => {
+studentController.post("/registerAttendance", (request: any, response: any) => {
   const body = request.body.data;
-  console.log("body : ", body);
   const { sessionCode, userId } = body;
   console.log("SessionCode: " + sessionCode + " UserId: " + userId);
 
@@ -31,7 +30,8 @@ studentController.post("/registerAttendance", (request, response) => {
       $elemMatch: {
         _id: userId
       }
-    }}
+    }
+  };
 
   const update = {
     $set: { 
