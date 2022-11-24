@@ -5,6 +5,12 @@ import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { useMutation } from "react-query";
 import { useState } from "react";
 import { useToasts } from "../../hooks/useToasts/useToasts";
+import { registerAttendance } from "../../../api/studentApi/studentApi";
+
+interface IData {
+  sessionCode: string;
+  userId: string;
+}
 
 const StudentDashboard = () => {
   const store = useStore();
@@ -12,9 +18,23 @@ const StudentDashboard = () => {
 
   const [sessionCode, setSessionCode] = useState<string>("");
 
+  const handleResponse = (status: number) => {
+    if (status === 200) {
+      onSuccessToast(
+        "Joined Session",
+        `You have successfully joined session ${sessionCode}` );
+        return;
+      }
+      
+      onErrorToast(
+        "Unable to proceed with - Joining Session",
+        `Cannot join session ${sessionCode}`);
+  };
+
   const handleUseMutation = async (sessionCode: string) => {
     console.log("sessionCode ==> ", sessionCode);
-    // handle api in here
+    const data: IData = { sessionCode: sessionCode, userId: store.auth.user?._id as string };
+    return registerAttendance(data);
   };
 
   const mutation = useMutation({
@@ -24,10 +44,7 @@ const StudentDashboard = () => {
   const handleSubmit = () => {
     mutation.mutate(sessionCode, {
       onSuccess: (response) => {
-        onSuccessToast(
-          "Joined Session",
-          `You have successfully joined session ${sessionCode}`
-        );
+        handleResponse(response.status);
       },
       onError: (error) => {
         onErrorToast(

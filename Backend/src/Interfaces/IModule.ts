@@ -14,5 +14,11 @@ export interface IModule {
       tutorId: Schema.Types.ObjectId;
     }
   ];
+  cohorts: [
+    {
+      cohortId: Schema.Types.ObjectId;
+      courseName: string;
+    }
+  ];
   _id?: Schema.Types.ObjectId;
 }

@@ -9,11 +9,11 @@ import {
   Select,
   Text,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
 import { useMutation, UseQueryResult } from "react-query";
-import { ISession, IUser } from "../../../types/types";
+import { IAttendance, IAttendanceUser, ISession } from "../../../types/types";
 import { setStudentAttendance } from "../../../api/sessionApi/sessionApi";
 import { useToasts } from "../../hooks/useToasts/useToasts";
+import { useState } from "react";
 
 interface ISessionModal {
   isOpen: boolean;
@@ -22,26 +22,40 @@ interface ISessionModal {
   attendeesQuery: UseQueryResult<unknown, unknown>;
 }
 
-export const SessionModal = ({ isOpen, onClose, session, attendeesQuery }: ISessionModal) => {
-
+export const SessionModal = ({
+  isOpen,
+  onClose,
+  session,
+  attendeesQuery,
+}: ISessionModal) => {
   const { onSuccessToast } = useToasts();
 
   //this needs a type
-  const {isLoading, isError, data, refetch} = attendeesQuery;
-  const users: any[] = data as any[];
-  
+  const { isLoading, isError, data, refetch } = attendeesQuery;
+  const users: IAttendance = data as IAttendance;
+  const userSessionID: string = session._id;
+
+  const [state, setState] = useState<IAttendanceUser>({} as IAttendanceUser);
   const mutation = useMutation({
     mutationFn: setStudentAttendance,
   });
 
-  function handleChangeAttendance(user: any, value: string): void {
-    mutation.mutate({...user, attended: value, sessionId: session._id}, {
-      onSuccess: () => {
-        refetch();
-        onSuccessToast("Attendance updated", "Success");
+  const handleChangeAttendance = (
+    user: IAttendanceUser,
+    value: string
+  ): void => {
+    console.log("user = ", user);
+    console.log("userSessionID = ", userSessionID);
+    mutation.mutate(
+      { ...user, status: +value, sessionId: userSessionID },
+      {
+        onSuccess: () => {
+          onSuccessToast("Attendance updated", "Success");
+          refetch();
+        },
       }
-    })
-  }
+    );
+  };
 
   if (isError) return <div>error retriving data</div>;
 
@@ -55,24 +69,36 @@ export const SessionModal = ({ isOpen, onClose, session, attendeesQuery }: ISess
       <ModalContent>
         <Flex width={"full"} justifyContent="center" direction={"row"}>
           <Text paddingY="50px" fontSize={"xl"}>
-            Session Code = {session._id}
+            Session Code = {userSessionID}
           </Text>
         </Flex>
         <ModalBody>
           <Flex width={"full"} justifyContent="center" direction={"column"}>
-            {(users && !isLoading) && users.map((user: any) => (
-              <>
-              <Flex width={"full"} justifyContent="space-evenly" direction={"row"}>
-              <Text paddingY="5px" align={"left"} fontSize={"xl"}>
-                {user.firstName} {user.lastName}
-              </Text>
-              <Select width={'70px'} value={user.attended} onChange={(e) => handleChangeAttendance(user, e.target.value)}>
-                <option value="0">❌</option>
-                <option value="1">✅</option>
-              </Select>
-              </Flex>
-              </>
-            ),)}
+            {users &&
+              !isLoading &&
+              users.attendance.map((user: IAttendanceUser) => (
+                <>
+                  <Flex
+                    width={"full"}
+                    justifyContent="space-evenly"
+                    direction={"row"}
+                  >
+                    <Text paddingY="5px" align={"left"} fontSize={"xl"}>
+                      {user.firstName} {user.lastName}
+                    </Text>
+                    <Select
+                      width={"70px"}
+                      value={user.status}
+                      onChange={(e) =>
+                        handleChangeAttendance(user, e.target.value)
+                      }
+                    >
+                      <option value={0}>❌</option>
+                      <option value={1}>✅</option>
+                    </Select>
+                  </Flex>
+                </>
+              ))}
           </Flex>
         </ModalBody>
         <ModalFooter>
@@ -82,4 +108,3 @@ export const SessionModal = ({ isOpen, onClose, session, attendeesQuery }: ISess
     </Modal>
   );
 };
-

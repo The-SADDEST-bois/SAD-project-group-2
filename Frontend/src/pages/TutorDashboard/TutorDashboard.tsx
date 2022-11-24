@@ -15,28 +15,37 @@ import { formatDate } from "../../utils/formatDate/formatDate";
 import { useDisclosure } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
-
 const TutorDashboard = () => {
   const store = useStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { onSuccessToast, onErrorToast } = useToasts();
   const [currentSession, setCurrentSession] = useState({} as ISession);
   const [polling, setPolling] = useState(false);
-  
+
   const queries = {
-    queries:[
-      {queryKey: "allSessions", queryFn: () => getAllSessionsApi(store.auth.user._id as string), refetchOnWindowFocus: true},
-      {queryKey: "attendees", queryFn: () => getSessionAttendees(currentSession._id as string), refetchIntervabl: 20000, enabled: polling, refetchOnWindowFocus: true}
-    ]
-  }
-  
+    queries: [
+      {
+        queryKey: "allSessions",
+        queryFn: () => getAllSessionsApi(store.auth.user._id as string),
+        refetchOnWindowFocus: true,
+      },
+      {
+        queryKey: "attendees",
+        queryFn: () => getSessionAttendees(currentSession._id as string),
+        refetchInterval: 2000,
+        enabled: polling,
+        refetchOnWindowFocus: true,
+      },
+    ],
+  };
+
   const result = useQueries<any[]>(queries.queries);
 
-  const {isLoading, isError, data, refetch} = result[0]
+  const { isLoading, isError, data, refetch } = result[0];
   const allSessions = data as ISession[];
-  
+
   const attendeesQuery: UseQueryResult<unknown, unknown> = result[1];
-  
+
   useEffect(() => {
     if (currentSession._id) {
       setPolling(true);
@@ -45,12 +54,11 @@ const TutorDashboard = () => {
     setPolling(false);
     return;
   }, [currentSession]);
-  
 
   const mutation = useMutation({
     mutationFn: setSessionOpen,
   });
-  
+
   const handleSubmit = (session: ISession) => {
     mutation.mutate(
       { ...session, isOpen: !session.isOpen },
@@ -67,7 +75,6 @@ const TutorDashboard = () => {
       }
     );
   };
-
 
   if (isLoading) return <Spinner />;
 
@@ -99,8 +106,8 @@ const TutorDashboard = () => {
             wrap={"wrap"}
           >
             <>
-              {(allSessions &&
-                !isLoading) &&
+              {allSessions &&
+                !isLoading &&
                 allSessions.map((item: ISession) => (
                   <VStack
                     width="300px"

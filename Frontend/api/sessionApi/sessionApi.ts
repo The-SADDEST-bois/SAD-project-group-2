@@ -22,7 +22,7 @@ export const setSessionOpen = async (session: ISession) => {
 };
 
 export const getSessionAttendees = async (_id: string) => {
-  if (_id){ 
+  if (_id) {
     const res = await api.get("session/attendance", {
       params: {
         _id: _id,
@@ -31,10 +31,14 @@ export const getSessionAttendees = async (_id: string) => {
     return res.data;
   }
   return Error("No session id provided");
-  ;
 };
 
-export const setStudentAttendance = async (data: {sessionId: string, firstName: string, surname: string, attended: number}) => {
-  const res = await api.post("Attendance/sessionAttendance", data);
+export const setStudentAttendance = async (data: {
+  sessionId: string;
+  firstName: string;
+  lastName: string;
+  status: number;
+}) => {
+  const res = await api.post("session/sessionAttendance", data);
   return res.data;
-}
+};

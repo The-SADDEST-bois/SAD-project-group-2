@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { ISession } from "../Interfaces/ISession";
+import StatusCode from "../Utils/StatusCodes";
 import Sessions from "../Models/Session";
-import AttendanceRegisters from "../Models/AttendanceRegister";
 const sessionController = express.Router();
 
 // Session controller post endpoint (adds session to database) (can rename to /createSession if necessary)
@@ -18,9 +18,13 @@ sessionController.post("/toggleSession", (request, response) => {
     { new: true },
     (err, doc) => {
       if (err) {
-        response.status(500).json({ message: "Internal server error" });
+        response
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ message: "Internal server error" });
       } else {
-        response.status(200).json({ message: "Session updated successfully" });
+        response
+          .status(StatusCode.OK)
+          .json({ message: "Session updated successfully" });
       }
     }
   );
@@ -31,9 +35,11 @@ sessionController.get("/allSessions", (request, response) => {
     .populate("tutor")
     .exec((err, sessions) => {
       if (err) {
-        response.status(500).json({ message: "Internal server error" });
+        response
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ message: "Internal server error" });
       } else {
-        response.status(200).json(sessions);
+        response.status(StatusCode.OK).json(sessions);
       }
     });
 });
@@ -44,30 +50,28 @@ sessionController.get("/sessionByTutor", async (request, response) => {
   Sessions.find({ "tutor.tutorId": id }, (err: any, document: any) => {
     if (err) {
       response
-        .status(err.status || 400)
+        .status(err.status || StatusCode.BAD_REQUEST)
         .json({ error: "Error getting sessions", message: err });
       return;
     } else {
       //console.log("successful session retrieval", document);
-      response.status(200).json(document);
+      response.status(StatusCode.OK).json(document);
     }
   });
 });
 
 sessionController.get("/attendance", async (request, response) => {
   const id = request.query._id;
-  var registerQuery = AttendanceRegisters.find({
-    sessionID: id,
-  }).select("attendance.firstName attendance.lastName attendance.attended");
+  var attendanceQuery = Sessions.findById(id).select("attendance");
 
-  registerQuery.exec((err: any, document: any) => {
+  attendanceQuery.exec((err: any, document: any) => {
     if (err) {
       response
-        .status(err.status || 400)
+        .status(err.status || StatusCode.BAD_REQUEST)
         .json({ error: "Error getting register", message: err });
       return;
     } else {
-      response.status(200).json(document[0].attendance);
+      response.status(StatusCode.OK).json(document);
     }
   });
 });
@@ -78,11 +82,48 @@ sessionController.post("/newSession", (request, response) => {
     if (err) {
       console.log("error creating session", err);
       response
-        .status(400)
+        .status(StatusCode.INTERNAL_SERVER_ERROR)
         .json({ error: "Error creating session", message: err });
     } else {
       console.log("successful session creation", document);
-      response.status(200).json({ message: "Session created successfully" });
+      response
+        .status(StatusCode.OK)
+        .json({ message: "Session created successfully" });
+    }
+  });
+});
+
+sessionController.post("/sessionAttendance", async (request, response) => {
+  const body = request.body as {
+    sessionId: string;
+    firstName: string;
+    lastName: string;
+    status: number;
+  };
+  // TODO - only updating the first record
+  console.log("sessionID = ", body.sessionId);
+
+  const filter = {
+    sessionID: body.sessionId,
+    attendance: {
+      $elemMatch: {
+        firstName: body.firstName,
+      },
+    },
+  };
+
+  const update = {
+    $set: {
+      "attendance.$.status": body.status,
+    },
+  };
+  Sessions.updateOne(filter, update, (err: any, doc: any) => {
+    if (err) {
+      console.log(err);
+      response.status(500).json({ message: "Internal server error" });
+    } else {
+      console.log(doc);
+      response.status(200).json({ message: "Success" });
     }
   });
 });

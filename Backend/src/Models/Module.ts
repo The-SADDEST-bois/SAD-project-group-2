@@ -15,6 +15,12 @@ const moduleSchema = new Schema<IModule>({
       lastName: { type: String, required: true },
     },
   ],
+  cohorts: [
+    {
+      cohortId: { type: Schema.Types.ObjectId, required: false },
+      courseName: { type: String, required: true },
+    },
+  ],
 });
 
 const Modules = mongoose.model("Module", moduleSchema);
