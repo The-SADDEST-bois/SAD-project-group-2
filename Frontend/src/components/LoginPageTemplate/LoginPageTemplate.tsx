@@ -14,7 +14,7 @@ const LoginPageTemplate = ({
 }: ILoginPageTemplate) => {
   return (
     <Flex h="100vh" justify="space-between">
-      <VStack h="full" w="full" bg={"#17BEBB"}>
+      <VStack h="full" w="full" bg={"#17BEBB"} justifyContent="center">
         {leftSection}
       </VStack>
 

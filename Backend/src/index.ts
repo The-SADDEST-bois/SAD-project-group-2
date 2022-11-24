@@ -6,6 +6,7 @@ import UserRouteHandler from "./Routes/UserRouteHandler";
 import SessionRouteHandler from "./Routes/SessionRouteHandler";
 import StudentRouteHandler from "./Routes/StudentRouteHandler";
 import AdvisorRouteHandler from "./Routes/AdvisorRouteHandler";
+import TutorRouteHandler from "./Routes/TutorRouteHandler";
 
 dotenv.config();
 
@@ -43,3 +44,4 @@ app.use("/user", UserRouteHandler);
 app.use("/session", SessionRouteHandler);
 app.use("/student", StudentRouteHandler);
 app.use("/advisor", AdvisorRouteHandler);
+app.use("/tutor", TutorRouteHandler);

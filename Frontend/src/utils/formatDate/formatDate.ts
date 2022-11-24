@@ -1,10 +1,5 @@
 export const formatDate = (dateIsoString: string) => {
-  if (!dateIsoString)
-    return {
-      dateString: "",
-      formattedTime: "",
-      formattedDate: "",
-    };
+  if (!dateIsoString) return;
 
   const splitOnT = dateIsoString?.split("T");
   const date = splitOnT[0];

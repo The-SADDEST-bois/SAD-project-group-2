@@ -1,10 +1,11 @@
 import { Button, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQueries, UseQueryResult } from "react-query";
 import {
   getAllSessionsApi,
+  getSessionAttendees,
   setSessionOpen,
 } from "../../../api/sessionApi/sessionApi";
-import { ISession } from "../../../types/types";
+import { ISession, IUser } from "../../../types/types";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { SessionModal } from "../../components/SessionModal/SessionModal";
@@ -12,19 +13,47 @@ import { useStore } from "../../contexts/storeProvider";
 import { useToasts } from "../../hooks/useToasts/useToasts";
 import { formatDate } from "../../utils/formatDate/formatDate";
 import { useDisclosure } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const TutorDashboard = () => {
   const store = useStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { onSuccessToast, onErrorToast } = useToasts();
-
   const [currentSession, setCurrentSession] = useState({} as ISession);
+  const [polling, setPolling] = useState(false);
 
-  const { isLoading, error, data, refetch } = useQuery<ISession[], Error>({
-    queryFn: () => getAllSessionsApi(store.auth.user?._id as string),
-    refetchInterval: 10000,
-  });
+  const queries = {
+    queries: [
+      {
+        queryKey: "allSessions",
+        queryFn: () => getAllSessionsApi(store.auth.user._id as string),
+        refetchOnWindowFocus: true,
+      },
+      {
+        queryKey: "attendees",
+        queryFn: () => getSessionAttendees(currentSession._id as string),
+        refetchInterval: 2000,
+        enabled: polling,
+        refetchOnWindowFocus: true,
+      },
+    ],
+  };
+
+  const result = useQueries<any[]>(queries.queries);
+
+  const { isLoading, isError, data, refetch } = result[0];
+  const allSessions = data as ISession[];
+
+  const attendeesQuery: UseQueryResult<unknown, unknown> = result[1];
+
+  useEffect(() => {
+    if (currentSession._id) {
+      setPolling(true);
+      return;
+    }
+    setPolling(false);
+    return;
+  }, [currentSession]);
 
   const mutation = useMutation({
     mutationFn: setSessionOpen,
@@ -38,7 +67,6 @@ const TutorDashboard = () => {
           onSuccessToast("Session Started");
           setCurrentSession(session);
           onOpen();
-          refetch();
         },
         onError: (error) => {
           onErrorToast("Error Joining Session");
@@ -48,12 +76,16 @@ const TutorDashboard = () => {
     );
   };
 
+  if (isLoading) return <Spinner />;
+
+  if (isError) return <Text>Something went wrong</Text>;
+
   return (
     <PageWithSideBar
-      leftSection={<DynamicNavBar role={store.auth.user.role.toString()} />}
+      leftSection={<DynamicNavBar role={store?.auth?.user?.role as string} />}
       rightSection={
         <>
-          {isLoading && (
+          {result[0].isLoading && (
             <Spinner
               size="lg"
               justifySelf={"center"}
@@ -74,8 +106,9 @@ const TutorDashboard = () => {
             wrap={"wrap"}
           >
             <>
-              {data &&
-                data.map((item: ISession) => (
+              {allSessions &&
+                !isLoading &&
+                allSessions.map((item: ISession) => (
                   <VStack
                     width="300px"
                     height="200px"
@@ -85,14 +118,14 @@ const TutorDashboard = () => {
                   >
                     <Text color="white">
                       <b>Session Type: </b>
-                      {item.sessionType}
+                      {item?.sessionType}
                     </Text>
                     <Text color="white">
-                      <b>Module: </b> {item.moduleName}
+                      <b>Module: </b> {item.sessionType}
                     </Text>
                     <Text color="white">
                       <>
-                        <b>Date: </b> {formatDate(item.startTime.toString())}
+                        <b>Date: </b> {formatDate(item?.startTime.toString())}
                       </>
                     </Text>
 
@@ -107,6 +140,7 @@ const TutorDashboard = () => {
               isOpen={isOpen}
               onClose={onClose}
               session={currentSession}
+              attendeesQuery={attendeesQuery}
             />
           </Flex>
         </>
