@@ -6,6 +6,7 @@ import UserRouteHandler from "./Routes/UserRouteHandler";
 import SessionRouteHandler from "./Routes/SessionRouteHandler";
 import { accessToken } from "./middleware/jwt"
 import StudentRouteHandler from "./Routes/StudentRouteHandler";
+import TutorRouteHandler from "./Routes/TutorRouteHandler";
 
 dotenv.config();
 
@@ -41,4 +42,5 @@ process.on("SIGINT", () => {
 
 app.use("/user", UserRouteHandler);
 app.use("/session", SessionRouteHandler);
-app.use("/student", StudentRouteHandler)
+app.use("/student", StudentRouteHandler);
+app.use("/tutor", TutorRouteHandler);
