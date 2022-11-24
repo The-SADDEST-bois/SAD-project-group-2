@@ -10,7 +10,6 @@ advisorController.get("/adviseesByAdvisorId", (request: any, response: any) => {
   var GetAdviseesQuery = AcademicAdvisors.find({
     advisorId: advisorId,
   }).select("advisees");
-  console.log(GetAdviseesQuery);
 
   GetAdviseesQuery.exec((err: any, document: any) => {
     if (err) {
