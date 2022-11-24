@@ -7,24 +7,23 @@ sessionController.post("/sessionAttendance", async (request, response) => {
     sessionId: string;
     firstName: string;
     surname: string;
-    newAttendance: number;
+    attended: number;
   };
-
-  console.log(body);
 
   const filter = {
     sessionID: body.sessionId,
     attendance: {
       $elemMatch: {
-        firstName: "Joe",
+        firstName: body.firstName,
       },
-    },
+    }
   };
+
   const update = {
     $set: {
-      "attendance.$.attended": 1,
+      "attendance.$.attended": body.attended,
     },
-  };
+  }; 
   AttendanceRegisters.updateOne(filter, update, (err: any, doc: any) => {
     if (err) {
       console.log(err);
@@ -34,15 +33,6 @@ sessionController.post("/sessionAttendance", async (request, response) => {
       response.status(200).json({ message: "Success" });
     }
   });
-
-  // AttendanceRegisters.findOneAndUpdate(filter, (err: any, doc: any) => {
-  //     if (err) {
-  //         response.status(500).json({ message: "Internal server error" });
-  //     } else {
-  //         console.log(doc);
-  //         response.status(200).json({ message: "Session updated successfully" });
-  //     }
-  // });
 });
 
 export default sessionController;
