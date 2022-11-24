@@ -4,9 +4,9 @@ import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 import UserRouteHandler from "./Routes/UserRouteHandler";
 import SessionRouteHandler from "./Routes/SessionRouteHandler";
-import { accessToken } from "./middleware/jwt"
+import { accessToken } from "./middleware/jwt";
 import StudentRouteHandler from "./Routes/StudentRouteHandler";
-import AttendanceRouteHandler from "./Routes/AttendanceRouteHandler";
+import TutorRouteHandler from "./Routes/TutorRouteHandler";
 
 dotenv.config();
 
@@ -43,4 +43,4 @@ process.on("SIGINT", () => {
 app.use("/user", UserRouteHandler);
 app.use("/session", SessionRouteHandler);
 app.use("/student", StudentRouteHandler);
-app.use("/attendance", AttendanceRouteHandler);
+app.use("/tutor", TutorRouteHandler);
