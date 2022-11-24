@@ -1,8 +1,7 @@
 import { Button, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
-import { useMutation, useQueries, UseQueryResult } from "react-query";
+import { useMutation, useQueries, useQuery, UseQueryResult } from "react-query";
 import {
   getAllSessionsApi,
-  getSessionAttendees,
   setSessionOpen,
 } from "../../../api/sessionApi/sessionApi";
 import { ISession, IUser } from "../../../types/types";
@@ -20,40 +19,15 @@ const TutorDashboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { onSuccessToast, onErrorToast } = useToasts();
   const [currentSession, setCurrentSession] = useState({} as ISession);
-  const [polling, setPolling] = useState(false);
 
-  const queries = {
-    queries: [
-      {
-        queryKey: "allSessions",
-        queryFn: () => getAllSessionsApi(store.auth.user._id as string),
-        refetchOnWindowFocus: true,
-      },
-      {
-        queryKey: "attendees",
-        queryFn: () => getSessionAttendees(currentSession._id as string),
-        refetchInterval: 2000,
-        enabled: polling,
-        refetchOnWindowFocus: true,
-      },
-    ],
-  };
 
-  const result = useQueries<any[]>(queries.queries);
-
-  const { isLoading, isError, data, refetch } = result[0];
+  const { isLoading, isError, data, refetch } = useQuery(
+    {
+      queryKey: "allSessions",
+      queryFn: () => getAllSessionsApi(store.auth.user._id as string),
+      refetchOnWindowFocus: true,
+    });
   const allSessions = data as ISession[];
-
-  const attendeesQuery: UseQueryResult<unknown, unknown> = result[1];
-
-  useEffect(() => {
-    if (currentSession._id) {
-      setPolling(true);
-      return;
-    }
-    setPolling(false);
-    return;
-  }, [currentSession]);
 
   const mutation = useMutation({
     mutationFn: setSessionOpen,
@@ -85,7 +59,7 @@ const TutorDashboard = () => {
       leftSection={<DynamicNavBar role={store?.auth?.user?.role as string} />}
       rightSection={
         <>
-          {result[0].isLoading && (
+          {isLoading && (
             <Spinner
               size="lg"
               justifySelf={"center"}
@@ -140,7 +114,6 @@ const TutorDashboard = () => {
               isOpen={isOpen}
               onClose={onClose}
               session={currentSession}
-              attendeesQuery={attendeesQuery}
             />
           </Flex>
         </>
