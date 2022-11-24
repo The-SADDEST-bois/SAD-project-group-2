@@ -5,6 +5,7 @@ import * as dotenv from "dotenv";
 import UserRouteHandler from "./Routes/UserRouteHandler";
 import SessionRouteHandler from "./Routes/SessionRouteHandler";
 import StudentRouteHandler from "./Routes/StudentRouteHandler";
+import AdvisorRouteHandler from "./Routes/AdvisorRouteHandler";
 
 dotenv.config();
 
@@ -41,4 +42,4 @@ process.on("SIGINT", () => {
 app.use("/user", UserRouteHandler);
 app.use("/session", SessionRouteHandler);
 app.use("/student", StudentRouteHandler);
-app.use("/advisor", StudentRouteHandler);
+app.use("/advisor", AdvisorRouteHandler);

@@ -4,12 +4,13 @@ import AcademicAdvisors from "../Models/AcademicAdvisor";
 
 const advisorController = express.Router();
 
-advisorController.get("/getAllAdvisees", (request: any, response: any) => {
-  const id = request.query._id;
+advisorController.get("/adviseesByAdvisorId", (request: any, response: any) => {
+  const advisorId = request.query._id;
 
-  var GetAdviseesQuery = AcademicAdvisors.find({ advisorId: id }).select(
-    "advisees"
-  );
+  var GetAdviseesQuery = AcademicAdvisors.find({
+    advisorId: advisorId,
+  }).select("advisees");
+  console.log(GetAdviseesQuery);
 
   GetAdviseesQuery.exec((err: any, document: any) => {
     if (err) {
