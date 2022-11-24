@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { useMutation, UseQueryResult } from "react-query";
 import { ISession, IUser } from "../../../types/types";
 import { setStudentAttendance } from "../../../api/sessionApi/sessionApi";
+import { useToasts } from "../../hooks/useToasts/useToasts";
 
 interface ISessionModal {
   isOpen: boolean;
@@ -22,6 +23,8 @@ interface ISessionModal {
 }
 
 export const SessionModal = ({ isOpen, onClose, session, attendeesQuery }: ISessionModal) => {
+
+  const { onSuccessToast } = useToasts();
 
   //this needs a type
   const {isLoading, isError, data, refetch} = attendeesQuery;
@@ -33,10 +36,9 @@ export const SessionModal = ({ isOpen, onClose, session, attendeesQuery }: ISess
 
   function handleChangeAttendance(user: any, value: string): void {
     mutation.mutate({...user, attended: value, sessionId: session._id}, {
-      onSuccess: (response) => {
-        if (response.status == 200) {
+      onSuccess: () => {
         refetch();
-        }
+        onSuccessToast("Attendance updated", "Success");
       }
     })
   }
