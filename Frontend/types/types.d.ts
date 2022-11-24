@@ -47,7 +47,7 @@ export interface ISession {
   startTime: Date;
   duration?: number;
   isOpen: boolean;
-  _id?: string;
+  _id: string;
 }
 
 export interface ICourse {
@@ -105,4 +105,16 @@ export interface ICohort {
     }
   ];
   _id?: string;
+}
+
+export interface IAttendanceUser {
+  firstName: string;
+  lastName: string;
+  status: number;
+  _id: string;
+}
+
+export interface IAttendance {
+  attendance: IAttendanceUser[];
+  _id: string;
 }

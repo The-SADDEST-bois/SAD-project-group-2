@@ -11,13 +11,35 @@ export const getAllSessionsApi = async (_id: string) => {
   const res = await api.get("session/sessionByTutor", {
     params: {
       _id: _id,
-    }
+    },
   });
-  console.log(res.data);
   return res.data as ISession[];
-}
+};
 
 export const setSessionOpen = async (session: ISession) => {
   const res = await api.post<ISession>("session/toggleSession", session);
-  return res.data
-}
+  return res.data;
+};
+
+export const getSessionAttendees = async (_id: string) => {
+  if (_id) {
+    const res = await api.get("session/attendance", {
+      params: {
+        _id: _id,
+      },
+    });
+    return res.data;
+  }
+  return Error("No session id provided");
+};
+
+export const setStudentAttendance = async (data: {
+  sessionId: string;
+  firstName: string;
+  lastName: string;
+  status: number;
+  sessionCode: string;
+}) => {
+  const res = await api.post("session/sessionAttendance", data);
+  return res.data;
+};

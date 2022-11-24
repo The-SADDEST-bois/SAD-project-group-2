@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 import UserRouteHandler from "./Routes/UserRouteHandler";
 import SessionRouteHandler from "./Routes/SessionRouteHandler";
-import { accessToken } from "./middleware/jwt"
+import { accessToken } from "./middleware/jwt";
 import StudentRouteHandler from "./Routes/StudentRouteHandler";
 import TutorRouteHandler from "./Routes/TutorRouteHandler";
 

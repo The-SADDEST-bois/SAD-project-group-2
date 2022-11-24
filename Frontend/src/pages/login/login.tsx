@@ -12,7 +12,7 @@ import { useStore } from "../../contexts/storeProvider";
 import { IUser } from "../../../types/types";
 import { useNavigate } from "react-router-dom";
 import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTemplate";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { StyledButton } from "../../components/StyledButton/StyledButton";
 
 interface ICredentials {
@@ -86,7 +86,11 @@ const Login = () => {
 
   return (
     <LoginPageTemplate
-      leftSection={<></>}
+      leftSection={
+        <>
+          <Text fontSize={"8xl"}>Attendance Register</Text>
+        </>
+      }
       height="200px"
       rightSection={
         <FormControl>
