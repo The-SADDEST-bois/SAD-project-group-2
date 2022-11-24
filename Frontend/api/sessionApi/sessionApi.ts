@@ -34,7 +34,7 @@ export const getSessionAttendees = async (_id: string) => {
   ;
 };
 
-export const setStudentAttendance = async (data: {sessionId: string, firstName: string, surname: string, newAttendance: number}) => {
+export const setStudentAttendance = async (data: {sessionId: string, firstName: string, surname: string, attended: number}) => {
   const res = await api.post("Attendance/sessionAttendance", data);
   return res.data;
 }
