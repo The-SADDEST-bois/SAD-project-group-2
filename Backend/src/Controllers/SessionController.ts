@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { ISession } from "../Interfaces/ISession";
 import StatusCode from "../Utils/StatusCodes";
 import Sessions from "../Models/Session";
+import mongoose from "mongoose";
 const sessionController = express.Router();
 
 // Session controller post endpoint (adds session to database) (can rename to /createSession if necessary)
@@ -99,33 +100,30 @@ sessionController.post("/sessionAttendance", async (request, response) => {
     firstName: string;
     lastName: string;
     status: number;
+    sessionCode: string;
   };
-  // TODO - only updating the first record
-  console.log("sessionID = ", body.sessionId);
+  const sessionCode = body.sessionCode;
 
-  const filter = {
-    sessionID: body.sessionId,
-    attendance: {
-      $elemMatch: {
-        firstName: body.firstName,
-      },
+  Sessions.findOneAndUpdate(
+    {
+      sessionCode: sessionCode,
     },
-  };
-
-  const update = {
-    $set: {
-      "attendance.$.status": body.status,
+    {
+      $set: { "attendance.$[v1].status": body.status },
     },
-  };
-  Sessions.updateOne(filter, update, (err: any, doc: any) => {
-    if (err) {
-      console.log(err);
-      response.status(500).json({ message: "Internal server error" });
-    } else {
-      console.log(doc);
-      response.status(200).json({ message: "Success" });
+    {
+      arrayFilters: [{ "v1.firstName": body.firstName }],
+    },
+    (err: any, doc: any) => {
+      if (err) {
+        console.log(err);
+        response.status(500).json({ message: "Internal server error" });
+      } else {
+        console.log("document = ", doc);
+        response.status(200).json({ message: "Success" });
+      }
     }
-  });
+  );
 });
 
 export default sessionController;

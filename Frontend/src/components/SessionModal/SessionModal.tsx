@@ -1,6 +1,7 @@
 import {
   Button,
   Flex,
+  HStack,
   Modal,
   ModalBody,
   ModalContent,
@@ -8,6 +9,7 @@ import {
   ModalOverlay,
   Select,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import { useMutation, UseQueryResult } from "react-query";
 import { IAttendance, IAttendanceUser, ISession } from "../../../types/types";
@@ -44,10 +46,13 @@ export const SessionModal = ({
     user: IAttendanceUser,
     value: string
   ): void => {
-    console.log("user = ", user);
-    console.log("userSessionID = ", userSessionID);
     mutation.mutate(
-      { ...user, status: +value, sessionId: userSessionID },
+      {
+        ...user,
+        status: +value,
+        sessionId: userSessionID,
+        sessionCode: session.sessionCode,
+      },
       {
         onSuccess: () => {
           onSuccessToast("Attendance updated", "Success");
@@ -69,11 +74,11 @@ export const SessionModal = ({
       <ModalContent>
         <Flex width={"full"} justifyContent="center" direction={"row"}>
           <Text paddingY="50px" fontSize={"xl"}>
-            Session Code = {userSessionID}
+            Session Code = {userSessionID} // {session.sessionCode}
           </Text>
         </Flex>
         <ModalBody>
-          <Flex width={"full"} justifyContent="center" direction={"column"}>
+          <VStack width="full">
             {users &&
               !isLoading &&
               users.attendance.map((user: IAttendanceUser) => (
@@ -83,23 +88,30 @@ export const SessionModal = ({
                     justifyContent="space-evenly"
                     direction={"row"}
                   >
-                    <Text paddingY="5px" align={"left"} fontSize={"xl"}>
-                      {user.firstName} {user.lastName}
-                    </Text>
-                    <Select
-                      width={"70px"}
-                      value={user.status}
-                      onChange={(e) =>
-                        handleChangeAttendance(user, e.target.value)
-                      }
+                    <HStack
+                      width="400px"
+                      justifyContent={"space-between"}
+                      spacing={10}
+                      padding="10px"
                     >
-                      <option value={0}>❌</option>
-                      <option value={1}>✅</option>
-                    </Select>
+                      <Text paddingY="5px" align={"left"} fontSize={"xl"}>
+                        {user.firstName} {user.lastName}
+                      </Text>
+                      <Select
+                        width={"70px"}
+                        value={user.status}
+                        onChange={(e) =>
+                          handleChangeAttendance(user, e.target.value)
+                        }
+                      >
+                        <option value={0}>❌</option>
+                        <option value={1}>✅</option>
+                      </Select>
+                    </HStack>
                   </Flex>
                 </>
               ))}
-          </Flex>
+          </VStack>
         </ModalBody>
         <ModalFooter>
           <Button onClick={onClose}>Close</Button>

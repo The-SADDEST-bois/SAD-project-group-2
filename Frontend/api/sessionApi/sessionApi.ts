@@ -38,6 +38,7 @@ export const setStudentAttendance = async (data: {
   firstName: string;
   lastName: string;
   status: number;
+  sessionCode: string;
 }) => {
   const res = await api.post("session/sessionAttendance", data);
   return res.data;
