@@ -10,7 +10,6 @@ const TutorViewAttendance = () => {
   const [dateSelection, setDateSelection] = useState({} as string);
 
   const { isLoading, isError, data, refetch } = useGetAllModules();
-  console.log("data =", data);
   return (
     <PageWithSideBar
       leftSection={<DynamicNavBar role={store.auth.user.role.toString()} />}

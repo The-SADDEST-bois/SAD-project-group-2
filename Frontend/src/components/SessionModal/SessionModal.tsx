@@ -13,16 +13,10 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useMutation } from "react-query";
-import { IAttendanceUser, ISession } from "../../../types/types";
+import { IAttendanceUser, ISessionModal } from "../../../types/types";
 import { setStudentAttendance } from "../../../api/sessionApi/sessionApi";
 import { useToasts } from "../../hooks/useToasts/useToasts";
 import { useGetSessionAttendees } from "../../pages/TutorDashboard/hooks/useGetSessionAttendees/useGetSessionAttendees";
-
-interface ISessionModal {
-  isOpen: boolean;
-  onClose: () => void;
-  session: ISession;
-}
 
 export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
   const { onSuccessToast } = useToasts();

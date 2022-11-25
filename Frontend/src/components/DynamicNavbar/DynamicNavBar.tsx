@@ -1,19 +1,17 @@
-import {
-  HiOutlineCalendar,
-  HiOutlineBookOpen,
-  HiOutlineLogin,
-} from "react-icons/hi";
-import { Flex, Text, useToast, VStack } from "@chakra-ui/react";
-import { ReactNode } from "react";
+import { HiOutlineLogin } from "react-icons/hi";
+import { Flex, Text, VStack } from "@chakra-ui/react";
 import useAuth from "../../hooks/useAuth";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useToasts } from "../../hooks/useToasts/useToasts";
+import {
+  StudentNavbar,
+  TutorNavbar,
+  ModuleLeaderNavbar,
+  CourseLeaderNavbar,
+  AcademicAdvisorNavbar,
+} from "./data/NavbarItems";
+import NavBarIcons from "./components/NavbarIcons/NavBarIcons";
 
-interface NavbarItems {
-  label: string;
-  icon: ReactNode;
-  url: string;
-}
 // TODO add url to navbar items and pass navigate
 
 interface IDynamicNavBar {
@@ -38,156 +36,19 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
     }
   };
 
-  const StudentNavbar: NavbarItems[] = [
-    {
-      label: "Join Session",
-      icon: <HiOutlineCalendar size="40" />,
-      url: "",
-    },
-
-    {
-      label: "View Attendance",
-      icon: <HiOutlineBookOpen size="40" />,
-      url: "",
-    },
-  ];
-
-  const TutorNavbar: NavbarItems[] = [
-    {
-      label: "View Sessions",
-      icon: <HiOutlineCalendar size="40" />,
-      url: "/tutordashboard",
-    },
-
-    {
-      label: "View Attendance",
-      icon: <HiOutlineBookOpen size="40" />,
-      url: "/tutorviewattendance",
-    },
-  ];
-
-  const ModuleLeaderNavbar: NavbarItems[] = [
-    {
-      label: "Start Session",
-      icon: <HiOutlineCalendar size="40" />,
-      url: "",
-    },
-
-    {
-      label: "View Session Attendance",
-      icon: <HiOutlineBookOpen size="40" />,
-      url: "",
-    },
-
-    {
-      label: "View Module Attendance",
-      icon: <HiOutlineBookOpen size="40" />,
-      url: "",
-    },
-  ];
-
-  const AcademicAdvisorNavbar: NavbarItems[] = [
-    {
-      label: "Start Session",
-      icon: <HiOutlineCalendar size="40" />,
-      url: "",
-    },
-
-    {
-      label: "View Attendance",
-      icon: <HiOutlineBookOpen size="40" />,
-      url: "",
-    },
-
-    {
-      label: "View Advisee Attendance",
-      icon: <HiOutlineBookOpen size="40" />,
-      url: "",
-    },
-  ];
-
-  const CourseLeaderNavbar: NavbarItems[] = [
-    {
-      label: "Start Session",
-      icon: <HiOutlineCalendar size="40" />,
-      url: "",
-    },
-
-    {
-      label: "View Session Attendance",
-      icon: <HiOutlineBookOpen size="40" />,
-      url: "",
-    },
-
-    {
-      label: "View Module Attendance",
-      icon: <HiOutlineBookOpen size="40" />,
-      url: "",
-    },
-
-    {
-      label: "View Course Attendance",
-      icon: <HiOutlineBookOpen size="40" />,
-      url: "",
-    },
-  ];
-
-  //console.log(role);
   return (
     <VStack>
       <Flex width="full" alignItems={"center"} direction="column" gap={10}>
         {role === "Student" &&
-          StudentNavbar.map((item: NavbarItems, key: number) => (
-            <VStack key={key} cursor="pointer">
-              {item.icon}
-              <Text width="100px" align="center" fontSize={"sm"}>
-                {item.label}
-              </Text>
-            </VStack>
-          ))}
-
+          NavBarIcons({ NavBarType: StudentNavbar, handleNavigate })}
         {role === "Tutor" &&
-          TutorNavbar.map((item: NavbarItems, key: number) => (
-            <VStack
-              key={key}
-              cursor="pointer"
-              onClick={(e) => handleNavigate(item.url)}
-            >
-              {item.icon}
-              <Text width="100px" align="center" fontSize={"sm"}>
-                {item.label}
-              </Text>
-            </VStack>
-          ))}
+          NavBarIcons({ NavBarType: TutorNavbar, handleNavigate })}
         {role === "ModuleLeader" &&
-          ModuleLeaderNavbar.map((item: NavbarItems, key: number) => (
-            <VStack key={key} cursor="pointer">
-              {item.icon}
-              <Text width="100px" align="center" fontSize={"sm"}>
-                {item.label}
-              </Text>
-            </VStack>
-          ))}
-
+          NavBarIcons({ NavBarType: ModuleLeaderNavbar, handleNavigate })}
         {role === "AcademicAdvisor" &&
-          AcademicAdvisorNavbar.map((item: NavbarItems, key: number) => (
-            <VStack key={key} cursor="pointer">
-              {item.icon}
-              <Text width="100px" align="center" fontSize={"sm"}>
-                {item.label}
-              </Text>
-            </VStack>
-          ))}
-
+          NavBarIcons({ NavBarType: AcademicAdvisorNavbar, handleNavigate })}
         {role === "CourseLeader" &&
-          CourseLeaderNavbar.map((item: NavbarItems, key: number) => (
-            <VStack key={key} cursor="pointer">
-              {item.icon}
-              <Text width="100px" align="center" fontSize={"sm"}>
-                {item.label}
-              </Text>
-            </VStack>
-          ))}
+          NavBarIcons({ NavBarType: CourseLeaderNavbar, handleNavigate })}
 
         <VStack cursor="pointer" onClick={() => handleLogout()}>
           <HiOutlineLogin size="50" />
