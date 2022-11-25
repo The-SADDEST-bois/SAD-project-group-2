@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTemplate";
 import { Flex, Text } from "@chakra-ui/react";
 import { StyledButton } from "../../components/StyledButton/StyledButton";
+import { isValidEmail } from "../../utils/validateEmail/isValidEmail";
 
 interface ICredentials {
   email: string;
@@ -31,6 +32,11 @@ interface IAuthResponse {
   user: IUserDetails;
 }
 
+const initialState = {
+  email: "",
+  password: "",
+};
+
 const Login = () => {
   const navigate = useNavigate();
   const authStore = useStore();
@@ -38,12 +44,10 @@ const Login = () => {
     mutationFn: loginUser,
   });
 
+  const [credentials, setCredentials] = useState<ICredentials>(initialState);
   const setAuthStore = (data: IAuthResponse) => {
     if (authStore) {
       authStore.auth.login(data.user as IUser, data.accessToken);
-    } else {
-      console.log("authStore is null");
-      return;
     }
 
     if (data.user.role === "Student") {
@@ -54,19 +58,12 @@ const Login = () => {
       navigate("/tutordashboard");
       return;
     }
+    console.log("authStore is null");
   };
-
-  const initialState = {
-    email: "",
-    password: "",
-  };
-
-  const [credentials, setCredentials] = useState<ICredentials>(initialState);
 
   const handleSubmit = () => {
     mutation.mutate(credentials, {
       onSuccess: (response) => {
-        //console.table(data.data.other);
         setAuthStore(response.data);
       },
       onError: (error) => {
@@ -74,10 +71,6 @@ const Login = () => {
       },
     });
   };
-
-  function isValidEmail(email: string) {
-    return /\S+@\S+\.\S+/.test(email);
-  }
 
   const errors = {
     email: isValidEmail(credentials.email),

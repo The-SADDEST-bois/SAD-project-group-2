@@ -6,19 +6,21 @@ import Sessions from "../Models/Session";
 const tutorController = express.Router();
 
 tutorController.get("/allModules", (request: any, response: any) => {
-    const tutorId = request.query.tutorId;
-
-    Modules.find({"tutors.tutorId": tutorId }, (err: any, document: any) => {
-        if (err) {
-            console.log("Error Registering: ", err);
-            response
-            .status(err.status || StatusCode.BAD_REQUEST)
-            .json({ error: "Error getting modules", message: err });
-        } else {
-            response.status(StatusCode.OK).json(document);
-        }
-    });
+  const tutorId = request.query.key;
+  Modules.find({ "tutors.tutorId": tutorId }, (err: any, document: any) => {
+    if (err) {
+      console.log("Error Registering: ", err);
+      response
+        .status(err.status || StatusCode.BAD_REQUEST)
+        .json({ error: "Error getting modules", message: err });
+    } else {
+      response.status(StatusCode.OK).json(document);
+    }
   });
+});
+
+
+export default tutorController;
 
 tutorController.get("/sessionsPerModule", (request: any, response: any) => {
     const moduleName = request.query.moduleName;
@@ -35,3 +37,4 @@ tutorController.get("/sessionsPerModule", (request: any, response: any) => {
 });
 
 export default tutorController;
+

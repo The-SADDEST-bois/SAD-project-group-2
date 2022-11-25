@@ -1,10 +1,7 @@
 import { Button, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
-import { useMutation, useQueries, useQuery, UseQueryResult } from "react-query";
-import {
-  getAllSessionsApi,
-  setSessionOpen,
-} from "../../../api/sessionApi/sessionApi";
-import { ISession, IUser } from "../../../types/types";
+import { useMutation } from "react-query";
+import { setSessionOpen } from "../../../api/sessionApi/sessionApi";
+import { ISession } from "../../../types/types";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { SessionModal } from "../../components/SessionModal/SessionModal";
@@ -12,7 +9,8 @@ import { useStore } from "../../contexts/storeProvider";
 import { useToasts } from "../../hooks/useToasts/useToasts";
 import { formatDate } from "../../utils/formatDate/formatDate";
 import { useDisclosure } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useGetAllSessions } from "./hooks/useGetAllSessions/useGetAllSessions";
 
 const TutorDashboard = () => {
   const store = useStore();
@@ -20,13 +18,8 @@ const TutorDashboard = () => {
   const { onSuccessToast, onErrorToast } = useToasts();
   const [currentSession, setCurrentSession] = useState({} as ISession);
 
+  const { isLoading, isError, data } = useGetAllSessions();
 
-  const { isLoading, isError, data, refetch } = useQuery(
-    {
-      queryKey: "allSessions",
-      queryFn: () => getAllSessionsApi(store.auth.user._id as string),
-      refetchOnWindowFocus: true,
-    });
   const allSessions = data as ISession[];
 
   const mutation = useMutation({

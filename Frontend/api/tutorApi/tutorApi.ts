@@ -2,6 +2,14 @@ import type { IModule, ISession } from "../../types/types";
 import api from "../config/apiconfig";
 import headerAuthorisationWithParams from "../../src/utils/headerAuthorization/headerAuthorisationWithParams";
 
+export const getAllModulesByTutor = async (tutorId: string) => {
+  const response = await api.get<IModule[]>(
+    "/tutor/allModules",
+    headerAuthorisationWithParams("tutorId", tutorId)
+  );
+  return response;
+};
+
 interface IData {
     tutorId?: string;
     moduleName?: string;
@@ -18,3 +26,4 @@ export const getAllSessionsPerModule = async (data: IData) => {
   console.log(response);
   return response;
 }
+

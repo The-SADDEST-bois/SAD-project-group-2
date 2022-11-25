@@ -7,7 +7,7 @@ export interface IUser {
   _id?: string;
 }
 
-interface ICredentials {
+export interface ICredentials {
   email: string;
   password: string;
   role: Roles;
@@ -117,4 +117,24 @@ export interface IAttendanceUser {
 export interface IAttendance {
   attendance: IAttendanceUser[];
   _id: string;
+}
+
+export interface IData {
+  sessionCode: string;
+  userId: string;
+}
+export interface NavbarItems {
+  label: string;
+  icon: ReactNode;
+  url: string;
+}
+export interface INavBarIcons {
+  NavBarType: NavbarItems[];
+  handleNavigate: (url: string) => void;
+}
+
+export interface ISessionModal {
+  isOpen: boolean;
+  onClose: () => void;
+  session: ISession;
 }

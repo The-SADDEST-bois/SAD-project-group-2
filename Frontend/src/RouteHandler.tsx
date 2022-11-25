@@ -7,6 +7,7 @@ import { Roles } from "../types/roles";
 import CustomError from "./components/CustomError";
 import StudentDashboard from "./pages/StudentDashboard/StudentDashboard";
 import TutorDashboard from "./pages/TutorDashboard/TutorDashboard";
+import TutorViewAttendance from "./pages/TutorViewAttendance/TutorViewAttendance";
 const TestUseQuery = lazy(() => import("./pages/testusequery/TestUseQuery"));
 const NewSession = lazy(
   () => import("./pages/StudentDashboard/StudentDashboard")
@@ -78,6 +79,10 @@ const RouteHandler = () => {
           <Route path="/newsession" element={<NewSession />} />
           <Route path="*" element={<CustomError errorMessage="sixth" />} />
           <Route path="/tutordashboard" element={<TutorDashboard />} />
+          <Route
+            path="/tutorviewattendance"
+            element={<TutorViewAttendance />}
+          />
         </Routes>
       );
     }
