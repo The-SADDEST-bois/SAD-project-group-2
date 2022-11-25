@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { ISession } from "../Interfaces/ISession";
 import StatusCode from "../Utils/StatusCodes";
 import Sessions from "../Models/Session";
+import mongoose from "mongoose";
 const sessionController = express.Router();
 
 // Session controller post endpoint (adds session to database) (can rename to /createSession if necessary)
@@ -91,6 +92,38 @@ sessionController.post("/newSession", (request, response) => {
         .json({ message: "Session created successfully" });
     }
   });
+});
+
+sessionController.post("/sessionAttendance", async (request, response) => {
+  const body = request.body as {
+    sessionId: string;
+    firstName: string;
+    lastName: string;
+    status: number;
+    sessionCode: string;
+  };
+  const sessionCode = body.sessionCode;
+
+  Sessions.findOneAndUpdate(
+    {
+      sessionCode: sessionCode,
+    },
+    {
+      $set: { "attendance.$[v1].status": body.status },
+    },
+    {
+      arrayFilters: [{ "v1.firstName": body.firstName }],
+    },
+    (err: any, doc: any) => {
+      if (err) {
+        console.log(err);
+        response.status(500).json({ message: "Internal server error" });
+      } else {
+        console.log("document = ", doc);
+        response.status(200).json({ message: "Success" });
+      }
+    }
+  );
 });
 
 export default sessionController;

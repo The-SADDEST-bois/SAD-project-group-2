@@ -53,16 +53,7 @@ const TestUseQuery = () => {
   return (
     <VStack>
       <h1>{store.auth.user.firstName}</h1>
-      {data?.map((session) => (
-        <Button onClick={() => handleSubmit(session)}>
-          {" id:" +
-            session._id +
-            " tutor:" +
-            session.tutor.firstName +
-            " isOpen:" +
-            session.isOpen}
-        </Button>
-      ))}
+      <h2>{store.staticTime.Date.toLocaleDateString()}</h2>
     </VStack>
   );
 };
