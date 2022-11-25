@@ -1,14 +1,16 @@
-import { Flex, Select, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Flex, Select, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { useStore } from "../../contexts/storeProvider";
-
+import { useGetAllModules } from "./hooks/useGetAllModules";
 const TutorViewAttendance = () => {
   const store = useStore();
 
   const [dateSelection, setDateSelection] = useState({} as string);
 
+  const { isLoading, isError, data, refetch } = useGetAllModules();
+  console.log("data =", data);
   return (
     <PageWithSideBar
       leftSection={<DynamicNavBar role={store.auth.user.role.toString()} />}

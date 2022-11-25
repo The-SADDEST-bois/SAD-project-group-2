@@ -9,37 +9,28 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addUserToDatabase } from "../../../api/userApi/userApi";
 import { Roles } from "../../../types/roles";
+import { ICredentials } from "../../../types/types";
 import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTemplate";
 import { StyledButton } from "../../components/StyledButton/StyledButton";
+import { isValidEmail } from "../../utils/validateEmail/isValidEmail";
 
-interface ICredentials {
-  email: string;
-  password: string;
-  role: Roles;
-  firstName?: string;
-  lastName?: string;
-}
-
+const initialState = {
+  email: "",
+  password: "",
+  role: Roles.Student,
+  firstName: "",
+  lastName: "",
+};
 const Register = () => {
   const navigate = useNavigate();
 
-  const initialState = {
-    email: "",
-    password: "",
-    role: Roles.Student,
-    firstName: "",
-    lastName: "",
-  };
+  const [credentials, setCredentials] = useState<ICredentials>(initialState);
 
   const onSubmit = () => {
     addUserToDatabase(credentials);
     navigate("/");
   };
 
-  function isValidEmail(email: string) {
-    return /\S+@\S+\.\S+/.test(email);
-  }
-  const [credentials, setCredentials] = useState<ICredentials>(initialState);
   const errors = {
     email: isValidEmail(credentials.email),
     password: credentials.password.length < 3,

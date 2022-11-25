@@ -8,17 +8,15 @@ import {
   ModalFooter,
   ModalOverlay,
   Select,
+  Spinner,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useMutation, useQuery } from "react-query";
-import { IAttendance, IAttendanceUser, ISession } from "../../../types/types";
-import {
-  setStudentAttendance,
-  getSessionAttendees,
-} from "../../../api/sessionApi/sessionApi";
+import { useMutation } from "react-query";
+import { IAttendanceUser, ISession } from "../../../types/types";
+import { setStudentAttendance } from "../../../api/sessionApi/sessionApi";
 import { useToasts } from "../../hooks/useToasts/useToasts";
-import { useState } from "react";
+import { useGetSessionAttendees } from "../../pages/TutorDashboard/hooks/useGetSessionAttendees/useGetSessionAttendees";
 
 interface ISessionModal {
   isOpen: boolean;
@@ -29,16 +27,11 @@ interface ISessionModal {
 export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
   const { onSuccessToast } = useToasts();
 
-  //this needs a type
-  const { isLoading, isError, data, refetch } = useQuery({
-    queryKey: "attendees",
-    queryFn: () => getSessionAttendees(session._id as string),
-    refetchInterval: 5000,
-    enabled: isOpen,
-    refetchOnWindowFocus: true,
-  });
-  const users: IAttendance = data as IAttendance;
   const userSessionID: string = session._id;
+  const { isLoading, isError, users, refetch } = useGetSessionAttendees(
+    isOpen,
+    userSessionID
+  );
 
   const mutation = useMutation({
     mutationFn: setStudentAttendance,
@@ -67,7 +60,7 @@ export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
   if (isError) return <div>error retriving data</div>;
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <Spinner />;
   }
 
   return (
@@ -89,6 +82,7 @@ export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
                     width={"full"}
                     justifyContent="space-evenly"
                     direction={"row"}
+                    key={user._id}
                   >
                     <HStack
                       width="400px"

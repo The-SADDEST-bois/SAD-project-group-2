@@ -189,7 +189,7 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
             </VStack>
           ))}
 
-        <VStack cursor="pointer">
+        <VStack cursor="pointer" onClick={() => handleLogout()}>
           <HiOutlineLogin size="50" />
           <Text width="100px" align="center" fontSize={"sm"}>
             Log out

@@ -6,11 +6,7 @@ import { useMutation } from "react-query";
 import { useState } from "react";
 import { useToasts } from "../../hooks/useToasts/useToasts";
 import { registerAttendance } from "../../../api/studentApi/studentApi";
-
-interface IData {
-  sessionCode: string;
-  userId: string;
-}
+import { IData } from "../../../types/types";
 
 const StudentDashboard = () => {
   const store = useStore();
@@ -22,18 +18,22 @@ const StudentDashboard = () => {
     if (status === 200) {
       onSuccessToast(
         "Joined Session",
-        `You have successfully joined session ${sessionCode}` );
-        return;
-      }
-      
-      onErrorToast(
-        "Unable to proceed with - Joining Session",
-        `Cannot join session ${sessionCode}`);
+        `You have successfully joined session ${sessionCode}`
+      );
+      return;
+    }
+
+    onErrorToast(
+      "Unable to proceed with - Joining Session",
+      `Cannot join session ${sessionCode}`
+    );
   };
 
   const handleUseMutation = async (sessionCode: string) => {
-    console.log("sessionCode ==> ", sessionCode);
-    const data: IData = { sessionCode: sessionCode, userId: store.auth.user?._id as string };
+    const data: IData = {
+      sessionCode: sessionCode,
+      userId: store.auth.user?._id as string,
+    };
     return registerAttendance(data);
   };
 
