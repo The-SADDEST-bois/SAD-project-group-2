@@ -11,9 +11,12 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useMutation, UseQueryResult } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { IAttendance, IAttendanceUser, ISession } from "../../../types/types";
-import { setStudentAttendance } from "../../../api/sessionApi/sessionApi";
+import {
+  setStudentAttendance,
+  getSessionAttendees,
+} from "../../../api/sessionApi/sessionApi";
 import { useToasts } from "../../hooks/useToasts/useToasts";
 import { useState } from "react";
 
@@ -21,23 +24,22 @@ interface ISessionModal {
   isOpen: boolean;
   onClose: () => void;
   session: ISession;
-  attendeesQuery: UseQueryResult<unknown, unknown>;
 }
 
-export const SessionModal = ({
-  isOpen,
-  onClose,
-  session,
-  attendeesQuery,
-}: ISessionModal) => {
+export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
   const { onSuccessToast } = useToasts();
 
   //this needs a type
-  const { isLoading, isError, data, refetch } = attendeesQuery;
+  const { isLoading, isError, data, refetch } = useQuery({
+    queryKey: "attendees",
+    queryFn: () => getSessionAttendees(session._id as string),
+    refetchInterval: 5000,
+    enabled: isOpen,
+    refetchOnWindowFocus: true,
+  });
   const users: IAttendance = data as IAttendance;
   const userSessionID: string = session._id;
 
-  const [state, setState] = useState<IAttendanceUser>({} as IAttendanceUser);
   const mutation = useMutation({
     mutationFn: setStudentAttendance,
   });
