@@ -1,4 +1,3 @@
-import { json } from "body-parser";
 import { ITokenData } from "../Interfaces/ITokenData";
 import { verifyToken } from "../middleware/jwt";
 
