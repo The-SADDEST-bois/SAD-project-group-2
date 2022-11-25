@@ -1,3 +1,4 @@
+import { json } from "body-parser";
 import { ITokenData } from "../Interfaces/ITokenData";
 import { verifyToken } from "../middleware/jwt";
 
@@ -11,17 +12,16 @@ export const checkAuth = (request: any, response: any, next: any) => {
       verifyToken(JSON.parse(token))
         .then((data) => {
           const tokenData = data as unknown as ITokenData;
-          console.log("Token verified");
           request.body.role = tokenData.data.role;
           next();
         })
-        .catch(() => {
-          console.log("Bad token");
+        .catch((error) => {
+          console.log(error, "Bad token");
           response.status(401).json({ error: "Invalid token" }).send();
         });
     }
   } catch (error) {
-    console.log("No authorization header set");
+    console.log(error, "No authorization header set");
     response.status(401).json({ error: "Bearer not added" }).send();
   }
 };

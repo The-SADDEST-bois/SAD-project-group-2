@@ -23,12 +23,15 @@ studentController.get("/all", (request: any, response: any) => {
 
 studentController.post("/registerAttendance", (request: any, response: any) => {
   if (!IsStudentRole(GetRoleFromRequest(request))) {
-    response.status(StatusCode.FORBIDDEN).json({
-      error: "Forbidden",
-      message:
-        "You are do not have the correct privileges to register attendance",
-    });
-
+    response
+      .status(StatusCode.FORBIDDEN)
+      .json({
+        error: "Forbidden",
+        message:
+          "You are do not have the correct privileges to register attendance",
+      })
+      .send();
+  } else {
     const body = request.body.data;
     const { sessionCode, userId } = body;
     console.log("SessionCode: " + sessionCode + " UserId: " + userId);
