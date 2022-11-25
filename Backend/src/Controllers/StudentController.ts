@@ -26,7 +26,7 @@ studentController.post("/registerAttendance", (request: any, response: any) => {
     response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
       message:
-        "You are do not have the correct priveleges to register attendance",
+        "You are do not have the correct privileges to register attendance",
     });
 
     const body = request.body.data;
