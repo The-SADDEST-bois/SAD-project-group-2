@@ -32,7 +32,7 @@ studentController.post("/registerAttendance", (request: any, response: any) => {
       })
       .send();
   } else {
-    const body = request.body.data;
+    const body = request.body;
     const { sessionCode, userId } = body;
     console.log("SessionCode: " + sessionCode + " UserId: " + userId);
 
