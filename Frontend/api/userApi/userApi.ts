@@ -1,5 +1,6 @@
 import type { IUser } from "../../types/types";
 import api from "../config/apiconfig";
+import { ICredentials } from "../../types/types";
 
 function assertIsUser(user: any): asserts user is IUser {
   if (user.name === undefined) {
@@ -30,11 +31,6 @@ export const addUserToDatabase = async (payload: IUser) => {
 
   return;
 };
-
-interface ICredentials {
-  email: string;
-  password: string;
-}
 
 export const loginUser = async (credentials: ICredentials) => {
   return await api.post(`/user/login`, {

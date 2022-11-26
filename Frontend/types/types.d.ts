@@ -123,6 +123,19 @@ export interface IData {
   sessionCode: string;
   userId: string;
 }
+
+export interface IUserDetails {
+  email: string;
+  role: string;
+  password: string;
+}
+
+export interface IAuthResponse {
+  accessToken: string;
+  message: string;
+  user: IUserDetails;
+}
+
 export interface NavbarItems {
   label: string;
   icon: ReactNode;
