@@ -1,9 +1,7 @@
 import express from "express";
 import { IsStudentRole } from "../Utils/CheckRole";
 import Sessions from "../Models/Session";
-import Users from "../Models/User";
 import StatusCode from "../Utils/StatusCodes";
-import { GetRoleFromRequest } from "../Utils/RequestFormatter";
 
 const studentController = express.Router();
 

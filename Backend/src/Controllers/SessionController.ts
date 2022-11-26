@@ -1,8 +1,7 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import { ISession } from "../Interfaces/ISession";
 import StatusCode from "../Utils/StatusCodes";
 import Sessions from "../Models/Session";
-import mongoose from "mongoose";
 const sessionController = express.Router();
 
 // Session controller post endpoint (adds session to database) (can rename to /createSession if necessary)
