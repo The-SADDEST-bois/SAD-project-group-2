@@ -6,7 +6,7 @@ import Sessions from "../Models/Session";
 const tutorController = express.Router();
 
 tutorController.get("/allModules", (request: any, response: any) => {
-  const tutorId = request.query.key;
+  const tutorId = request.query.tutorId;
   Modules.find({ "tutors.tutorId": tutorId }, (err: any, document: any) => {
     if (err) {
       console.log("Error finding modules: ", err);

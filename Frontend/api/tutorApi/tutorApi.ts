@@ -5,7 +5,7 @@ import headerAuthorisationWithParams from "../../src/utils/headerAuthorization/h
 export const getAllModulesByTutor = async (tutorId: string) => {
   const response = await api.get<IModule[]>(
     "/tutor/allModules",
-    headerAuthorisationWithParams(tutorId)
+    headerAuthorisationWithParams({tutorId: tutorId})
   );
   return response;
 };
@@ -13,7 +13,7 @@ export const getAllModulesByTutor = async (tutorId: string) => {
 export const getAllSessionsPerModule = async (moduleName: string) => {
   const response = await api.get<ISession[]>(
     "/tutor/sessionsPerModule",
-    headerAuthorisationWithParams(moduleName)
+    headerAuthorisationWithParams({moduleName: moduleName})
   );
   console.log(response);
   return response;
