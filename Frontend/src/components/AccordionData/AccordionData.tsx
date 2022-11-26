@@ -3,12 +3,17 @@ import {
   AccordionIcon,
   AccordionPanel,
   Box,
+  Text,
 } from "@chakra-ui/react";
+import { ISession } from "../../../types/types";
+import { formatDate } from "../../utils/formatDate/formatDate";
+
+import { useGetAllSessionsByModule } from "../../pages/TutorViewAttendance/hooks/useGetAllSessionsByModule";
 
 interface IAccordionData {
   moduleName: string;
-  startDate: Date;
-  endDate: Date;
+  startDate?: Date;
+  endDate?: Date;
 }
 
 export const AccordionData = ({
@@ -16,6 +21,7 @@ export const AccordionData = ({
   startDate,
   endDate,
 }: IAccordionData) => {
+    const { isLoading, isError, sessionData, refetch } = useGetAllSessionsByModule(moduleName);
   return (
     <>
       <h2>
@@ -26,7 +32,9 @@ export const AccordionData = ({
           <AccordionIcon />
         </AccordionButton>
       </h2>
-      <AccordionPanel>HELLO WORLD</AccordionPanel>
+        <AccordionPanel>
+            { sessionData && !isLoading && sessionData.map((item: ISession) => (<Text>{ item.moduleName }, { "Code: " + item.sessionCode }, { "Duration: " + item.duration }, {"Date: " + formatDate(item?.startTime.toString())}</Text>))}
+        </AccordionPanel>
     </>
   );
 };

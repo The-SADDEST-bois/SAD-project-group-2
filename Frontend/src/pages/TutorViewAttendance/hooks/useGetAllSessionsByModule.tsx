@@ -3,7 +3,7 @@ import { getAllSessionsPerModule } from "../../../../api/tutorApi/tutorApi";
 import { ISession } from "../../../../types/types";
 import { useStore } from "../../../contexts/storeProvider";
 
-export const useGetAllModules = (moduleName: string) => {
+export const useGetAllSessionsByModule = (moduleName: string) => {
   const store = useStore();
 
   const { isLoading, isError, data, refetch } = useQuery({

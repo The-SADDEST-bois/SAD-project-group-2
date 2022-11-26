@@ -5,6 +5,8 @@ import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { useStore } from "../../contexts/storeProvider";
 import { useGetAllModules } from "./hooks/useGetAllModules";
+import AccordionData from "../../components/AccordionData/AccordionData";
+
 const TutorViewAttendance = () => {
   const store = useStore();
 
@@ -55,17 +57,7 @@ const TutorViewAttendance = () => {
                 { moduleData && !isLoading && moduleData.map((item: IModule) => (
                   <Accordion allowToggle allowMultiple>
                     <AccordionItem>
-                      <h2>
-                        <AccordionButton>
-                          <Box flex="1" textAlign="left">
-                            {item.moduleName}
-                          </Box>
-                          <AccordionIcon />
-                        </AccordionButton>
-                      </h2>
-                      <AccordionPanel>
-                        HELLO WORLD
-                      </AccordionPanel>
+                      <AccordionData moduleName={item.moduleName}/>
                     </AccordionItem>
                 </Accordion>
                 ) )}
