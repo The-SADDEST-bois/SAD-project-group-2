@@ -7,6 +7,7 @@ const studentController = express.Router();
 
 studentController.post("/registerAttendance", (request: any, response: any) => {
   if (!IsStudentRole(request)) {
+    console.log("hit");
     response
       .status(StatusCode.FORBIDDEN)
       .json({
@@ -15,7 +16,8 @@ studentController.post("/registerAttendance", (request: any, response: any) => {
       })
       .send();
   } else {
-    const body = request.body.data;
+    console.log(request.body);
+    const body = request.body;
     const { sessionCode, userId } = body;
     console.log("SessionCode: " + sessionCode + " UserId: " + userId);
 

@@ -16,11 +16,8 @@ sessionController.post("/", (request, response) => {
 });
 
 sessionController.post("/toggleSession", (request: any, response: any) => {
-  if (
-    !IsCourseLeaderRole(request) ||
-    !IsModuleLeaderRole(request) ||
-    !IsTutorRole(request)
-  ) {
+  if (!IsTutorRole(request)) {
+    console.log(request.headers);
     response
       .status(StatusCode.FORBIDDEN)
       .json({
@@ -80,18 +77,21 @@ sessionController.get("/sessionByTutor", async (request, response) => {
 });
 
 sessionController.get("/sessionByTutorAndDate", async (request, response) => {
-  const {_id, date} = request.query;
-  Sessions.find({ "tutor.tutorId": _id, startTime: date }, (err: any, document: any) => {
-    if (err) {
-      response
-        .status(err.status || StatusCode.BAD_REQUEST)
-        .json({ error: "Error getting sessions", message: err });
-      return;
-    } else {
-      //console.log("successful session retrieval", document);
-      response.status(StatusCode.OK).json(document);
+  const { _id, date } = request.query;
+  Sessions.find(
+    { "tutor.tutorId": _id, startTime: date },
+    (err: any, document: any) => {
+      if (err) {
+        response
+          .status(err.status || StatusCode.BAD_REQUEST)
+          .json({ error: "Error getting sessions", message: err });
+        return;
+      } else {
+        //console.log("successful session retrieval", document);
+        response.status(StatusCode.OK).json(document);
+      }
     }
-  });
+  );
 });
 
 sessionController.get("/attendance", async (request, response) => {
@@ -128,11 +128,7 @@ sessionController.post("/newSession", (request, response) => {
 sessionController.post(
   "/sessionAttendance",
   async (request: any, response: any) => {
-    if (
-      !IsCourseLeaderRole(request) ||
-      !IsModuleLeaderRole(request) ||
-      !IsTutorRole(request)
-    ) {
+    if (!IsTutorRole(request)) {
       response
         .status(StatusCode.FORBIDDEN)
         .json({
