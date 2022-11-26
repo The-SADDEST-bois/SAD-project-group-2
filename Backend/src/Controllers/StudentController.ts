@@ -16,7 +16,6 @@ studentController.post("/registerAttendance", (request: any, response: any) => {
       })
       .send();
   } else {
-    console.log(request.body);
     const body = request.body;
     const { sessionCode, userId } = body;
     console.log("SessionCode: " + sessionCode + " UserId: " + userId);

@@ -28,6 +28,7 @@ tutorController.get("/allModules", (request: any, response: any) => {
       }
     });
   }
+
 });
 
 tutorController.get("/sessionsPerModule", (request: any, response: any) => {
