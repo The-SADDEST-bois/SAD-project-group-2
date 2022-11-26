@@ -5,10 +5,10 @@ import {
   Box,
   Text,
 } from "@chakra-ui/react";
-import { ISession } from "../../../types/types";
-import { formatDate } from "../../utils/formatDate/formatDate";
-import { useStore } from "../../contexts/storeProvider";
-import { useGetAllSessionsByModule } from "../../pages/TutorViewAttendance/hooks/useGetAllSessionsByModule";
+import { ISession } from "../../../../types/types";
+import { formatDate } from "../../../utils/formatDate/formatDate";
+import { useStore } from "../../../contexts/storeProvider";
+import { useGetAllSessionsByModule } from "../hooks/useGetAllSessionsByModule";
 
 interface IAccordionData {
   moduleName: string;
@@ -24,16 +24,11 @@ export const AccordionData = ({
   const store = useStore();
   const { isLoading, isError, sessionData, refetch } =
     useGetAllSessionsByModule(moduleName);
+
+    
   return (
     <>
-      <h2>
-        <AccordionButton>
-          <Box flex="1" textAlign="left">
-            {moduleName}
-          </Box>
-          <AccordionIcon />
-        </AccordionButton>
-      </h2>
+
       <AccordionPanel>
         {sessionData &&
           !isLoading &&
@@ -42,7 +37,7 @@ export const AccordionData = ({
               {item.moduleName}, {"Code: " + item.sessionCode},{" "}
               {"Duration: " + item.duration},{" "}
               {"Date: " + formatDate(item?.startTime.toString())},
-              {(item.isOpen) ? <h1>Show</h1> : <h1>no Show</h1>}
+              {new Date(item.startTime).getTime() < store.staticTime.Date.getTime() ? "Show" : "no Show"}
             </Text>
           ))}
       </AccordionPanel>

@@ -1,11 +1,22 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Flex, Select, Text, VStack } from "@chakra-ui/react";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Flex,
+  Select,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import { IModule } from "../../../types/types";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { useStore } from "../../contexts/storeProvider";
 import { useGetAllModules } from "./hooks/useGetAllModules";
-import AccordionData from "../../components/AccordionData/AccordionData";
+import AccordionData from "./components/AccordionData";
 
 const TutorViewAttendance = () => {
   const store = useStore();
@@ -54,13 +65,23 @@ const TutorViewAttendance = () => {
                 borderRadius={"20px"}
               >
                 <Text fontSize={"xl"}>Results </Text>
-                { moduleData && !isLoading && moduleData.map((item: IModule) => (
-                  <Accordion allowToggle allowMultiple>
-                    <AccordionItem>
-                      <AccordionData moduleName={item.moduleName}/>
-                    </AccordionItem>
-                </Accordion>
-                ) )}
+                {moduleData &&
+                  !isLoading &&
+                  moduleData.map((item: IModule) => (
+                    <Accordion allowToggle allowMultiple>
+                      <AccordionItem>
+                        <h2>
+                          <AccordionButton>
+                            <Box flex="1" textAlign="left">
+                              {item.moduleName}
+                            </Box>
+                            <AccordionIcon />
+                          </AccordionButton>
+                        </h2>
+                        <AccordionData moduleName={item.moduleName} />
+                      </AccordionItem>
+                    </Accordion>
+                  ))}
               </VStack>
             </VStack>
           </Flex>
