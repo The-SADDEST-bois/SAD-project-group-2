@@ -8,13 +8,12 @@ import { GetRoleFromRequest } from "../Utils/RequestFormatter";
 const studentController = express.Router();
 
 studentController.post("/registerAttendance", (request: any, response: any) => {
-  if (!IsStudentRole(GetRoleFromRequest(request))) {
+  if (!IsStudentRole(request)) {
     response
       .status(StatusCode.FORBIDDEN)
       .json({
         error: "Forbidden",
-        message:
-          "You are do not have the correct privileges to register attendance",
+        message: "You are do not have the correct privileges for this request",
       })
       .send();
   } else {
