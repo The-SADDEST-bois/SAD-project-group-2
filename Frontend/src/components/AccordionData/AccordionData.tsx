@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { ISession } from "../../../types/types";
 import { formatDate } from "../../utils/formatDate/formatDate";
-
+import { useStore } from "../../contexts/storeProvider";
 import { useGetAllSessionsByModule } from "../../pages/TutorViewAttendance/hooks/useGetAllSessionsByModule";
 
 interface IAccordionData {
@@ -21,7 +21,9 @@ export const AccordionData = ({
   startDate,
   endDate,
 }: IAccordionData) => {
-    const { isLoading, isError, sessionData, refetch } = useGetAllSessionsByModule(moduleName);
+  const store = useStore();
+  const { isLoading, isError, sessionData, refetch } =
+    useGetAllSessionsByModule(moduleName);
   return (
     <>
       <h2>
@@ -32,9 +34,18 @@ export const AccordionData = ({
           <AccordionIcon />
         </AccordionButton>
       </h2>
-        <AccordionPanel>
-            { sessionData && !isLoading && sessionData.map((item: ISession) => (<Text>{ item.moduleName }, { "Code: " + item.sessionCode }, { "Duration: " + item.duration }, {"Date: " + formatDate(item?.startTime.toString())}</Text>))}
-        </AccordionPanel>
+      <AccordionPanel>
+        {sessionData &&
+          !isLoading &&
+          sessionData.map((item: ISession) => (
+            <Text>
+              {item.moduleName}, {"Code: " + item.sessionCode},{" "}
+              {"Duration: " + item.duration},{" "}
+              {"Date: " + formatDate(item?.startTime.toString())},
+              {(item.isOpen) ? <h1>Show</h1> : <h1>no Show</h1>}
+            </Text>
+          ))}
+      </AccordionPanel>
     </>
   );
 };
