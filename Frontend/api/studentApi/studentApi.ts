@@ -11,12 +11,7 @@ export async function GetAllStudents() {
 export const registerAttendance = async (data: IData) => {
   return await api.post(
     `/student/registerAttendance`,
-    {
-      data: {
-        sessionCode: data.sessionCode,
-        userId: data.userId,
-      },
-    },
+    data,
     headerAuthorisation()
   );
 };

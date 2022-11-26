@@ -43,8 +43,6 @@ const TutorDashboard = () => {
     );
   };
 
-  if (isLoading) return <Spinner />;
-
   if (isError) return <Text>Something went wrong</Text>;
 
   return (
