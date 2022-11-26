@@ -20,7 +20,7 @@ export const getAllSessionsApi = async (_id: string) => {
 export const getAllSessionsByDate = async (_id: string, date: Date) => {
   const res = await api.get(
     "session/sessionByTutorAndDate",
-    headerAuthorisationWithParams({ _id: _id, date: date })
+    headerAuthorisationWithParams({ _id: _id, date: date.toISOString() })
   );
   return res.data as ISession[];
 };
