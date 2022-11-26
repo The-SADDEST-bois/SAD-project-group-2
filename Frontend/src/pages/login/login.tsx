@@ -9,32 +9,22 @@ import { useState } from "react";
 import { loginUser } from "../../../api/userApi/userApi";
 import { useMutation } from "react-query";
 import { useStore } from "../../contexts/storeProvider";
-import { IUser } from "../../../types/types";
+import {
+  IUser,
+  ICredentials,
+  IUserDetails,
+  IAuthResponse,
+} from "../../../types/types";
 import { useNavigate } from "react-router-dom";
 import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTemplate";
 import { Flex, Text } from "@chakra-ui/react";
 import { StyledButton } from "../../components/StyledButton/StyledButton";
 import { isValidEmail } from "../../utils/validateEmail/isValidEmail";
 
-interface ICredentials {
-  email: string;
-  password: string;
-}
-
-interface IUserDetails {
-  email: string;
-  role: string;
-  password: string;
-}
-interface IAuthResponse {
-  accessToken: string;
-  message: string;
-  user: IUserDetails;
-}
-
 const initialState = {
   email: "",
   password: "",
+  role: "",
 };
 
 const Login = () => {

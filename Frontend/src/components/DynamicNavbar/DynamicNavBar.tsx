@@ -11,6 +11,7 @@ import {
   AcademicAdvisorNavbar,
 } from "./data/NavbarItems";
 import NavBarIcons from "./components/NavbarIcons/NavBarIcons";
+import { useStore } from "../../contexts/storeProvider";
 
 // TODO add url to navbar items and pass navigate
 
@@ -18,7 +19,7 @@ interface IDynamicNavBar {
   role: string;
 }
 export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
-  const { logout } = useAuth();
+  const store = useStore();
   const navigate = useNavigate();
   const { onSuccessToast, onErrorToast } = useToasts();
 
@@ -28,7 +29,7 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
 
   const handleLogout = () => {
     try {
-      logout();
+      store.auth.logout();
       navigate("/");
       onSuccessToast("Logged Out Succesfully");
     } catch (err) {
@@ -38,6 +39,7 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
 
   return (
     <VStack>
+      <Text>{store.staticTime.Date.toLocaleDateString()}</Text>
       <Flex width="full" alignItems={"center"} direction="column" gap={10}>
         {role === "Student" &&
           NavBarIcons({ NavBarType: StudentNavbar, handleNavigate })}

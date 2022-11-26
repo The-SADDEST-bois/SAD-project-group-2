@@ -10,24 +10,15 @@ interface IData {
 export const getAllModulesByTutor = async (tutorId: string) => {
   const response = await api.get<IModule[]>(
     "/tutor/allModules",
-    headerAuthorisationWithParams("tutorId", tutorId)
+    headerAuthorisationWithParams(tutorId)
   );
   return response;
 };
 
-/* export const getAllModulesByTutor = async (data: IData) => {
-  const response = await api.get<IModule[]>(
-    "/tutor/allModules",
-    headerAuthorisationWithParams("tutorId", data.tutorId)
-  );
-  console.log(response);
-  return response;
-}; */
-
-export const getAllSessionsPerModule = async (data: IData) => {
+export const getAllSessionsPerModule = async (moduleName: string) => {
   const response = await api.get<ISession[]>(
     "/tutor/sessionsPerModule",
-    headerAuthorisationWithParams("moduleName", data.moduleName)
+    headerAuthorisationWithParams(moduleName)
   );
   console.log(response);
   return response;

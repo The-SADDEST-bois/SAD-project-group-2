@@ -9,9 +9,7 @@ import StudentDashboard from "./pages/StudentDashboard/StudentDashboard";
 import TutorDashboard from "./pages/TutorDashboard/TutorDashboard";
 import TutorViewAttendance from "./pages/TutorViewAttendance/TutorViewAttendance";
 const TestUseQuery = lazy(() => import("./pages/testusequery/TestUseQuery"));
-const NewSession = lazy(
-  () => import("./pages/StudentDashboard/StudentDashboard")
-);
+const NewSession = lazy(() => import("./pages/StudentDashboard/StudentDashboard"));
 const RegisterNewUser = lazy(() => import("./pages/register/register"));
 
 const RouteHandler = () => {

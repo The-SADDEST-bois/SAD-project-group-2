@@ -79,6 +79,21 @@ sessionController.get("/sessionByTutor", async (request, response) => {
   });
 });
 
+sessionController.get("/sessionByTutorAndDate", async (request, response) => {
+  const {_id, date} = request.query;
+  Sessions.find({ "tutor.tutorId": _id, startTime: date }, (err: any, document: any) => {
+    if (err) {
+      response
+        .status(err.status || StatusCode.BAD_REQUEST)
+        .json({ error: "Error getting sessions", message: err });
+      return;
+    } else {
+      //console.log("successful session retrieval", document);
+      response.status(StatusCode.OK).json(document);
+    }
+  });
+});
+
 sessionController.get("/attendance", async (request, response) => {
   const id = request.query._id;
   var attendanceQuery = Sessions.findById(id).select("attendance");
