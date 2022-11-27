@@ -34,7 +34,7 @@ userController.post("/login", async (req, response) => {
         role: user.role,
       };
       const data: { _id: string; role: Roles } = {
-        _id: user.id,
+        _id: user._id.toString(),
         role: user.role,
       };
       const newToken = accessToken(data);

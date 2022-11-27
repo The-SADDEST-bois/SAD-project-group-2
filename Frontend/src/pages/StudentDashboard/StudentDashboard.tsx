@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useToasts } from "../../hooks/useToasts/useToasts";
 import { registerAttendance } from "../../../api/studentApi/studentApi";
 import { IData } from "../../../types/types";
+import { AxiosResponse } from "axios";
 
 const StudentDashboard = () => {
   const store = useStore();
@@ -14,18 +15,19 @@ const StudentDashboard = () => {
 
   const [sessionCode, setSessionCode] = useState<string>("");
 
-  const handleResponse = (status: number) => {
-    if (status === 200) {
+  const handleResponse = (response: AxiosResponse) => {
+    console.log(response);
+    if (response.status === 200) {
       onSuccessToast(
-        "Joined Session",
-        `You have successfully joined session ${sessionCode}`
+        `Session: ${sessionCode}`,
+        response.data.message
       );
       return;
     }
 
     onErrorToast(
-      "Unable to proceed with - Joining Session",
-      `Cannot join session ${sessionCode}`
+      `Session: ${sessionCode}`,
+      response.data.error,
     );
   };
 
@@ -43,10 +45,10 @@ const StudentDashboard = () => {
 
   const handleSubmit = () => {
     mutation.mutate(sessionCode, {
-      onSuccess: (response) => {
-        handleResponse(response.status);
+      onSuccess: (axiosResponse) => {
+        handleResponse(axiosResponse);
       },
-      onError: (error) => {
+      onError: () => {
         onErrorToast(
           "Error Joining Session",
           `Cannot join session ${sessionCode}`
