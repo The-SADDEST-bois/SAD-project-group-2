@@ -38,7 +38,6 @@ export const setSessionOpen = async (session: ISession) => {
 };
 
 export const getSessionAttendees = async (_id: string) => {
-  try {
     if (_id) {
       const res = await api.get(
         "session/attendance",
@@ -48,10 +47,6 @@ export const getSessionAttendees = async (_id: string) => {
     }
     return Error("No session id provided");
 
-  } catch (error: any) {
-    console.log(error);
-    return error.response;
-  }
 };
 
 export const setStudentAttendance = async (data: {
