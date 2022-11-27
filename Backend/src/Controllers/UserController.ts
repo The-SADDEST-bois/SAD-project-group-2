@@ -41,25 +41,26 @@ userController.post("/login", async (req, response) => {
           role: user.role,
         };
         const newToken = accessToken(data);
-        response
+        return response
           .status(StatusCode.OK)
           .json({ messasge: "Success", user: cleanUser, accessToken: newToken })
           .send();
-      } else {
-        console.log("NOT VALID");
-  
-        response
-          .status(StatusCode.BAD_REQUEST)
-          .json({ error: "Invalid Password" });
       }
-    } else {
-      response
-        .status(StatusCode.NOT_FOUND)
-        .json({ error: "User does not exist" });
+      
+      console.log("NOT VALID");
+  
+      return response
+        .status(StatusCode.BAD_REQUEST)
+        .json({ error: "Invalid Password" });
+
     }
+    return response
+      .status(StatusCode.NOT_FOUND)
+      .json({ error: "User does not exist" });
+
   } catch (error) {
     console.log(error);
-    response
+    return response
       .status(StatusCode.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
   }
@@ -70,10 +71,9 @@ userController.post("/reauthenticate", async (request, response) => {
   const result: any = await verifyToken(JSON.parse(cookie));
 
   if (result instanceof Error) {
-    response
+    return response
       .status(StatusCode.UNAUTHORIZED)
-      .json({ error: "Invalid Token" })
-      .send();
+      .json({ error: "Invalid Token" });
   }
 
   const data: ITokenData = result;
@@ -87,7 +87,7 @@ userController.post("/reauthenticate", async (request, response) => {
     role: user.role,
   };
   console.log("REAUTHENTICATE", Date.now());
-  response
+  return response
     .status(StatusCode.OK)
     .json({ messasge: "Success", user: cleanUser })
     .send();
@@ -102,11 +102,11 @@ userController.post("/register", async (req, res) => {
   Users.create(userObj, (err: any, document: any) => {
     if (err) {
       console.log("error registering", err);
-      res.send(err);
-    } else {
-      console.log("successful register", document);
-      res.status(StatusCode.OK).send("ok");
+      return res.status(StatusCode.BAD_REQUEST).send(err);
     }
+
+    console.log("successful register", document);
+    return res.status(StatusCode.OK).send("ok");
   });
 });
 
@@ -114,13 +114,12 @@ userController.get("/allStudents", (request: any, response: any) => {
   Users.find({ role: "Student" }, (err: any, document: any) => {
     if (err) {
       console.log("error getting students", err);
-      response
+      return response
         .status(err.status || StatusCode.BAD_REQUEST)
         .json({ error: "Error getting students", message: err });
-    } else {
-      console.log("successful student retrieval", document);
-      response.status(StatusCode.OK).json(document);
     }
+      console.log("successful student retrieval", document);
+      return response.status(StatusCode.OK).json(document);
   });
 });
 
