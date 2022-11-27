@@ -2,6 +2,8 @@ import express from "express";
 import { IsStudentRole } from "../Utils/CheckRole";
 import Sessions from "../Models/Session";
 import StatusCode from "../Utils/StatusCodes";
+import { DocumentResultManager } from "../Utils/DocumentResultManager";
+import { DocumentStatus } from "../Utils/DocumentStatus";
 
 const studentController = express.Router();
 
@@ -22,6 +24,7 @@ studentController.post("/registerAttendance", (request: any, response: any) => {
 
     const filter = {
       sessionCode: sessionCode,
+      isOpen: true,
       attendance: {
         $elemMatch: {
           _id: userId,
@@ -43,7 +46,25 @@ studentController.post("/registerAttendance", (request: any, response: any) => {
           message: err,
         });
       } else {
-        response.status(StatusCode.OK).json(document);
+        console.log("Document: ", document);
+        var result = DocumentResultManager(document);
+
+        if (result === DocumentStatus.PreviouslyUpdated) {
+          response.status(StatusCode.OK).json({
+              message: "You have already joined this session"
+          });
+        } else if (result === DocumentStatus.NotFound) {
+          response.status(StatusCode.NOT_FOUND).json({
+            error: "Session not found",
+            message: "Unable to join this session"
+          });
+        } else {
+          console.log("Joined session");
+          response.status(StatusCode.OK).json({
+            message: "Successfully joined session"
+          });
+        }
+
       }
     });
   }
