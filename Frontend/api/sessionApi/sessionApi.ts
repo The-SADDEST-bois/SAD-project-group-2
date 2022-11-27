@@ -2,6 +2,7 @@ import api from "../config/apiconfig";
 import { ISession } from "../../types/types";
 import headerAuthorisationWithParams from "../../src/utils/headerAuthorization/headerAuthorisationWithParams";
 import headerAuthorisation from "../../src/utils/headerAuthorization/headerAuthorisation";
+import { AxiosResponse } from "axios";
 
 export const newSessionApi = async (session: ISession) => {
   const res = await api.post<ISession>("session/newSession", session);
@@ -25,12 +26,15 @@ export const getAllSessionsByDate = async (_id: string, date: Date) => {
 };
 
 export const setSessionOpen = async (session: ISession) => {
-  const res = await api.post<ISession>(
-    "session/toggleSession",
-    session,
-    headerAuthorisation()
-  );
-  return res.data;
+    const res = await api.post<ISession, AxiosResponse>(
+      "session/toggleSession",
+      session,
+      headerAuthorisation()
+    );
+    if (res.status === 200) {
+      return res.data;
+    }
+    return res;
 };
 
 export const getSessionAttendees = async (_id: string) => {

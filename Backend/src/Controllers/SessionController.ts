@@ -32,14 +32,14 @@ sessionController.post("/toggleSession", (request: any, response: any) => {
       { isOpen: body.isOpen },
       { new: true },
       (err, doc) => {
-        if (err) {
+        if (err) {  
           response
             .status(StatusCode.INTERNAL_SERVER_ERROR)
             .json({ message: "Internal server error" });
         } else {
           response
             .status(StatusCode.OK)
-            .json({ message: "Session updated successfully" });
+            .json({ message: "Session Started" });
         }
       }
     );
