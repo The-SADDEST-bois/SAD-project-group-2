@@ -20,6 +20,8 @@ import LoginPageTemplate from "../../components/LoginPageTemplate/LoginPageTempl
 import { Flex, Text } from "@chakra-ui/react";
 import { StyledButton } from "../../components/StyledButton/StyledButton";
 import { isValidEmail } from "../../utils/validateEmail/isValidEmail";
+import { useToasts } from "../../hooks/useToasts/useToasts";
+import { AxiosResponse } from "axios";
 
 const initialState = {
   email: "",
@@ -30,9 +32,23 @@ const initialState = {
 const Login = () => {
   const navigate = useNavigate();
   const authStore = useStore();
+  const { onErrorToast } = useToasts();
   const mutation = useMutation({
     mutationFn: loginUser,
   });
+
+  const handleResponse = (response: AxiosResponse) => {
+    console.log(response);
+    if (response.status === 200) {
+      setAuthStore(response.data);
+      return;
+    }
+
+    onErrorToast(
+      "Login Failed",
+      response.data.error,
+    );
+  };
 
   const [credentials, setCredentials] = useState<ICredentials>(initialState);
   const setAuthStore = (data: IAuthResponse) => {
@@ -54,10 +70,12 @@ const Login = () => {
   const handleSubmit = () => {
     mutation.mutate(credentials, {
       onSuccess: (response) => {
-        setAuthStore(response.data);
+        handleResponse(response);
       },
-      onError: (error) => {
-        console.log(error);
+      onError: () => {
+        onErrorToast(
+          "Error Logging In",
+        );
       },
     });
   };

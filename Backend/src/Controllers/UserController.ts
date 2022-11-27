@@ -12,47 +12,56 @@ const userController = express.Router();
 // User Controller test endpoint (returns first user in database)
 
 userController.post("/login", async (req, response) => {
-  const body = req.body.data;
-  const { email, password } = body;
-  const user = await Users.findOne({ email });
-
-  if (user) {
-    // check user password with hashed password stored in the database
-    const validPassword = await bcrypt.compare(
-      password as string,
-      user.password
-    );
-    if (validPassword) {
-      console.log("VALID");
-
-      const cleanUser: IUser = {
-        _id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        password: "",
-        role: user.role,
-      };
-      const data: { _id: string; role: Roles } = {
-        _id: user._id.toString(),
-        role: user.role,
-      };
-      const newToken = accessToken(data);
-      response
-        .status(StatusCode.OK)
-        .json({ messasge: "Success", user: cleanUser, accessToken: newToken })
-        .send();
+  
+  try {
+    const body = req.body.data;
+    const { email, password } = body;
+  
+    const user = await Users.findOne({ email });
+  
+    if (user) {
+      // check user password with hashed password stored in the database
+      const validPassword = await bcrypt.compare(
+        password as string,
+        user.password
+      );
+      if (validPassword) {
+        console.log("VALID");
+  
+        const cleanUser: IUser = {
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          password: "",
+          role: user.role,
+        };
+        const data: { _id: string; role: Roles } = {
+          _id: user._id.toString(),
+          role: user.role,
+        };
+        const newToken = accessToken(data);
+        response
+          .status(StatusCode.OK)
+          .json({ messasge: "Success", user: cleanUser, accessToken: newToken })
+          .send();
+      } else {
+        console.log("NOT VALID");
+  
+        response
+          .status(StatusCode.BAD_REQUEST)
+          .json({ error: "Invalid Password" });
+      }
     } else {
-      console.log("NOT VALID");
-
       response
-        .status(StatusCode.BAD_REQUEST)
-        .json({ error: "Invalid Password" });
+        .status(StatusCode.NOT_FOUND)
+        .json({ error: "User does not exist" });
     }
-  } else {
+  } catch (error) {
+    console.log(error);
     response
-      .status(StatusCode.NOT_FOUND)
-      .json({ error: "User does not exist" });
+      .status(StatusCode.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
   }
 });
 
