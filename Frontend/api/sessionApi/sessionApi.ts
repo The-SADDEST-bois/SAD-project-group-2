@@ -1,4 +1,3 @@
-import React from "react";
 import api from "../config/apiconfig";
 import { ISession } from "../../types/types";
 import headerAuthorisationWithParams from "../../src/utils/headerAuthorization/headerAuthorisationWithParams";
