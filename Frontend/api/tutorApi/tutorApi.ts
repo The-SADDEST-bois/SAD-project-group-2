@@ -8,18 +8,26 @@ interface IData {
 }
 
 export const getAllModulesByTutor = async (tutorId: string) => {
-  const response = await api.get<IModule[]>(
-    "/tutor/allModules",
-    headerAuthorisationWithParams({tutorId: tutorId})
-  );
-  return response;
+  try {
+    return await api.get<IModule[]>(
+      "/tutor/allModules",
+      headerAuthorisationWithParams({tutorId: tutorId})
+    ); 
+  } catch (error: any) {
+    console.log(error);
+    return error.response;
+  }
 };
 
 export const getAllSessionsPerModule = async (moduleName: string) => {
-  const response = await api.get<ISession[]>(
-    "/tutor/sessionsPerModule",
-    headerAuthorisationWithParams({moduleName: moduleName})
-  );
-  console.log(response);
-  return response;
+  try {
+    return await api.get<ISession[]>(
+      "/tutor/sessionsPerModule",
+      headerAuthorisationWithParams({moduleName: moduleName})
+    );
+  } catch (error: any) {
+    console.log(error);
+    return error.response;
+  }
+
 };
