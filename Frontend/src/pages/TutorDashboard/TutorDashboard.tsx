@@ -86,7 +86,7 @@ const TutorDashboard = () => {
                       {item?.sessionType}
                     </Text>
                     <Text color="white">
-                      <b>Module: </b> {item.sessionType}
+                      <b>Module: </b> {item?.moduleName}
                     </Text>
                     <Text color="white">
                       <>
