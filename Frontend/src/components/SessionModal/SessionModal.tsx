@@ -17,15 +17,30 @@ import { IAttendanceUser, ISessionModal } from "../../../types/types";
 import { setStudentAttendance } from "../../../api/sessionApi/sessionApi";
 import { useToasts } from "../../hooks/useToasts/useToasts";
 import { useGetSessionAttendees } from "../../pages/TutorDashboard/hooks/useGetSessionAttendees/useGetSessionAttendees";
+import { AxiosResponse } from "axios";
 
 export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
-  const { onSuccessToast } = useToasts();
+  const { onSuccessToast, onErrorToast } = useToasts();
 
   const userSessionID: string = session._id;
   const { isLoading, isError, users, refetch } = useGetSessionAttendees(
     isOpen,
     userSessionID
   );
+
+  const handleResponse = (response: AxiosResponse) => {
+    if (response?.status === 400 || response?.status === 403) {
+      onErrorToast(
+        "Error Updating Attendance",
+        response.data.error.message
+      );
+      return;
+    }
+
+    onSuccessToast("Attendance updated", "Success");
+    refetch();
+    
+  };
 
   const mutation = useMutation({
     mutationFn: setStudentAttendance,
@@ -43,10 +58,13 @@ export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
         sessionCode: session.sessionCode,
       },
       {
-        onSuccess: () => {
-          onSuccessToast("Attendance updated", "Success");
-          refetch();
+        onSuccess: (response) => {
+          handleResponse(response);
         },
+        onError: (error) => {
+          onErrorToast("Error updating attendance");
+          console.log(error);
+        }
       }
     );
   };

@@ -25,6 +25,8 @@ const TutorViewAttendance = () => {
 
   const { isLoading, isError, moduleData, refetch } = useGetAllModules();
 
+  if (isError) return <Text>Something went wrong</Text>;
+
   return (
     <PageWithSideBar
       leftSection={<DynamicNavBar role={store.auth.user.role.toString()} />}

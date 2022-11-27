@@ -38,14 +38,20 @@ export const setSessionOpen = async (session: ISession) => {
 };
 
 export const getSessionAttendees = async (_id: string) => {
-  if (_id) {
-    const res = await api.get(
-      "session/attendance",
-      headerAuthorisationWithParams({ _id: _id })
-    );
-    return res.data;
+  try {
+    if (_id) {
+      const res = await api.get(
+        "session/attendance",
+        headerAuthorisationWithParams({ _id: _id })
+      );
+      return res.data;
+    }
+    return Error("No session id provided");
+
+  } catch (error: any) {
+    console.log(error);
+    return error.response;
   }
-  return Error("No session id provided");
 };
 
 export const setStudentAttendance = async (data: {
@@ -55,7 +61,11 @@ export const setStudentAttendance = async (data: {
   status: number;
   sessionCode: string;
 }) => {
-  const res = await api.post("session/sessionAttendance", data,
+  const res = await api.post<AxiosResponse>("session/sessionAttendance", data,
   headerAuthorisation());
-  return res.data;
+
+  if (res.status === 200) {
+    return res.data;
+  }
+  return res;
 };

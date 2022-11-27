@@ -24,7 +24,7 @@ const TutorDashboard = () => {
   const allSessions = data as ISession[];
 
   const handleResponse = (session: ISession, response?: AxiosResponse,) => {
-    if (response?.status === 500) {
+    if (response?.status === 500 || response?.status === 400) {
       onErrorToast(
         `Error Starting Session`,
         response.data.message
@@ -49,7 +49,7 @@ const TutorDashboard = () => {
           handleResponse(session, response);
         },
         onError: (error) => {
-          onErrorToast("Error Joining Session");
+          onErrorToast("Error Starting Session");
           console.log(error);
         },
       }
