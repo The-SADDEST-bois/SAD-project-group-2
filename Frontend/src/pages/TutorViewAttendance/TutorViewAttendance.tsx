@@ -1,15 +1,30 @@
-import { Flex, Select, Text, VStack } from "@chakra-ui/react";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Flex,
+  Select,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useState } from "react";
+import { IModule } from "../../../types/types";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { useStore } from "../../contexts/storeProvider";
 import { useGetAllModules } from "./hooks/useGetAllModules";
+import AccordionData from "./components/AccordionData";
+
 const TutorViewAttendance = () => {
   const store = useStore();
 
   const [dateSelection, setDateSelection] = useState({} as string);
 
-  const { isLoading, isError, data, refetch } = useGetAllModules();
+  const { isLoading, isError, moduleData, refetch } = useGetAllModules();
+
   return (
     <PageWithSideBar
       leftSection={<DynamicNavBar role={store.auth.user.role.toString()} />}
@@ -50,21 +65,23 @@ const TutorViewAttendance = () => {
                 borderRadius={"20px"}
               >
                 <Text fontSize={"xl"}>Results </Text>
-                <Select borderColor="white" border={"2px"}>
-                  <option value={""}>Module 1</option>
-                  <option value={""}>Module 2</option>
-                  <option value={""}>Module 3</option>
-                </Select>
-                <Select borderColor="white" border={"2px"}>
-                  <option value={""}>Module 1</option>
-                  <option value={""}>Module 3</option>
-                  <option value={""}>Module 2</option>
-                </Select>
-                <Select borderColor="white" border={"2px"}>
-                  <option value={""}>Module 1</option>
-                  <option value={""}>Module 3</option>
-                  <option value={""}>Module 2</option>
-                </Select>
+                {moduleData &&
+                  !isLoading &&
+                  moduleData.map((item: IModule) => (
+                    <Accordion allowToggle allowMultiple>
+                      <AccordionItem>
+                        <h2>
+                          <AccordionButton>
+                            <Box flex="1" textAlign="left">
+                              {item.moduleName}
+                            </Box>
+                            <AccordionIcon />
+                          </AccordionButton>
+                        </h2>
+                        <AccordionData moduleName={item.moduleName} />
+                      </AccordionItem>
+                    </Accordion>
+                  ))}
               </VStack>
             </VStack>
           </Flex>

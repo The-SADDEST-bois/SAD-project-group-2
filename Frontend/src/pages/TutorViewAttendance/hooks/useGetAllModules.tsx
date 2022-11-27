@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import { getAllModulesByTutor } from "../../../../api/tutorApi/tutorApi";
+import { IModule } from "../../../../types/types";
 import { useStore } from "../../../contexts/storeProvider";
 
 export const useGetAllModules = () => {
@@ -11,5 +12,6 @@ export const useGetAllModules = () => {
     refetchOnWindowFocus: true,
   });
 
-  return { isLoading, isError, data, refetch };
+  const moduleData = data?.data as IModule[];
+  return { isLoading, isError, moduleData, refetch };
 };

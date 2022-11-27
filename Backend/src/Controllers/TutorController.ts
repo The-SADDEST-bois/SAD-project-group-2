@@ -16,7 +16,7 @@ tutorController.get("/allModules", (request: any, response: any) => {
       })
       .send();
   } else {
-    const tutorId = request.query.key;
+    const tutorId = request.query.tutorId;
     Modules.find({ "tutors.tutorId": tutorId }, (err: any, document: any) => {
       if (err) {
         console.log("Error Registering: ", err);
