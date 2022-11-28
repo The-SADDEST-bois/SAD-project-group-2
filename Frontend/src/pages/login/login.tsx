@@ -44,10 +44,7 @@ const Login = () => {
       return;
     }
 
-    onErrorToast(
-      "Login Failed",
-      response.data.error,
-    );
+    onErrorToast("Login Failed", response.data.error);
   };
 
   const [credentials, setCredentials] = useState<ICredentials>(initialState);
@@ -64,6 +61,10 @@ const Login = () => {
       navigate("/tutordashboard");
       return;
     }
+    if (data.user.role === "ModuleLeader") {
+      navigate("/test");
+      return;
+    }
     console.log("authStore is null");
   };
 
@@ -73,9 +74,7 @@ const Login = () => {
         handleResponse(response);
       },
       onError: () => {
-        onErrorToast(
-          "Error Logging In",
-        );
+        onErrorToast("Error Logging In");
       },
     });
   };
