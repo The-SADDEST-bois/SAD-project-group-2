@@ -74,7 +74,6 @@ sessionController.get("/sessionByTutor", async (request: any, response: any) => 
     return response.status(StatusCode.OK).json(document);
   });
 });
-
 sessionController.get("/sessionByTutorAndDate", async (request: any, response: any) => {
   if (!isEvalatedRole(request)) {
     return response.status(StatusCode.FORBIDDEN).json({
@@ -85,7 +84,7 @@ sessionController.get("/sessionByTutorAndDate", async (request: any, response: a
 
   const { _id, date } = request.query;
   Sessions.find(
-    { "tutor.tutorId": _id, startTime: date },
+    { "tutor.tutorId": _id, startDate: date },
     (err: any, document: any) => {
       if (err) {
         return response
