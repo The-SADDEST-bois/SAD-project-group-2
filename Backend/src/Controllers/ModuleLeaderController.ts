@@ -84,7 +84,6 @@ moduleLeaderController.get(
         (numberOfAttended / numberOfStudents) *
         100
       ).toFixed(2);
-      console.log(overallAttendancePercentage);
       return response.status(StatusCode.OK).json({
         overallAttendancePercentage: overallAttendancePercentage,
       });
