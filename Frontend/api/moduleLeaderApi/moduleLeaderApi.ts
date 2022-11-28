@@ -25,3 +25,15 @@ export const getOverallModuleAttendance = async (moduleName: string) => {
     return error.response;
   }
 };
+
+export const getOverallCohortAttendance = async (cohortName: string) => {
+  try {
+    return await api.get<ISession[]>(
+      "/tutor/overallCohortAttendance",
+      headerAuthorisationWithParams({ cohortName: cohortName })
+    );
+  } catch (error: any) {
+    console.log(error);
+    return error.response;
+  }
+};
