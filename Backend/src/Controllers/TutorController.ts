@@ -57,7 +57,8 @@ tutorController.get(
         error: "Forbidden",
         message: "You are do not have the correct privileges for this request",
       });
-    } else {
+    }
+    try {
       const moduleName = request.query.moduleName;
       const attendanceFromAllSessions = await Sessions.find({
         moduleName: moduleName,
@@ -73,6 +74,11 @@ tutorController.get(
       console.log(overallAttendancePercentage);
       return response.status(StatusCode.OK).json({
         overallAttendancePercentage: overallAttendancePercentage,
+      });
+    } catch (error) {
+      return response.status(StatusCode.INTERNAL_SERVER_ERROR).json({
+        error: "Internal Server Error",
+        message: "Error getting overall module attendance",
       });
     }
   }
