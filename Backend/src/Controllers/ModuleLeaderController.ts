@@ -14,8 +14,8 @@ moduleLeaderController.get("/allModules", (request: any, response: any) => {
           message: "You do not have the correct privileges for this request",
         });
     }
-      const tutorId = request.query.tutorId;
-      Modules.find({ "tutors.tutorId": tutorId }, (err: any, document: any) => {
+      const moduleLeaderId = request.query.moduleLeaderId;
+      Modules.find({ "moduleLeader.moduleLeaderId": moduleLeaderId }, (err: any, document: any) => {
         if (err) {
           console.log("Error Registering: ", err);
           return response

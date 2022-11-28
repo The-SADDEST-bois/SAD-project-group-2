@@ -2,12 +2,12 @@ import express from "express";
 import StatusCode from "../Utils/StatusCodes";
 import Modules from "../Models/Module";
 import Sessions from "../Models/Session";
-import { IsTutorRole } from "../Utils/CheckRole";
+import { IsTutorRole, isEvalatedRole } from "../Utils/CheckRole";
 
 const tutorController = express.Router();
 
 tutorController.get("/allModules", (request: any, response: any) => {
-  if (!IsTutorRole(request)) {
+  if (!isEvalatedRole(request)) {
     return response
       .status(StatusCode.FORBIDDEN)
       .json({
