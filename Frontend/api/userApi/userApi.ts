@@ -33,12 +33,17 @@ export const addUserToDatabase = async (payload: IUser) => {
 };
 
 export const loginUser = async (credentials: ICredentials) => {
-  return await api.post(`/user/login`, {
-    data: {
-      email: credentials.email,
-      password: credentials.password,
-    },
-  });
+  try {
+    return await api.post(`/user/login`, {
+      data: {
+        email: credentials.email,
+        password: credentials.password,
+      },
+    }); 
+  } catch (error:any) {
+    console.log(error);
+    return error.response;
+  }
 };
 
 export const reAuthenticate = async (token: string) => {

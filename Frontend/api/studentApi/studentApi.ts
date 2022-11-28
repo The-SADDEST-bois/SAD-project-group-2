@@ -9,9 +9,14 @@ export async function GetAllStudents() {
 }
 
 export const registerAttendance = async (data: IData) => {
-  return await api.post(
-    `/student/registerAttendance`,
-    data,
-    headerAuthorisation()
-  );
+  try {
+    return await api.post(
+      `/student/registerAttendance`,
+      data,
+      headerAuthorisation()
+    );
+  } catch (error: any) {
+    console.log(error);
+    return error.response;
+  }
 };

@@ -1,25 +1,37 @@
 import { Roles } from "../Types/Roles";
+import { GetRoleFromRequest } from "./RequestFormatter";
 
-export const IsStudentRole = (actualRole: string) => {
-  return actualRole === Roles.Student;
+export const IsStudentRole = (request: string) => {
+  const role = GetRoleFromRequest(request);
+  return role === Roles.Student;
 };
 
-export const IsAdminRole = (actualRole: string) => {
-  return actualRole === Roles.Admin;
+export const IsAdminRole = (request: string) => {
+  const role = GetRoleFromRequest(request);
+  return role === Roles.Admin;
 };
 
-export const IsTutorRole = (actualRole: string) => {
-  return actualRole === Roles.Tutor;
+export const IsTutorRole = (request: string) => {
+  const role = GetRoleFromRequest(request);
+  return role === Roles.Tutor;
 };
 
-export const IsAdvisorRole = (actualRole: string) => {
-  return actualRole === Roles.AcademicAdvisor;
+export const IsAdvisorRole = (request: string) => {
+  const role = GetRoleFromRequest(request);
+  return role === Roles.AcademicAdvisor;
 };
 
-export const IsCourseLeaderRole = (actualRole: string) => {
-  return actualRole === Roles.CourseLeader;
+export const IsCourseLeaderRole = (request: string) => {
+  const role = GetRoleFromRequest(request);
+  return role === Roles.CourseLeader;
 };
 
-export const IsModuleLeaderRole = (actualRole: string) => {
-  return actualRole === Roles.ModuleLeader;
+export const IsModuleLeaderRole = (request: string) => {
+  const role = GetRoleFromRequest(request);
+  return role === Roles.ModuleLeader;
 };
+
+export const isEvalatedRole = (request: string) => {
+  const role = GetRoleFromRequest(request);
+  return role === Roles.Tutor || role === Roles.CourseLeader || role === Roles.ModuleLeader;
+  }

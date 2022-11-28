@@ -39,8 +39,10 @@ export const DynamicNavBar = ({ role }: IDynamicNavBar) => {
 
   return (
     <VStack>
-      <Text>{store.staticTime.Date.toLocaleDateString()}</Text>
       <Flex width="full" alignItems={"center"} direction="column" gap={10}>
+        <Text fontWeight={"bold"}>
+          {store.staticTime.Date.toLocaleDateString()}
+        </Text>
         {role === "Student" &&
           NavBarIcons({ NavBarType: StudentNavbar, handleNavigate })}
         {role === "Tutor" &&
