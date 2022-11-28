@@ -65,6 +65,11 @@ const Login = () => {
       navigate("/test");
       return;
     }
+    if (data.user.role === "CourseLeader") {
+      navigate("/test");
+      return;
+    }
+
     if (data.user.role === "AcademicAdvisor") {
       navigate("/test");
       return;
