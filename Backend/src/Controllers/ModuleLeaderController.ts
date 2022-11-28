@@ -1,13 +1,13 @@
 import express from "express";
 import StatusCode from "../Utils/StatusCodes";
-import { IsModuleLeaderRole } from "../Utils/CheckRole";
+import { IsModuleLeaderRole, isEvalatedRole } from "../Utils/CheckRole";
 import Modules from "../Models/Module";
 import Sessions from "../Models/Session";
 
 const moduleLeaderController = express.Router();
 
 moduleLeaderController.get("/allModules", (request: any, response: any) => {
-  if (!IsModuleLeaderRole(request)) {
+  if (!isEvalatedRole(request)) {
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
       message: "You do not have the correct privileges for this request",
@@ -18,7 +18,7 @@ moduleLeaderController.get("/allModules", (request: any, response: any) => {
     { "moduleLeader.moduleLeaderId": moduleLeaderId },
     (err: any, document: any) => {
       if (err) {
-        console.log("Error Registering: ", err);
+        console.log("Error getting modules: ", err);
         return response
           .status(err.status || StatusCode.BAD_REQUEST)
           .json({ error: "Error getting modules", message: err });
