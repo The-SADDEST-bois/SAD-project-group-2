@@ -16,7 +16,7 @@ export const getAllModulesByModuleLeader = async (moduleLeaderId: string) => {
 
 export const getOverallModuleAttendance = async (moduleName: string) => {
   try {
-    return await api.get<ISession[]>(
+    return await api.get(
       "/moduleLeader/overallModuleAttendance",
       headerAuthorisationWithParams({ moduleName: moduleName })
     );
@@ -28,7 +28,7 @@ export const getOverallModuleAttendance = async (moduleName: string) => {
 
 export const getOverallCohortAttendance = async (cohortName: string) => {
   try {
-    return await api.get<ISession[]>(
+    return await api.get(
       "/moduleLeader/overallCohortAttendance",
       headerAuthorisationWithParams({ cohortName: cohortName })
     );
