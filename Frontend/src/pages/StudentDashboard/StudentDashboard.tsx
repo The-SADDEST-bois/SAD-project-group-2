@@ -16,7 +16,6 @@ const StudentDashboard = () => {
   const [sessionCode, setSessionCode] = useState<string>("");
 
   const handleResponse = (response: AxiosResponse) => {
-    console.log(response);
     if (response.status === 200) {
       onSuccessToast(
         `Session: ${sessionCode}`,

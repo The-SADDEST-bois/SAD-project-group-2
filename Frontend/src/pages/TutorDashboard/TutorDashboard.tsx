@@ -11,6 +11,7 @@ import { formatDate } from "../../utils/formatDate/formatDate";
 import { useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import { useGetAllSessions } from "./hooks/useGetAllSessions/useGetAllSessions";
+import { AxiosResponse } from "axios";
 
 const TutorDashboard = () => {
   const store = useStore();
@@ -22,6 +23,20 @@ const TutorDashboard = () => {
 
   const allSessions = data as ISession[];
 
+  const handleResponse = (session: ISession, response?: AxiosResponse,) => {
+    if (response?.status === 500 || response?.status === 400) {
+      onErrorToast(
+        `Error Starting Session`,
+        response.data.message
+      );
+      return;
+    }
+
+    onSuccessToast("Session Started");
+    setCurrentSession(session);
+    onOpen();
+  };
+
   const mutation = useMutation({
     mutationFn: setSessionOpen,
   });
@@ -31,12 +46,10 @@ const TutorDashboard = () => {
       { ...session, isOpen: !session.isOpen },
       {
         onSuccess: (response) => {
-          onSuccessToast("Session Started");
-          setCurrentSession(session);
-          onOpen();
+          handleResponse(session, response);
         },
         onError: (error) => {
-          onErrorToast("Error Joining Session");
+          onErrorToast("Error Starting Session");
           console.log(error);
         },
       }

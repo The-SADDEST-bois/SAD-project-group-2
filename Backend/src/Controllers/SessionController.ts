@@ -18,32 +18,27 @@ sessionController.post("/", (request, response) => {
 sessionController.post("/toggleSession", (request: any, response: any) => {
   if (!IsTutorRole(request)) {
     console.log(request.headers);
-    response
-      .status(StatusCode.FORBIDDEN)
-      .json({
-        error: "Forbidden",
-        message: "You are do not have the correct privileges for this request",
-      })
-      .send();
-  } else {
-    const body: ISession = request.body;
-    Sessions.findOneAndUpdate(
-      { _id: body._id },
-      { isOpen: body.isOpen },
-      { new: true },
-      (err, doc) => {
-        if (err) {
-          response
-            .status(StatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: "Internal server error" });
-        } else {
-          response
-            .status(StatusCode.OK)
-            .json({ message: "Session updated successfully" });
-        }
-      }
-    );
+    return response.status(StatusCode.FORBIDDEN).json({
+      error: "Forbidden",
+      message: "You are do not have the correct privileges for this request",
+    });
   }
+  const body: ISession = request.body;
+  Sessions.findOneAndUpdate(
+    { _id: body._id },
+    { isOpen: body.isOpen },
+    { new: true },
+    (err, doc) => {
+      if (err) {
+        return response
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ message: "Internal server error" });
+      }
+      return response
+        .status(StatusCode.OK)
+        .json({ message: "Session Started" });
+    }
+  );
 });
 
 sessionController.get("/allSessions", (request, response) => {
@@ -51,12 +46,11 @@ sessionController.get("/allSessions", (request, response) => {
     .populate("tutor")
     .exec((err, sessions) => {
       if (err) {
-        response
+        return response
           .status(StatusCode.INTERNAL_SERVER_ERROR)
           .json({ message: "Internal server error" });
-      } else {
-        response.status(StatusCode.OK).json(sessions);
       }
+      return response.status(StatusCode.OK).json(sessions);
     });
 });
 
@@ -65,14 +59,11 @@ sessionController.get("/sessionByTutor", async (request, response) => {
 
   Sessions.find({ "tutor.tutorId": id }, (err: any, document: any) => {
     if (err) {
-      response
+      return response
         .status(err.status || StatusCode.BAD_REQUEST)
         .json({ error: "Error getting sessions", message: err });
-      return;
-    } else {
-      //console.log("successful session retrieval", document);
-      response.status(StatusCode.OK).json(document);
     }
+    return response.status(StatusCode.OK).json(document);
   });
 });
 
@@ -82,14 +73,11 @@ sessionController.get("/sessionByTutorAndDate", async (request, response) => {
     { "tutor.tutorId": _id, startTime: date },
     (err: any, document: any) => {
       if (err) {
-        response
+        return response
           .status(err.status || StatusCode.BAD_REQUEST)
           .json({ error: "Error getting sessions", message: err });
-        return;
-      } else {
-        //console.log("successful session retrieval", document);
-        response.status(StatusCode.OK).json(document);
       }
+      return response.status(StatusCode.OK).json(document);
     }
   );
 });
@@ -100,13 +88,11 @@ sessionController.get("/attendance", async (request, response) => {
 
   attendanceQuery.exec((err: any, document: any) => {
     if (err) {
-      response
+      return response
         .status(err.status || StatusCode.BAD_REQUEST)
         .json({ error: "Error getting register", message: err });
-      return;
-    } else {
-      response.status(StatusCode.OK).json(document);
     }
+    response.status(StatusCode.OK).json(document);
   });
 });
 
@@ -114,14 +100,13 @@ sessionController.post("/newSession", (request, response) => {
   const session = request.body;
   Sessions.create(session, (err: any, document: any) => {
     if (err) {
-      response
+      return response
         .status(StatusCode.INTERNAL_SERVER_ERROR)
         .json({ error: "Error creating session", message: err });
-    } else {
-      response
-        .status(StatusCode.OK)
-        .json({ message: "Session created successfully" });
     }
+    return response
+      .status(StatusCode.OK)
+      .json({ message: "Session created successfully" });
   });
 });
 
@@ -129,45 +114,43 @@ sessionController.post(
   "/sessionAttendance",
   async (request: any, response: any) => {
     if (!IsTutorRole(request)) {
-      response
-        .status(StatusCode.FORBIDDEN)
-        .json({
-          error: "Forbidden",
-          message:
-            "You are do not have the correct privileges for this request",
-        })
-        .send();
-    } else {
-      const body = request.body as {
-        sessionId: string;
-        firstName: string;
-        lastName: string;
-        status: number;
-        sessionCode: string;
-      };
-      const sessionCode = body.sessionCode;
-
-      Sessions.findOneAndUpdate(
-        {
-          sessionCode: sessionCode,
-        },
-        {
-          $set: { "attendance.$[v1].status": body.status },
-        },
-        {
-          arrayFilters: [{ "v1.firstName": body.firstName }],
-        },
-        (err: any, doc: any) => {
-          if (err) {
-            console.log(err);
-            response.status(500).json({ message: "Internal server error" });
-          } else {
-            console.log("document = ", doc);
-            response.status(200).json({ message: "Success" });
-          }
-        }
-      );
+      return response.status(StatusCode.FORBIDDEN).json({
+        error: "Forbidden",
+        message: "You are do not have the correct privileges for this request",
+      });
     }
+    const body = request.body as {
+      sessionId: string;
+      firstName: string;
+      lastName: string;
+      status: number;
+      sessionCode: string;
+    };
+    const sessionCode = body.sessionCode;
+
+    Sessions.findOneAndUpdate(
+      {
+        sessionCode: sessionCode,
+      },
+      {
+        $set: { "attendance.$[v1].status": body.status },
+      },
+      {
+        arrayFilters: [{ "v1.firstName": body.firstName }],
+      },
+      (err: any, doc: any) => {
+        if (err) {
+          console.log(err);
+          return response.status(500).json({
+            message: "Internal server error",
+          });
+        }
+        console.log("document = ", doc);
+        return response.status(200).json({
+          message: "Success",
+        });
+      }
+    );
   }
 );
 
