@@ -3,13 +3,25 @@ import api from "../config/apiconfig";
 import headerAuthorisationWithParams from "../../src/utils/headerAuthorization/headerAuthorisationWithParams";
 
 export const getAllModulesByModuleLeader = async (moduleLeaderId: string) => {
-    try {
-      return await api.get<IModule[]>(
-        "/moduleLeader/allModules",
-        headerAuthorisationWithParams({moduleLeaderId: moduleLeaderId})
-      ); 
-    } catch (error: any) {
-      console.log(error);
-      return error.response;
-    }
-  };
+  try {
+    return await api.get<IModule[]>(
+      "/moduleLeader/allModules",
+      headerAuthorisationWithParams({ moduleLeaderId: moduleLeaderId })
+    );
+  } catch (error: any) {
+    console.log(error);
+    return error.response;
+  }
+};
+
+export const getOverallModuleAttendance = async (moduleName: string) => {
+  try {
+    return await api.get<ISession[]>(
+      "/tutor/overallModuleAttendance",
+      headerAuthorisationWithParams({ moduleName: moduleName })
+    );
+  } catch (error: any) {
+    console.log(error);
+    return error.response;
+  }
+};

@@ -30,15 +30,3 @@ export const getAllSessionsPerModule = async (moduleName: string) => {
     return error.response;
   }
 };
-
-export const getOverallModuleAttendance = async (moduleName: string) => {
-  try {
-    return await api.get<ISession[]>(
-      "/tutor/overallModuleAttendance",
-      headerAuthorisationWithParams({ moduleName: moduleName })
-    );
-  } catch (error: any) {
-    console.log(error);
-    return error.response;
-  }
-};
