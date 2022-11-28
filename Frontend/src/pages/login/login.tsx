@@ -65,6 +65,10 @@ const Login = () => {
       navigate("/test");
       return;
     }
+    if (data.user.role === "CourseLeader") {
+      navigate("/test");
+      return;
+    }
     console.log("authStore is null");
   };
 
