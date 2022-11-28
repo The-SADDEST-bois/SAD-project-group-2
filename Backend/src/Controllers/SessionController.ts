@@ -6,6 +6,7 @@ import {
   IsCourseLeaderRole,
   IsTutorRole,
   IsModuleLeaderRole,
+  isEvalatedRole,
 } from "../Utils/CheckRole";
 const sessionController = express.Router();
 
@@ -20,7 +21,7 @@ sessionController.post("/toggleSession", (request: any, response: any) => {
     console.log(request.headers);
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
-      message: "You are do not have the correct privileges for this request",
+      message: "You do not have the correct privileges for this request",
     });
   }
   const body: ISession = request.body;
@@ -54,7 +55,14 @@ sessionController.get("/allSessions", (request, response) => {
     });
 });
 
-sessionController.get("/sessionByTutor", async (request, response) => {
+sessionController.get("/sessionByTutor", async (request: any, response: any) => {
+  if (!isEvalatedRole(request)) {
+    return response.status(StatusCode.FORBIDDEN).json({
+      error: "Forbidden",
+      message: "You do not have the correct privileges for this request",
+    });
+  }
+
   const id = request.query._id;
 
   Sessions.find({ "tutor.tutorId": id }, (err: any, document: any) => {
@@ -67,7 +75,14 @@ sessionController.get("/sessionByTutor", async (request, response) => {
   });
 });
 
-sessionController.get("/sessionByTutorAndDate", async (request, response) => {
+sessionController.get("/sessionByTutorAndDate", async (request: any, response: any) => {
+  if (!isEvalatedRole(request)) {
+    return response.status(StatusCode.FORBIDDEN).json({
+      error: "Forbidden",
+      message: "You do not have the correct privileges for this request",
+    });
+  }
+
   const { _id, date } = request.query;
   Sessions.find(
     { "tutor.tutorId": _id, startTime: date },
@@ -82,7 +97,13 @@ sessionController.get("/sessionByTutorAndDate", async (request, response) => {
   );
 });
 
-sessionController.get("/attendance", async (request, response) => {
+sessionController.get("/attendance", async (request: any, response: any) => {
+    if (!isEvalatedRole(request)) {
+    return response.status(StatusCode.FORBIDDEN).json({
+      error: "Forbidden",
+      message: "You do not have the correct privileges for this request",
+    });
+  };
   const id = request.query._id;
   var attendanceQuery = Sessions.findById(id).select("attendance");
 
@@ -96,7 +117,7 @@ sessionController.get("/attendance", async (request, response) => {
   });
 });
 
-sessionController.post("/newSession", (request, response) => {
+sessionController.post("/newSession", (request: any, response: any) => {
   const session = request.body;
   Sessions.create(session, (err: any, document: any) => {
     if (err) {

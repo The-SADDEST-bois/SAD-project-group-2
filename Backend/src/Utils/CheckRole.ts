@@ -30,3 +30,8 @@ export const IsModuleLeaderRole = (request: string) => {
   const role = GetRoleFromRequest(request);
   return role === Roles.ModuleLeader;
 };
+
+export const isEvalatedRole = (request: string) => {
+  const role = GetRoleFromRequest(request);
+  return role === Roles.Tutor || role === Roles.CourseLeader || role === Roles.ModuleLeader;
+  }
