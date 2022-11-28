@@ -7,13 +7,18 @@ import {
   ModalContent,
   ModalFooter,
   ModalOverlay,
+  Progress,
   Select,
   Spinner,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { useMutation } from "react-query";
-import { IAttendanceUser, ISessionModal } from "../../../types/types";
+import {
+  IAttendance,
+  IAttendanceUser,
+  ISessionModal,
+} from "../../../types/types";
 import { setStudentAttendance } from "../../../api/sessionApi/sessionApi";
 import { useToasts } from "../../hooks/useToasts/useToasts";
 import { useGetSessionAttendees } from "../../pages/TutorDashboard/hooks/useGetSessionAttendees/useGetSessionAttendees";
@@ -30,21 +35,29 @@ export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
 
   const handleResponse = (response: AxiosResponse) => {
     if (response?.status === 400 || response?.status === 403) {
-      onErrorToast(
-        "Error Updating Attendance",
-        response.data.error.message
-      );
+      onErrorToast("Error Updating Attendance", response.data.error.message);
       return;
     }
 
     onSuccessToast("Attendance updated", "Success");
     refetch();
-    
   };
 
   const mutation = useMutation({
     mutationFn: setStudentAttendance,
   });
+
+  const calculateSessionAttendanceReport = (item: IAttendance): number => {
+    const totalAttendees: number = item.attendance.length;
+    const attended = item.attendance.filter(
+      (attendees) => attendees.status === 1
+    );
+    const totalAttended: number = attended.length;
+
+    const finalFormula = ((totalAttended / totalAttendees) * 100).toFixed(2);
+
+    return +finalFormula;
+  };
 
   const handleChangeAttendance = (
     user: IAttendanceUser,
@@ -64,7 +77,7 @@ export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
         onError: (error) => {
           onErrorToast("Error updating attendance");
           console.log(error);
-        }
+        },
       }
     );
   };
@@ -81,7 +94,7 @@ export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
       <ModalContent>
         <Flex width={"full"} justifyContent="center" direction={"row"}>
           <Text paddingY="50px" fontSize={"xl"}>
-            Session Code = {userSessionID} // {session.sessionCode}
+            Session Code = {session.sessionCode}
           </Text>
         </Flex>
         <ModalBody>
@@ -121,6 +134,17 @@ export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
               ))}
           </VStack>
         </ModalBody>
+        <HStack width="full" justifyContent={"center"}>
+          <Text fontSize={"4xl"}>
+            Attendance percentage ={" "}
+            {users && calculateSessionAttendanceReport(users)} / 100%
+            <Progress
+              value={calculateSessionAttendanceReport(users)}
+              colorScheme="green"
+              height="32px"
+            />
+          </Text>
+        </HStack>
         <ModalFooter>
           <Button onClick={onClose}>Close</Button>
         </ModalFooter>
