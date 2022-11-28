@@ -31,3 +31,20 @@ export const getAllSessionsPerModule = async (moduleName: string) => {
   }
 
 };
+
+export const getAllSessionsBetweenDateRange = async (moduleName: string, startDate?: Date, endDate?: Date ) => {
+  //console.log(moduleName, startDate, endDate);
+  if (startDate && endDate) {
+  try {
+     return await api.get<ISession[]>(
+      "/tutor/sessionsPerModuleBetweenDateRange",
+      headerAuthorisationWithParams({moduleName: moduleName, startDate: startDate.toISOString(), endDate: endDate.toISOString()})
+    );
+  }
+  catch (error: any) {
+    console.log(error);
+    return error.response;
+  }
+}
+else return getAllSessionsPerModule(moduleName);
+};

@@ -1,21 +1,17 @@
 import {
-  AccordionButton,
-  AccordionIcon,
   AccordionPanel,
-  Box,
   Button,
   Flex,
   HStack,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { ISession } from "../../../../types/types";
-import { formatDate } from "../../../utils/formatDate/formatDate";
-import { useStore } from "../../../contexts/storeProvider";
-import { useGetAllSessionsByModule } from "../hooks/useGetAllSessionsByModule";
-import { SessionModal } from "../../../components/SessionModal/SessionModal";
 import { useState } from "react";
-import React from "react";
+import { ISession } from "../../../../types/types";
+import { SessionModal } from "../../../components/SessionModal/SessionModal";
+import { useStore } from "../../../contexts/storeProvider";
+import { formatDate } from "../../../utils/formatDate/formatDate";
+import { useGetAllSessionsByModuleAndDateRange } from "../hooks/useGetAllSessionByModuleAndDateRange";
 
 interface IAccordionData {
   moduleName: string;
@@ -23,16 +19,16 @@ interface IAccordionData {
   endDate?: Date;
 }
 
-export const AccordionData = ({
+export const AccordianData = ({
   moduleName,
   startDate,
   endDate,
 }: IAccordionData) => {
   const store = useStore();
+  const [currentSession, setCurrentSession] = useState({} as ISession);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoading, isError, sessionData, refetch } =
-    useGetAllSessionsByModule(moduleName);
-  const [currentSession, setCurrentSession] = useState({} as ISession);
+    useGetAllSessionsByModuleAndDateRange(moduleName, startDate, endDate);
 
   const handleSubmit = (item: ISession): void => {
     setCurrentSession(item);
@@ -86,4 +82,3 @@ export const AccordionData = ({
     </>
   );
 };
-export default AccordionData;

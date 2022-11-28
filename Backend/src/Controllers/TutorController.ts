@@ -49,4 +49,29 @@ tutorController.get("/sessionsPerModule", (request: any, response: any) => {
   }
 });
 
+tutorController.get("/sessionsPerModuleBetweenDateRange", async (request: any, response) => {
+  console.log("request", request.query);
+  if (!IsTutorRole(request)){
+    return response
+    .status(StatusCode.FORBIDDEN)
+    .json({
+      error: "Forbidden",
+      message: "You do not have the correct privileges for this request",
+    });
+  } else {
+    const {moduleName, startDate, endDate} = request.query;
+    Sessions.find(
+      { moduleName: moduleName, startDate: {"$gte" : startDate, "$lt" : endDate} },
+      (err: any, document: any) => {
+        if (err) {
+          return response
+            .status(err.status || StatusCode.BAD_REQUEST)
+            .json({ error: "Error getting sessions", message: err });
+        }
+        console.log("document", document);
+        return response.status(StatusCode.OK).json(document);
+      }
+    );
+  };
+});
 export default tutorController;
