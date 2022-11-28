@@ -3,27 +3,41 @@ import {
   AccordionButton,
   AccordionIcon,
   AccordionItem,
-  AccordionPanel,
   Box,
   Flex,
   Select,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IModule } from "../../../types/types";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { useStore } from "../../contexts/storeProvider";
 import { useGetAllModules } from "./hooks/useGetAllModules";
-import AccordionData from "./components/AccordionData";
+import { AccordianData } from "./components/AccordianData";
 
 const TutorViewAttendance = () => {
   const store = useStore();
 
   const [dateSelection, setDateSelection] = useState({} as string);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 
-  const { isLoading, isError, moduleData, refetch } = useGetAllModules();
+  useEffect(() => {
+    if (dateSelection == "") {
+      setStartDate(undefined);
+      setEndDate(undefined);
+    } else if (dateSelection == "Semester 1") {
+      setStartDate(new Date("2022/01/01"));
+      setEndDate(new Date("2022/10/16"));
+    } else if (dateSelection == "Semester 2") {
+      setStartDate(new Date("2022/10/17"));
+      setEndDate(new Date("2023/01/01"));
+    }
+  }, [dateSelection]);
+
+  const { isLoading, isError, moduleData } = useGetAllModules();
 
   if (isError) return <Text>Something went wrong</Text>;
 
@@ -55,8 +69,8 @@ const TutorViewAttendance = () => {
                   borderColor="white"
                   border={"2px"}
                 >
-                  <option value={dateSelection}>Semester 1</option>
-                  <option value={dateSelection}>Semester 2</option>
+                  <option value={"Semester 1"}>Semester 1</option>
+                  <option value={"Semester 2"}>Semester 2</option>
                 </Select>
               </VStack>
 
@@ -70,7 +84,7 @@ const TutorViewAttendance = () => {
                 {moduleData &&
                   !isLoading &&
                   moduleData.map((item: IModule) => (
-                    <Accordion allowToggle allowMultiple>
+                    <Accordion allowMultiple>
                       <AccordionItem>
                         <h2>
                           <AccordionButton>
@@ -80,7 +94,7 @@ const TutorViewAttendance = () => {
                             <AccordionIcon />
                           </AccordionButton>
                         </h2>
-                        <AccordionData moduleName={item.moduleName} />
+                        <AccordianData moduleName={item.moduleName} startDate={startDate} endDate={endDate}/>
                       </AccordionItem>
                     </Accordion>
                   ))}
@@ -92,5 +106,6 @@ const TutorViewAttendance = () => {
     />
   );
 };
+
 
 export default TutorViewAttendance;
