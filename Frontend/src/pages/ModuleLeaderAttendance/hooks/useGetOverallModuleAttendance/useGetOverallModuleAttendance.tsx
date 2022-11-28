@@ -10,7 +10,7 @@ export const useGetOverallModuleAttendance = ({
   moduleName,
 }: UseGetOverallModuleAttendance) => {
   const { isLoading, isError, data, refetch } = useQuery({
-    queryKey: "moduleAttendanceByName",
+    queryKey: ["getOverallModuleAttendance", moduleName],
     queryFn: () => getOverallModuleAttendance(moduleName as string),
     refetchOnWindowFocus: true,
   });

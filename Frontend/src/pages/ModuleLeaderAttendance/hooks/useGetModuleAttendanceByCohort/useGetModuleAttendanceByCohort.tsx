@@ -3,38 +3,21 @@ import { useQuery } from "react-query";
 import { getOverallCohortAttendance } from "../../../../../api/moduleLeaderApi/moduleLeaderApi";
 
 interface IuseGetModuleAttendanceByCohort {
-  cohortNames: string[];
-}
-
-export interface IState {
-  name: string;
-  percentage: number;
+  cohortName: string;
 }
 
 export const useGetModuleAttendanceByCohort = ({
-  cohortNames,
+  cohortName,
 }: IuseGetModuleAttendanceByCohort) => {
-  const [state, setState] = useState<IState[]>([]);
 
-  cohortNames.map(async (item) => {
-    return useQuery({
-      queryKey: "cohortAttendanceByName",
-      queryFn: () => getOverallCohortAttendance(item as string),
-      refetchOnWindowFocus: true,
-      onSuccess(data) {
-        console.log("The data = ", data.data.overallAttendancePercentage);
+  console.log("cohortName= ", cohortName);
 
-        setState([
-          {
-            ...state,
-            name: item,
-            percentage: data.data.overallAttendancePercentage,
-          },
-        ]);
-        return data.data.overallAttendancePercentage;
-      },
-    });
+  const { isLoading, isError, data, refetch } = useQuery({
+    queryKey: "allModules",
+    queryFn: () => getOverallCohortAttendance(cohortName),
+    refetchOnWindowFocus: true,
   });
 
-  return { state };
+  const overallAttendancePercent = data?.data.overallAttendancePercentage;
+  return { isLoading, isError, overallAttendancePercent, refetch };
 };

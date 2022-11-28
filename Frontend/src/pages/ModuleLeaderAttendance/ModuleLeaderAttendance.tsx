@@ -10,18 +10,35 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IModule } from "../../../types/types";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { useStore } from "../../contexts/storeProvider";
-import { ModuleAccordionData } from "./compoenents/ModuleAccordianData/ModuleAccordionData";
+import { ModuleAccordionData } from "./components/ModuleAccordianData/ModuleAccordionData";
+import { ModuleAccordion } from "./components/ModuleAccordian/ModuleAccordion";
 import { useGetAllModulesById } from "./hooks/useGetAllModulesById/useGetAllModulesById";
 
 export const ModuleLeaderAttendance = () => {
   const store = useStore();
   const { moduleData, isError, isLoading } = useGetAllModulesById();
-  const [dateSelection, setDateSelection] = useState({} as string);
+  const [moduleSelection, setModuleSelection] = useState({} as IModule);
+  const [selectData, setSelectData] = useState("");
+
+  useEffect(() => {
+    console.log("moduleData= ", selectData);
+    if (moduleData) {
+      moduleData.map((item) => {
+        if (item.moduleName == selectData) {
+          setModuleSelection(item);
+          return;
+        }
+        else {
+          setModuleSelection({} as IModule);
+        }
+      });
+    }
+  }, [selectData]);
 
   return (
     <PageWithSideBar
@@ -47,12 +64,17 @@ export const ModuleLeaderAttendance = () => {
                 <Text fontSize={"xl"}>Select Date</Text>
                 <Select
                   placeholder="Please Select"
-                  onChange={(e) => setDateSelection(e.target.value)}
+                  onChange={(e: any) => setSelectData(e.target.value)}
                   borderColor="white"
                   border={"2px"}
                 >
-                  <option value={dateSelection}>Semester 1</option>
-                  <option value={dateSelection}>Semester 2</option>
+                  {!isLoading &&
+                    !isError &&
+                    moduleData.map((module) => (
+                      <option value={module.moduleName}>
+                        {module.moduleName}
+                      </option>
+                    ))}
                 </Select>
               </VStack>
 
@@ -63,29 +85,7 @@ export const ModuleLeaderAttendance = () => {
                 borderRadius={"20px"}
               >
                 <Text fontSize={"xl"}>Results </Text>
-                {moduleData &&
-                  !isLoading &&
-                  moduleData.map((item: IModule) => (
-                    <Accordion allowToggle allowMultiple>
-                      <AccordionItem>
-                        <h2>
-                          <AccordionButton>
-                            <Box
-                              flex="1"
-                              textAlign="left"
-                              border={"2px white solid"}
-                              padding="10px"
-                              borderRadius={"10px"}
-                            >
-                              {item.moduleName}
-                            </Box>
-                            <AccordionIcon />
-                          </AccordionButton>
-                        </h2>
-                        <ModuleAccordionData moduleObject={item} />
-                      </AccordionItem>
-                    </Accordion>
-                  ))}
+                <ModuleAccordion module={moduleSelection} />
               </VStack>
             </VStack>
           </Flex>
