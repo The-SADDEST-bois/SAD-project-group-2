@@ -74,13 +74,16 @@ moduleLeaderController.get(
     try {
       const cohorts = request.query.cohortNames;
       var allAttendance: any[] = [];
-      cohorts.forEach(async (cohort: any) => {
+
+      cohorts.forEach(async (cohortName: any) => {
         allAttendance.push(
           await Sessions.find({
-            cohort: cohort,
-          })
+            "cohorts.cohortName": cohortName,
+          }).select("attendance")
         );
       });
+      console.log(allAttendance);
+
       const numberOfStudents = allAttendance.length;
       const numberOfAttended = allAttendance.filter(
         (attendance: any) => attendance.status === 1
