@@ -48,6 +48,7 @@ export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
   });
 
   const calculateSessionAttendanceReport = (item: IAttendance): number => {
+    if (!item) return 0;
     const totalAttendees: number = item.attendance.length;
     const attended = item.attendance.filter(
       (attendees) => attendees.status === 1
