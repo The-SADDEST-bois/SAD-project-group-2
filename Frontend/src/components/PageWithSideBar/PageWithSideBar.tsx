@@ -19,6 +19,7 @@ export const PageWithSideBar = ({
         w="full"
         px="16"
         justifyContent={"center"}
+        position={"fixed"}
       >
         <Flex direction="column">{leftSection}</Flex>
       </VStack>

@@ -82,13 +82,13 @@ export interface IModule {
       _id?: string;
     }
   ];
-  cohorts: [
-    {
-      cohortId: string;
-      courseName: string;
-    }
-  ];
+  cohorts: [ICohorts];
   _id?: string;
+}
+
+export interface ICohorts {
+  cohortId: string;
+  courseName: string;
 }
 
 export interface ICohort {

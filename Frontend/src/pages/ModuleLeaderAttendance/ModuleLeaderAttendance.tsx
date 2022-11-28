@@ -3,6 +3,7 @@ import {
   AccordionButton,
   AccordionIcon,
   AccordionItem,
+  AccordionPanel,
   Box,
   Flex,
   Select,
@@ -14,21 +15,17 @@ import { IModule } from "../../../types/types";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { useStore } from "../../contexts/storeProvider";
-import { useGetAllModules } from "./hooks/useGetAllModules";
-import AccordionData from "./components/AccordionData";
+import { ModuleAccordionData } from "./compoenents/ModuleAccordianData/ModuleAccordionData";
+import { useGetAllModulesById } from "./hooks/useGetAllModulesById/useGetAllModulesById";
 
-const TutorViewAttendance = () => {
+export const ModuleLeaderAttendance = () => {
   const store = useStore();
-
+  const { moduleData, isError, isLoading } = useGetAllModulesById();
   const [dateSelection, setDateSelection] = useState({} as string);
-
-  const { isLoading, isError, moduleData, refetch } = useGetAllModules();
-
-  if (isError) return <Text>Something went wrong</Text>;
 
   return (
     <PageWithSideBar
-      leftSection={<DynamicNavBar role={store.auth.user.role.toString()} />}
+      leftSection={<DynamicNavBar role={store?.auth?.user?.role as string} />}
       rightSection={
         <>
           <Flex
@@ -73,13 +70,19 @@ const TutorViewAttendance = () => {
                       <AccordionItem>
                         <h2>
                           <AccordionButton>
-                            <Box flex="1" textAlign="left">
+                            <Box
+                              flex="1"
+                              textAlign="left"
+                              border={"2px white solid"}
+                              padding="10px"
+                              borderRadius={"10px"}
+                            >
                               {item.moduleName}
                             </Box>
                             <AccordionIcon />
                           </AccordionButton>
                         </h2>
-                        <AccordionData moduleName={item.moduleName} />
+                        <ModuleAccordionData moduleObject={item} />
                       </AccordionItem>
                     </Accordion>
                   ))}
@@ -91,5 +94,3 @@ const TutorViewAttendance = () => {
     />
   );
 };
-
-export default TutorViewAttendance;

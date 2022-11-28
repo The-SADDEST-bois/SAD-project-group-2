@@ -62,7 +62,7 @@ const Login = () => {
       return;
     }
     if (data.user.role === "ModuleLeader") {
-      navigate("/test");
+      navigate("/tutordashboard");
       return;
     }
     console.log("authStore is null");
