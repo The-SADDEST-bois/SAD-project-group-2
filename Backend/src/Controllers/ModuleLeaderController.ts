@@ -1,12 +1,12 @@
 import express from "express";
 import StatusCode from "../Utils/StatusCodes";
-import { IsModuleLeaderRole } from "../Utils/CheckRole";
+import { IsModuleLeaderRole, isEvalatedRole } from "../Utils/CheckRole";
 import Modules from "../Models/Module";
 
 const moduleLeaderController = express.Router();
 
 moduleLeaderController.get("/allModules", (request: any, response: any) => {
-    if (!IsModuleLeaderRole(request)) {
+    if (!isEvalatedRole(request)) {
       return response
         .status(StatusCode.FORBIDDEN)
         .json({
@@ -17,7 +17,7 @@ moduleLeaderController.get("/allModules", (request: any, response: any) => {
       const moduleLeaderId = request.query.moduleLeaderId;
       Modules.find({ "moduleLeader.moduleLeaderId": moduleLeaderId }, (err: any, document: any) => {
         if (err) {
-          console.log("Error Registering: ", err);
+          console.log("Error getting modules: ", err);
           return response
             .status(err.status || StatusCode.BAD_REQUEST)
             .json({ error: "Error getting modules", message: err });
