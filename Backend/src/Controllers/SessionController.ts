@@ -63,7 +63,7 @@ sessionController.get("/sessionByTutor", async (request, response) => {
 
 sessionController.get("/sessionByTutorAndDate", async (request, response) => {
   const {_id, date} = request.query;
-  Sessions.find({ "tutor.tutorId": _id, startTime: date }, (err: any, document: any) => {
+  Sessions.find({ "tutor.tutorId": _id, startDate: date }, (err: any, document: any) => {
     if (err) {
       response
         .status(err.status || StatusCode.BAD_REQUEST)
