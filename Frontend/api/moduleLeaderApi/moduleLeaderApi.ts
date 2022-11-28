@@ -17,7 +17,7 @@ export const getAllModulesByModuleLeader = async (moduleLeaderId: string) => {
 export const getOverallModuleAttendance = async (moduleName: string) => {
   try {
     return await api.get<ISession[]>(
-      "/tutor/overallModuleAttendance",
+      "/moduleLeader/overallModuleAttendance",
       headerAuthorisationWithParams({ moduleName: moduleName })
     );
   } catch (error: any) {
@@ -29,8 +29,20 @@ export const getOverallModuleAttendance = async (moduleName: string) => {
 export const getOverallCohortAttendance = async (cohortName: string) => {
   try {
     return await api.get<ISession[]>(
-      "/tutor/overallCohortAttendance",
+      "/moduleLeader/overallCohortAttendance",
       headerAuthorisationWithParams({ cohortName: cohortName })
+    );
+  } catch (error: any) {
+    console.log(error);
+    return error.response;
+  }
+};
+
+export const deleteSession = async (sessionId: string) => {
+  try {
+    return await api.delete(
+      "/moduleLeader/deleteSession",
+      headerAuthorisationWithParams({ sessionId: sessionId })
     );
   } catch (error: any) {
     console.log(error);
