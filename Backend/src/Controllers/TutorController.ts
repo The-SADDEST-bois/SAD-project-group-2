@@ -2,17 +2,17 @@ import express from "express";
 import StatusCode from "../Utils/StatusCodes";
 import Modules from "../Models/Module";
 import Sessions from "../Models/Session";
-import { IsTutorRole } from "../Utils/CheckRole";
+import { IsTutorRole, isEvalatedRole } from "../Utils/CheckRole";
 
 const tutorController = express.Router();
 
 tutorController.get("/allModules", (request: any, response: any) => {
-  if (!IsTutorRole(request)) {
+  if (!isEvalatedRole(request)) {
     return response
       .status(StatusCode.FORBIDDEN)
       .json({
         error: "Forbidden",
-        message: "You are do not have the correct privileges for this request",
+        message: "You do not have the correct privileges for this request",
       });
   }
     const tutorId = request.query.tutorId;
@@ -33,7 +33,7 @@ tutorController.get("/sessionsPerModule", (request: any, response: any) => {
       .status(StatusCode.FORBIDDEN)
       .json({
         error: "Forbidden",
-        message: "You are do not have the correct privileges for this request",
+        message: "You do not have the correct privileges for this request",
       });
   } else {
     const moduleName = request.query.moduleName;
