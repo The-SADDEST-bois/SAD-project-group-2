@@ -72,23 +72,14 @@ moduleLeaderController.get(
       });
     }
     try {
-      const cohorts = request.query.cohortNames;
-      var allAttendance: any[] = [];
-
-      cohorts.forEach(async (cohortName: any) => {
-        allAttendance.push(
-          await Sessions.find({
-            "cohorts.cohortName": cohortName,
-          }).select("attendance")
-        );
+      const cohort = request.query.cohortName;
+      const attendanceFromSessionsByCohort = await Sessions.find({
+        cohort: cohort,
+      }).select("attendance");
+      const numberOfStudents = attendanceFromSessionsByCohort.length;
+      const numberOfAttended = await Sessions.count({
+        "attendance.status": 1,
       });
-      console.log(allAttendance);
-
-      const numberOfStudents = allAttendance.length;
-      const numberOfAttended = allAttendance.filter(
-        (attendance: any) => attendance.status === 1
-      ).length;
-
       const overallAttendancePercentage = (
         (numberOfAttended / numberOfStudents) *
         100
