@@ -30,6 +30,7 @@ export const sessionSchema = new Schema<ISession>({
     },
   ],
   moduleName: { type: String, required: true },
+  startDate: { type: Date, required: true },
   startTime: { type: Date, required: true },
   duration: { type: Number, required: false },
   isOpen: { type: Boolean, required: true },
