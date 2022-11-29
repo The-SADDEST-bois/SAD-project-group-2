@@ -22,7 +22,7 @@ const TutorViewAttendance = () => {
 
   const [dateSelection, setDateSelection] = useState({} as string);
 
-  const { isLoading, isError, moduleData, refetch } = useGetAllModules();
+  const { isLoading, isError, moduleData } = useGetAllModules();
 
   if (isError) return <Text>Something went wrong</Text>;
 
@@ -68,7 +68,7 @@ const TutorViewAttendance = () => {
                 <Text fontSize={"xl"}>Results </Text>
                 {moduleData &&
                   !isLoading &&
-                  moduleData.map((item: IModule) => (
+                  moduleData?.map((item: IModule) => (
                     <Accordion allowToggle allowMultiple>
                       <AccordionItem>
                         <h2>

@@ -1,25 +1,29 @@
-import { AccordionPanel, HStack, Text, VStack } from "@chakra-ui/react";
-import { isError } from "react-query";
+import { HStack, Text } from "@chakra-ui/react";
 
-import { ICohort } from "../../../../../types/types";
-import {
-  useGetModuleAttendanceByCohort,
-} from "../../hooks/useGetModuleAttendanceByCohort/useGetModuleAttendanceByCohort";
+import { useGetModuleAttendanceByCohort } from "../../hooks/useGetModuleAttendanceByCohort/useGetModuleAttendanceByCohort";
 
 interface IModuleAccordionData {
   cohortName: string;
 }
 
 export const ModuleAccordionData = ({ cohortName }: IModuleAccordionData) => {
-  const { isLoading, isError, overallAttendancePercent, refetch } = useGetModuleAttendanceByCohort(
-    {cohortName}
-  );
+  const { isLoading, isError, overallAttendancePercent, refetch } =
+    useGetModuleAttendanceByCohort({ cohortName });
 
   return (
-    <>
+    <HStack
+      width="100%"
+      border="solid 2px white"
+      borderRadius="10px"
+      padding="10px"
+      justifyContent={"space-between"}
+    >
       {!isLoading && !isError && overallAttendancePercent && (
-      <h1>{cohortName + ":" + overallAttendancePercent+"%"}</h1>
+        <>
+          <Text>{cohortName} Cohort</Text>
+          <Text fontWeight={"bolder"}>{overallAttendancePercent}%</Text>
+        </>
       )}
-    </>
+    </HStack>
   );
 };

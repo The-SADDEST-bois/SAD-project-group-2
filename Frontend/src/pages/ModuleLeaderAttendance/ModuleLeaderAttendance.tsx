@@ -1,21 +1,9 @@
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-  Flex,
-  Select,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Flex, Select, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { IModule } from "../../../types/types";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { useStore } from "../../contexts/storeProvider";
-import { ModuleAccordionData } from "./components/ModuleAccordianData/ModuleAccordionData";
 import { ModuleAccordion } from "./components/ModuleAccordian/ModuleAccordion";
 import { useGetAllModulesById } from "./hooks/useGetAllModulesById/useGetAllModulesById";
 
@@ -32,8 +20,7 @@ export const ModuleLeaderAttendance = () => {
         if (item.moduleName == selectData) {
           setModuleSelection(item);
           return;
-        }
-        else {
+        } else {
           setModuleSelection({} as IModule);
         }
       });
@@ -61,7 +48,7 @@ export const ModuleLeaderAttendance = () => {
                 padding="40px"
                 borderRadius={"20px"}
               >
-                <Text fontSize={"xl"}>Select Date</Text>
+                <Text fontSize={"xl"}>Select Module</Text>
                 <Select
                   placeholder="Please Select"
                   onChange={(e: any) => setSelectData(e.target.value)}
