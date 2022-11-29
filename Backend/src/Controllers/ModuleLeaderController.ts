@@ -39,17 +39,32 @@ moduleLeaderController.get(
     }
     try {
       const moduleName = request.query.moduleName;
-      const attendanceFromAllSessions = await Sessions.find({
+      const attendanceFromAllModuleSessions = await Sessions.find({
         moduleName: moduleName,
       }).select("attendance");
-      const numberOfStudents = attendanceFromAllSessions.length;
-      const numberOfAttended = await Sessions.count({
-        "attendance.status": 1,
-      });
+      var numberOfStudents = 0;
+      var numberOfAttended = 0;
+
+      for (let i = 0; i < attendanceFromAllModuleSessions.length; i++) {
+        numberOfStudents +=
+          attendanceFromAllModuleSessions[i].attendance.length;
+      }
+
+      for (let i = 0; i < attendanceFromAllModuleSessions.length; i++) {
+        attendanceFromAllModuleSessions[i].attendance.forEach(
+          (student: any) => {
+            if (student.status === 1) {
+              numberOfAttended++;
+            }
+          }
+        );
+      }
+
       const overallAttendancePercentage = (
         (numberOfAttended / numberOfStudents) *
         100
       ).toFixed(2);
+
       return response.status(StatusCode.OK).json({
         overallAttendancePercentage: overallAttendancePercentage,
       });
@@ -76,14 +91,24 @@ moduleLeaderController.get(
       const attendanceFromSessionsByCohort = await Sessions.find({
         cohort: cohort,
       }).select("attendance");
-      const numberOfStudents = attendanceFromSessionsByCohort.length;
-      const numberOfAttended = await Sessions.count({
-        "attendance.status": 1,
-      });
+      var numberOfStudents = 0;
+      for (let i = 0; i < attendanceFromSessionsByCohort.length; i++) {
+        numberOfStudents += attendanceFromSessionsByCohort[i].attendance.length;
+      }
+      var numberOfAttended = 0;
+      for (let i = 0; i < attendanceFromSessionsByCohort.length; i++) {
+        attendanceFromSessionsByCohort[i].attendance.forEach((student: any) => {
+          if (student.status === 1) {
+            numberOfAttended++;
+          }
+        });
+      }
+
       const overallAttendancePercentage = (
         (numberOfAttended / numberOfStudents) *
         100
       ).toFixed(2);
+
       return response.status(StatusCode.OK).json({
         overallAttendancePercentage: overallAttendancePercentage,
       });

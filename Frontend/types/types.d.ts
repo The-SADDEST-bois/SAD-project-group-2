@@ -44,6 +44,7 @@ export interface ISession {
     }
   ];
   moduleName: string;
+  startDate: Date;
   startTime: Date;
   duration?: number;
   isOpen: boolean;

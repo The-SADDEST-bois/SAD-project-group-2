@@ -65,6 +65,15 @@ const Login = () => {
       navigate("/tutordashboard");
       return;
     }
+    if (data.user.role === "CourseLeader") {
+      navigate("/test");
+      return;
+    }
+
+    if (data.user.role === "AcademicAdvisor") {
+      navigate("/test");
+      return;
+    }
     console.log("authStore is null");
   };
 
