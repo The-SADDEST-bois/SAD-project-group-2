@@ -52,6 +52,28 @@ const Login = () => {
     if (authStore) {
       authStore.auth.login(data.user as IUser, data.accessToken);
     }
+
+    if (data.user.role === "Student") {
+      navigate("/");
+      return;
+    }
+    if (data.user.role === "Tutor") {
+      navigate("/");
+      return;
+    }
+    if (data.user.role === "ModuleLeader") {
+      navigate("/");
+      return;
+    }
+    if (data.user.role === "CourseLeader") {
+      navigate("/");
+      return;
+    }
+
+    if (data.user.role === "AcademicAdvisor") {
+      navigate("/test");
+      return;
+    }
     navigate("/");
     console.log("authStore is null");
   };

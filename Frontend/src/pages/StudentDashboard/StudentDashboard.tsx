@@ -17,17 +17,11 @@ const StudentDashboard = () => {
 
   const handleResponse = (response: AxiosResponse) => {
     if (response.status === 200) {
-      onSuccessToast(
-        `Session: ${sessionCode}`,
-        response.data.message
-      );
+      onSuccessToast(`Session: ${sessionCode}`, response.data.message);
       return;
     }
 
-    onErrorToast(
-      `Session: ${sessionCode}`,
-      response.data.error,
-    );
+    onErrorToast(`Session: ${sessionCode}`, response.data.error);
   };
 
   const handleUseMutation = async (sessionCode: string) => {
@@ -58,7 +52,7 @@ const StudentDashboard = () => {
 
   return (
     <PageWithSideBar
-      leftSection={<DynamicNavBar role={store.auth.user.role.toString()} />}
+      leftSection={<DynamicNavBar role={store?.auth?.user?.role as string} />}
       rightSection={
         <>
           <Flex

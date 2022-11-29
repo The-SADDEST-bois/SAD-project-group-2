@@ -9,21 +9,26 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { IModule } from "../../../../../types/types";
-import { useGetOverallModuleAttendance } from "../../hooks/useGetOverallModuleAttendance/useGetOverallModuleAttendance";
-import { ModuleAccordionData } from "../ModuleAccordianData/ModuleAccordionData";
+import React from "react";
+import { ICourse } from "../../../../../types/types";
+import { useGetCourseAttendanceByName } from "../../hooks/useGetCourseAttendanceById/useGetCourseAttendanceByName";
+import { CourseAccordionData } from "../CourseAccordionData/CourseAccordionData";
 
-interface IModuleAttendance {
-  module: IModule;
+interface ICourseAccordion {
+  course: ICourse;
 }
 
-export const ModuleAccordion = ({ module }: IModuleAttendance) => {
-  const moduleName = module?.moduleName;
-  const { isLoading, percentageAttendance } = useGetOverallModuleAttendance({
-    moduleName: moduleName,
-  });
+export const CourseAccordion = ({ course }: ICourseAccordion) => {
+  const courseName = course?.courseName;
 
-  if (!moduleName) return <></>;
+  const { isLoading, percentageAttendance, refetch } =
+    useGetCourseAttendanceByName({
+      courseName,
+    });
+
+  if (!courseName) return <></>;
+
+  console.log("course = ", course);
 
   return (
     <>
@@ -38,9 +43,9 @@ export const ModuleAccordion = ({ module }: IModuleAttendance) => {
                 padding="10px"
                 justifyContent={"space-between"}
               >
-                {!isLoading && module != undefined && (
+                {!isLoading && course != undefined && (
                   <>
-                    <Text>{module.moduleName}</Text>
+                    <Text>{course.courseName}</Text>
                     <Text color="black" fontWeight={"bold"}>
                       {percentageAttendance && percentageAttendance}%
                     </Text>
@@ -57,12 +62,9 @@ export const ModuleAccordion = ({ module }: IModuleAttendance) => {
               justifyContent={"space-between"}
               spacing={5}
             >
-              {module.cohorts &&
-                module?.cohorts.map((cohort) => (
-                  <ModuleAccordionData
-                    cohortName={cohort.courseName}
-                    moduleName={moduleName}
-                  />
+              {course?.modules &&
+                course?.modules.map((module) => (
+                  <CourseAccordionData moduleName={module.moduleName} />
                 ))}
             </VStack>
           </AccordionPanel>

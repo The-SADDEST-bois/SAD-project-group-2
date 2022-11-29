@@ -60,6 +60,8 @@ export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
     return +finalFormula;
   };
 
+  console.log("users =", users);
+
   const handleChangeAttendance = (
     user: IAttendanceUser,
     value: string

@@ -4,11 +4,15 @@ import { useGetModuleAttendanceByCohort } from "../../hooks/useGetModuleAttendan
 
 interface IModuleAccordionData {
   cohortName: string;
+  moduleName: string;
 }
 
-export const ModuleAccordionData = ({ cohortName }: IModuleAccordionData) => {
+export const ModuleAccordionData = ({
+  cohortName,
+  moduleName,
+}: IModuleAccordionData) => {
   const { isLoading, isError, overallAttendancePercent, refetch } =
-    useGetModuleAttendanceByCohort({ cohortName });
+    useGetModuleAttendanceByCohort({ cohortName, moduleName });
 
   return (
     <HStack
