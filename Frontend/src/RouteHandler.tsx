@@ -9,7 +9,7 @@ import StudentDashboard from "./pages/StudentDashboard/StudentDashboard";
 import TutorDashboard from "./pages/TutorDashboard/TutorDashboard";
 import TutorViewAttendance from "./pages/TutorViewAttendance/TutorViewAttendance";
 import { ModuleLeaderAttendance } from "./pages/ModuleLeaderAttendance/ModuleLeaderAttendance";
-import { CoureLeaderAttendance } from "./pages/CourseLeaderAttendance/CoureLeaderAttendance";
+import { CourseLeaderAttendance } from "./pages/CourseLeaderAttendance/CourseLeaderAttendance";
 const TestUseQuery = lazy(() => import("./pages/testusequery/TestUseQuery"));
 const NewSession = lazy(
   () => import("./pages/StudentDashboard/StudentDashboard")
@@ -31,10 +31,10 @@ const RouteHandler = () => {
     if (store?.auth.user.role === Roles.CourseLeader) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<h1>Not Implemented</h1>} />
+          <Route path="/" element={<TutorDashboard />} />
           <Route
             path="/courseLeaderViewAttendance"
-            element={<h1>Not Implemented</h1>}
+            element={<CourseLeaderAttendance />}
           />
           <Route
             path="*"
@@ -100,8 +100,6 @@ const RouteHandler = () => {
       setRoutes(
         <Routes>
           <Route path="/" element={<StudentDashboard />} />
-          <Route path="/studentattendance" element={<h1>Not Implemented</h1>} />
-
           <Route
             path="*"
             element={

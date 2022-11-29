@@ -9,7 +9,7 @@ import { UseGetAllCourseById } from "./hooks/UseGetAllCourseById/UseGetAllCourse
 import { ICourse } from "../../../types/types";
 import { CourseAccordion } from "./components/CourseAccordion/CourseAccordion";
 
-export const CoureLeaderAttendance = () => {
+export const CourseLeaderAttendance = () => {
   const store = useStore();
   const [selectData, setSelectData] = useState("");
   const [courseSelection, setCourseSelection] = useState({} as ICourse);
