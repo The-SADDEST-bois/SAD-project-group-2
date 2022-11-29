@@ -67,22 +67,27 @@ export const ReauthenticateUser = async (request: any, response: any) => {
       .status(StatusCode.UNAUTHORIZED)
       .json({ error: "Invalid Token" });
   }
-
-  const data: ITokenData = result;
-  const user = await Users.findOne({ _id: data.data._id });
-  const cleanUser: IUser = {
-    _id: user._id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
-    password: "",
-    role: user.role,
-  };
-  console.log("REAUTHENTICATE", Date.now());
-  return response
-    .status(StatusCode.OK)
-    .json({ messasge: "Success", user: cleanUser })
-    .send();
+  try {
+    const data: ITokenData = result;
+    const user = await Users.findOne({ _id: data.data._id });
+    const cleanUser: IUser = {
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      password: "",
+      role: user.role,
+    };
+    console.log("REAUTHENTICATE", Date.now());
+    return response
+      .status(StatusCode.OK)
+      .json({ messasge: "Success", user: cleanUser })
+      .send();
+  } catch (error) {
+    return response
+      .status(StatusCode.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
+  }
 };
 
 export const RegisterUser = async (request: any, response: any) => {
@@ -109,7 +114,7 @@ export const AllStudents = (request: any, response: any) => {
         .status(err.status || StatusCode.BAD_REQUEST)
         .json({ error: "Error getting students", message: err });
     }
-      console.log("successful student retrieval", document);
-      return response.status(StatusCode.OK).json(document);
+    console.log("successful student retrieval", document);
+    return response.status(StatusCode.OK).json(document);
   });
 };

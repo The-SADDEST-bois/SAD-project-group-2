@@ -54,6 +54,7 @@ const RouteHandler = () => {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
+          <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
           <Route path="/tutordashboard" element={<TutorDashboard />} />
           <Route
