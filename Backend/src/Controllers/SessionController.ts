@@ -1,10 +1,7 @@
 import express from "express";
 import StatusCode from "../Utils/StatusCodes";
 import { StartSession, AllSessions, SessionsByTutor, SessionsByTutorAndDate, SessionAttendance, CreateSession, UpdateSessionAttendance } from "../Services/SessionServices";
-import {
-  IsTutorRole,
-  HighPriviledgesRole,
-} from "../Utils/CheckRole";
+import { IsTutorRole } from "../Utils/CheckRole";
 const sessionController = express.Router();
 
 // Session controller post endpoint (adds session to database) (can rename to /createSession if necessary)
@@ -14,7 +11,7 @@ sessionController.post("/", (request: any, response: any) => {
 });
 
 sessionController.post("/toggleSession", (request: any, response: any) => {
-  if (!HighPriviledgesRole(request)) {
+  if (!IsTutorRole(request)) {
     console.log(request.headers);
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
@@ -33,7 +30,7 @@ sessionController.get("/allSessions", (request: any, response: any) => {
 });
 
 sessionController.get("/sessionByTutor", async (request: any, response: any) => {
-  if (!HighPriviledgesRole(request)) {
+  if (!IsTutorRole(request)) {
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
       message: "You do not have the correct privileges for this request",
@@ -45,7 +42,7 @@ sessionController.get("/sessionByTutor", async (request: any, response: any) => 
 });
 
 sessionController.get("/sessionByTutorAndDate", async (request: any, response: any) => {
-  if (!HighPriviledgesRole(request)) {
+  if (!IsTutorRole(request)) {
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
       message: "You do not have the correct privileges for this request",
@@ -57,7 +54,7 @@ sessionController.get("/sessionByTutorAndDate", async (request: any, response: a
 });
 
 sessionController.get("/attendance", async (request: any, response: any) => {
-    if (!HighPriviledgesRole(request)) {
+    if (!IsTutorRole(request)) {
       return response.status(StatusCode.FORBIDDEN).json({
         error: "Forbidden",
         message: "You do not have the correct privileges for this request"
@@ -75,10 +72,10 @@ sessionController.post("/newSession", (request: any, response: any) => {
 });
 
 sessionController.post("/sessionAttendance", async (request: any, response: any) => {
-    if (!HighPriviledgesRole(request)) {
+    if (!IsTutorRole(request)) {
       return response.status(StatusCode.FORBIDDEN).json({
         error: "Forbidden",
-        message: "You are do not have the correct privileges for this request",
+        message: "You do not have the correct privileges for this request",
       });
     }
 

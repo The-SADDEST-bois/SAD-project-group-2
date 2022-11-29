@@ -1,12 +1,12 @@
 import express from "express";
 import StatusCode from "../Utils/StatusCodes";
-import { HighPriviledgesRole, MediumPriviledgesRole } from "../Utils/CheckRole";
+import { IsTutorRole, IsModuleLeaderRole } from "../Utils/CheckRole";
 import { ModulesByModuleLeader, OverallModuleAttendance, OverallCohortAttendance, DeleteSession } from "../Services/ModuleLeaderServices";
 
 const moduleLeaderController = express.Router();
 
 moduleLeaderController.get("/allModules", (request: any, response: any) => {
-  if (!HighPriviledgesRole(request)) {
+  if (!IsTutorRole(request)) {
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
       message: "You do not have the correct privileges for this request",
@@ -18,7 +18,7 @@ moduleLeaderController.get("/allModules", (request: any, response: any) => {
 });
 
 moduleLeaderController.get("/overallModuleAttendance", async (request: any, response: any) => {
-    if (!MediumPriviledgesRole(request)) {
+    if (!IsModuleLeaderRole(request)) {
       return response.status(StatusCode.FORBIDDEN).json({
         error: "Forbidden",
         message: "You do not have the correct privileges for this request",
@@ -30,7 +30,7 @@ moduleLeaderController.get("/overallModuleAttendance", async (request: any, resp
   });
 
 moduleLeaderController.get("/overallCohortAttendance", async (request: any, response: any) => {
-    if (!MediumPriviledgesRole(request)) {
+    if (!IsModuleLeaderRole(request)) {
       return response.status(StatusCode.FORBIDDEN).json({
         error: "Forbidden",
         message: "You do not have the correct privileges for this request",
@@ -42,7 +42,7 @@ moduleLeaderController.get("/overallCohortAttendance", async (request: any, resp
   });
 
 moduleLeaderController.delete("/deleteSession", (request: any, response: any) => {
-    if (!MediumPriviledgesRole(request)) {
+    if (!IsModuleLeaderRole(request)) {
       return response.status(StatusCode.FORBIDDEN).json({
         error: "Forbidden",
         message: "You do not have the correct privileges for this request",
