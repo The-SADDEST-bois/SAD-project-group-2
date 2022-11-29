@@ -14,7 +14,7 @@ sessionController.post("/", (request: any, response: any) => {
 });
 
 sessionController.post("/toggleSession", (request: any, response: any) => {
-  if (!IsTutorRole(request)) {
+  if (!HighPriviledgesRole(request)) {
     console.log(request.headers);
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
@@ -75,7 +75,7 @@ sessionController.post("/newSession", (request: any, response: any) => {
 });
 
 sessionController.post("/sessionAttendance", async (request: any, response: any) => {
-    if (!IsTutorRole(request)) {
+    if (!HighPriviledgesRole(request)) {
       return response.status(StatusCode.FORBIDDEN).json({
         error: "Forbidden",
         message: "You are do not have the correct privileges for this request",

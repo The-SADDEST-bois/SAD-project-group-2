@@ -21,7 +21,7 @@ tutorController.get("/allModules", (request: any, response: any) => {
 });
 
 tutorController.get("/sessionsPerModule", (request: any, response: any) => {
-  if (!IsTutorRole(request)) {
+  if (!HighPriviledgesRole(request)) {
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
       message: "You do not have the correct privileges for this request",
@@ -34,7 +34,7 @@ tutorController.get("/sessionsPerModule", (request: any, response: any) => {
 
 tutorController.get("/sessionsPerModuleBetweenDateRange", async (request: any, response: any) => {
   console.log("request", request.query);
-  if (!IsTutorRole(request)){
+  if (!HighPriviledgesRole(request)){
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
       message: "You do not have the correct privileges for this request",

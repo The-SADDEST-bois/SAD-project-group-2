@@ -33,15 +33,15 @@ export const IsModuleLeaderRole = (request: string) => {
 
 export const HighPriviledgesRole = (request: string) => {
   const role = GetRoleFromRequest(request);
-  return role === Roles.Tutor || role === Roles.CourseLeader || role === Roles.ModuleLeader;
+  return role === Roles.Tutor || role === Roles.ModuleLeader || role === Roles.CourseLeader;
 };
 
 export const MediumPriviledgesRole = (request: string) => {
   const role = GetRoleFromRequest(request);
-  return role === Roles.Tutor || role === Roles.ModuleLeader;
+  return role === Roles.ModuleLeader || role === Roles.CourseLeader;
 };
 
 export const LowPriviledgesRole = (request: string) => {
   const role = GetRoleFromRequest(request);
-  return role === Roles.Tutor;
+  return role === Roles.CourseLeader;
 }

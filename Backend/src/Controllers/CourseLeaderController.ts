@@ -1,12 +1,12 @@
 import express from "express";
 import StatusCode from "../Utils/StatusCodes";
-import { IsCourseLeaderRole } from "../Utils/CheckRole";
+import { LowPriviledgesRole  } from "../Utils/CheckRole";
 import { CoursesByCourseLeader, OverallCourseAttendance } from "../Services/CourseLeaderServices";
 
 const courseLeaderController = express.Router();
 
 courseLeaderController.get("/allCourses", (request: any, response: any) => {
-  if (!IsCourseLeaderRole(request)) {
+  if (!LowPriviledgesRole(request)) {
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
       message: "You do not have the correct privileges for this request",
@@ -18,7 +18,7 @@ courseLeaderController.get("/allCourses", (request: any, response: any) => {
 });
 
 courseLeaderController.get("/overallCourseAttendance", async (request: any, response: any) => {
-    if (!IsCourseLeaderRole(request)) {
+    if (!LowPriviledgesRole(request)) {
       return response.status(StatusCode.FORBIDDEN).json({
         error: "Forbidden",
         message: "You are do not have the correct privileges for this request",
