@@ -101,7 +101,7 @@ export const RegisterUser = async (request: any, response: any) => {
   });
 };
 
-export const GetAllStudents = (request: any, response: any) => {
+export const AllStudents = (request: any, response: any) => {
   Users.find({ role: "Student" }, (err: any, document: any) => {
     if (err) {
       console.log("error getting students", err);

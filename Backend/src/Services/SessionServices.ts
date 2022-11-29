@@ -21,7 +21,7 @@ export const StartSession = (request: any, response: any) => {
     );
 };
 
-export const GetAllSessions = (request: any, response: any) => {
+export const AllSessions = (request: any, response: any) => {
     Sessions.find()
     .populate("tutor")
     .exec((err, sessions) => {
@@ -34,7 +34,7 @@ export const GetAllSessions = (request: any, response: any) => {
     });
 };
 
-export const GetSessionsByTutor = async (request: any, response: any) => {
+export const SessionsByTutor = async (request: any, response: any) => {
     const id = request.query._id;
 
     Sessions.find({ "tutor.tutorId": id }, (err: any, document: any) => {
@@ -47,7 +47,7 @@ export const GetSessionsByTutor = async (request: any, response: any) => {
     });
 };
 
-export const GetSessionsByTutorAndDate = async (request: any, response: any) => {
+export const SessionsByTutorAndDate = async (request: any, response: any) => {
     const { _id, date } = request.query;
     Sessions.find(
       { "tutor.tutorId": _id, startDate: date },

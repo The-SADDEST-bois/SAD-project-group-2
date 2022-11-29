@@ -1,6 +1,6 @@
 import express from "express";
 import StatusCode from "../Utils/StatusCodes";
-import { GetModulesByTutor, GetSessionsByModule, GetSessionsByModuleBetweenDateRange } from "../Services/TutorServices";
+import { ModulesByTutor, SessionsByModule, SessionsByModuleBetweenDateRange } from "../Services/TutorServices";
 import {
   IsTutorRole,
   isEvalatedRole,
@@ -16,7 +16,7 @@ tutorController.get("/allModules", (request: any, response: any) => {
     });
   }
 
-  return GetModulesByTutor(request, response);
+  return ModulesByTutor(request, response);
 
 });
 
@@ -28,7 +28,7 @@ tutorController.get("/sessionsPerModule", (request: any, response: any) => {
     });
   }
 
-  return GetSessionsByModule(request, response);
+  return SessionsByModule(request, response);
 
 });
 
@@ -41,7 +41,7 @@ tutorController.get("/sessionsPerModuleBetweenDateRange", async (request: any, r
     });
   }
 
-  return await GetSessionsByModuleBetweenDateRange(request, response);
+  return await SessionsByModuleBetweenDateRange(request, response);
 
 });
 export default tutorController;

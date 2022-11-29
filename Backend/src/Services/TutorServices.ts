@@ -2,7 +2,7 @@ import StatusCode from "../Utils/StatusCodes";
 import Modules from "../Models/Module";
 import Sessions from "../Models/Session";
 
-export const GetModulesByTutor =  (request: any, response: any) => {
+export const ModulesByTutor =  (request: any, response: any) => {
     const tutorId = request.query.tutorId;
     Modules.find({ "tutors.tutorId": tutorId }, (err: any, document: any) => {
       if (err) {
@@ -15,7 +15,7 @@ export const GetModulesByTutor =  (request: any, response: any) => {
     });
 };
 
-export const GetSessionsByModule = (request: any, response: any) => {
+export const SessionsByModule = (request: any, response: any) => {
     const moduleName = request.query.moduleName;
     Sessions.find({ moduleName: moduleName }, (err: any, document: any) => {
       if (err) {
@@ -28,7 +28,7 @@ export const GetSessionsByModule = (request: any, response: any) => {
     });
 };
 
-export const GetSessionsByModuleBetweenDateRange = async (request: any, response: any) => {
+export const SessionsByModuleBetweenDateRange = async (request: any, response: any) => {
     const {moduleName, startDate, endDate} = request.query;
     Sessions.find(
       { moduleName: moduleName, startDate: {"$gte" : startDate, "$lt" : endDate} },

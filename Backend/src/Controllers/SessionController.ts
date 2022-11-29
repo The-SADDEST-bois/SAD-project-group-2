@@ -1,6 +1,6 @@
 import express from "express";
 import StatusCode from "../Utils/StatusCodes";
-import { StartSession, GetAllSessions, GetSessionsByTutor, GetSessionsByTutorAndDate, SessionAttendance, CreateSession, UpdateSessionAttendance } from "../Services/SessionServices";
+import { StartSession, AllSessions, SessionsByTutor, SessionsByTutorAndDate, SessionAttendance, CreateSession, UpdateSessionAttendance } from "../Services/SessionServices";
 import {
   IsTutorRole,
   isEvalatedRole,
@@ -28,7 +28,7 @@ sessionController.post("/toggleSession", (request: any, response: any) => {
 
 sessionController.get("/allSessions", (request: any, response: any) => {
 
-  return GetAllSessions(request, response);
+  return AllSessions(request, response);
 
 });
 
@@ -40,7 +40,7 @@ sessionController.get("/sessionByTutor", async (request: any, response: any) => 
     });
   }
   
-  return await GetSessionsByTutor(request, response);
+  return await SessionsByTutor(request, response);
 
 });
 
@@ -52,7 +52,7 @@ sessionController.get("/sessionByTutorAndDate", async (request: any, response: a
     });
   }
 
-  return await GetSessionsByTutorAndDate(request, response);
+  return await SessionsByTutorAndDate(request, response);
 
 });
 

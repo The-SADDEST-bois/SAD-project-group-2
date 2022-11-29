@@ -1,5 +1,5 @@
 import express from "express";
-import { LoginUser, ReauthenticateUser, RegisterUser, GetAllStudents } from "../Services/UserServices";
+import { LoginUser, ReauthenticateUser, RegisterUser, AllStudents } from "../Services/UserServices";
 
 const userController = express.Router();
 
@@ -26,7 +26,7 @@ userController.post("/register", async (request: any, response: any) => {
 
 userController.get("/allStudents", (request: any, response: any) => {
 
-  return GetAllStudents(request, response);
+  return AllStudents(request, response);
 
 });
 
