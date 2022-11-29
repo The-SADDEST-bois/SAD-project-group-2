@@ -14,7 +14,6 @@ export const ModuleLeaderAttendance = () => {
   const [selectData, setSelectData] = useState("");
 
   useEffect(() => {
-    console.log("moduleData= ", selectData);
     if (moduleData) {
       moduleData.map((item) => {
         if (item.moduleName == selectData) {
