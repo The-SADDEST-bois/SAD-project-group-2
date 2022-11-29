@@ -23,6 +23,7 @@ import { setStudentAttendance } from "../../../api/sessionApi/sessionApi";
 import { useToasts } from "../../hooks/useToasts/useToasts";
 import { useGetSessionAttendees } from "../../pages/TutorDashboard/hooks/useGetSessionAttendees/useGetSessionAttendees";
 import { AxiosResponse } from "axios";
+import { calculateSessionAttendanceReport } from "../../utils/calculateAttendance/calculateAttendance"; 
 
 export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
   const { onSuccessToast, onErrorToast } = useToasts();
@@ -46,21 +47,6 @@ export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
   const mutation = useMutation({
     mutationFn: setStudentAttendance,
   });
-
-  const calculateSessionAttendanceReport = (item: IAttendance): number => {
-    if (!item) return 0;
-    const totalAttendees: number = item.attendance.length;
-    const attended = item.attendance.filter(
-      (attendees) => attendees.status === 1
-    );
-    const totalAttended: number = attended.length;
-
-    const finalFormula = ((totalAttended / totalAttendees) * 100).toFixed(2);
-
-    return +finalFormula;
-  };
-
-  console.log("users =", users);
 
   const handleChangeAttendance = (
     user: IAttendanceUser,
