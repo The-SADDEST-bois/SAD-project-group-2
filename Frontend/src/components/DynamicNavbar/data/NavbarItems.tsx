@@ -6,13 +6,13 @@ export const StudentNavbar: NavbarItems[] = [
   {
     label: "Join Session",
     icon: <HiOutlineCalendar size="40" />,
-    url: "",
+    url: "/",
   },
 
   {
     label: "View Attendance",
     icon: <HiOutlineBookOpen size="40" />,
-    url: "",
+    url: "/studentattendance",
   },
 ];
 
@@ -20,7 +20,7 @@ export const TutorNavbar: NavbarItems[] = [
   {
     label: "View Sessions",
     icon: <HiOutlineCalendar size="40" />,
-    url: "/tutordashboard",
+    url: "/",
   },
 
   {
