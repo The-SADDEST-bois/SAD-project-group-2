@@ -56,7 +56,11 @@ const RouteHandler = () => {
     if (store?.auth.user.role === Roles.ModuleLeader) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<TutorDashboard />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<RegisterNewUser />} />
+          <Route path="/test" element={<TestUseQuery />} />
+          <Route path="/newsession" element={<NewSession />} />
+          <Route path="/tutordashboard" element={<TutorDashboard />} />
           <Route
             path="/tutorviewattendance"
             element={<TutorViewAttendance />}
