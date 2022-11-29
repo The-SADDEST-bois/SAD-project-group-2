@@ -74,24 +74,24 @@ export const CourseLeaderNavbar: NavbarItems[] = [
   {
     label: "Start Session",
     icon: <HiOutlineCalendar size="40" />,
-    url: "",
+    url: "/tutordashboard",
   },
 
   {
     label: "View Session Attendance",
     icon: <HiOutlineBookOpen size="40" />,
-    url: "",
+    url: "/tutorviewattendance",
   },
 
   {
     label: "View Module Attendance",
     icon: <HiOutlineBookOpen size="40" />,
-    url: "",
+    url: "/moduleleaderattendance",
   },
 
   {
     label: "View Course Attendance",
     icon: <HiOutlineBookOpen size="40" />,
-    url: "",
+    url: "/courseleaderattendance",
   },
 ];

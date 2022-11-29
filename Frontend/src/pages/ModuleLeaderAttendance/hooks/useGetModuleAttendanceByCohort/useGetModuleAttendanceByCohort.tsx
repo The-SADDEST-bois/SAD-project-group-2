@@ -4,17 +4,16 @@ import { getOverallCohortAttendance } from "../../../../../api/moduleLeaderApi/m
 
 interface IuseGetModuleAttendanceByCohort {
   cohortName: string;
+  moduleName: string;
 }
 
 export const useGetModuleAttendanceByCohort = ({
   cohortName,
+  moduleName,
 }: IuseGetModuleAttendanceByCohort) => {
-
-  console.log("cohortName= ", cohortName);
-
   const { isLoading, isError, data, refetch } = useQuery({
     queryKey: "allModules",
-    queryFn: () => getOverallCohortAttendance(cohortName),
+    queryFn: () => getOverallCohortAttendance(cohortName, moduleName),
     refetchOnWindowFocus: true,
   });
 

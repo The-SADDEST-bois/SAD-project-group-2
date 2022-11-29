@@ -66,7 +66,7 @@ const Login = () => {
       return;
     }
     if (data.user.role === "CourseLeader") {
-      navigate("/test");
+      navigate("/tutordashboard");
       return;
     }
 

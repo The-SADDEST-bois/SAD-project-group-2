@@ -18,11 +18,12 @@ interface IModuleAttendance {
 }
 
 export const ModuleAccordion = ({ module }: IModuleAttendance) => {
+  const moduleName = module?.moduleName;
   const { isLoading, percentageAttendance } = useGetOverallModuleAttendance({
-    moduleName: module.moduleName,
+    moduleName: moduleName,
   });
 
-  if (!module.moduleName) return <></>;
+  if (!moduleName) return <></>;
 
   return (
     <>
@@ -58,7 +59,10 @@ export const ModuleAccordion = ({ module }: IModuleAttendance) => {
             >
               {module.cohorts &&
                 module.cohorts.map((cohort) => (
-                  <ModuleAccordionData cohortName={cohort.courseName} />
+                  <ModuleAccordionData
+                    cohortName={cohort.courseName}
+                    moduleName={moduleName}
+                  />
                 ))}
             </VStack>
           </AccordionPanel>
