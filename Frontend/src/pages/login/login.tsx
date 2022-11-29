@@ -71,7 +71,7 @@ const Login = () => {
     }
 
     if (data.user.role === "AcademicAdvisor") {
-      navigate("/test");
+      navigate("/");
       return;
     }
     navigate("/");
