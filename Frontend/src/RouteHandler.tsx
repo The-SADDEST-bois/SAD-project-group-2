@@ -8,6 +8,7 @@ import CustomError from "./components/CustomError";
 import StudentDashboard from "./pages/StudentDashboard/StudentDashboard";
 import TutorDashboard from "./pages/TutorDashboard/TutorDashboard";
 import TutorViewAttendance from "./pages/TutorViewAttendance/TutorViewAttendance";
+import { ModuleLeaderAttendance } from "./pages/ModuleLeaderAttendance/ModuleLeaderAttendance";
 const TestUseQuery = lazy(() => import("./pages/testusequery/TestUseQuery"));
 const NewSession = lazy(
   () => import("./pages/StudentDashboard/StudentDashboard")
@@ -43,8 +44,8 @@ const RouteHandler = () => {
     if (store?.auth.user.role === Roles.ModuleLeader) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<h1>Not Implemented</h1>} />
-          <Route path="/moduleLeaderViewAttendance" element={<h1>Not Implemented</h1>} />
+          <Route path="/" element={<TutorDashboard />} />
+          <Route path="/moduleLeaderViewAttendance" element={<ModuleLeaderAttendance />} />
           <Route
             path="*"
             element={
