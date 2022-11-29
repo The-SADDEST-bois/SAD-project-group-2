@@ -1793,7 +1793,9 @@ const main = async () => {
   await DropCollections();
   await CreateUsers();
   await Break();
+  await Break();
   await CreateAcademicAdvisors();
+  await Break();
   await Break();
   await CreateCourses();
   await Break();
@@ -1806,5 +1808,4 @@ const main = async () => {
   console.log("Database seeded");
 };
 
-//await CreateSessions();
 main();
