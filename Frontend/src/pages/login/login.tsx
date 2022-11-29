@@ -74,6 +74,7 @@ const Login = () => {
       navigate("/test");
       return;
     }
+    navigate("/");
     console.log("authStore is null");
   };
 

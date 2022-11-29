@@ -15,7 +15,7 @@ export const ModuleLeaderAttendance = () => {
 
   useEffect(() => {
     if (moduleData) {
-      moduleData.map((item) => {
+      moduleData?.map((item) => {
         if (item.moduleName == selectData) {
           setModuleSelection(item);
           return;
@@ -55,8 +55,8 @@ export const ModuleLeaderAttendance = () => {
                   border={"2px"}
                 >
                   {!isLoading &&
-                    !isError &&
-                    moduleData.map((module) => (
+                    moduleData &&
+                    moduleData?.map((module) => (
                       <option value={module.moduleName}>
                         {module.moduleName}
                       </option>

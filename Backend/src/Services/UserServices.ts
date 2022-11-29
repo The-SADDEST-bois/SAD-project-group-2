@@ -14,6 +14,7 @@ export const LoginUser = async (request: any, response: any) => {
     const user = await Users.findOne({ email });
 
     if (user) {
+      console.log(user);
       // check user password with hashed password stored in the database
       const validPassword = await bcrypt.compare(
         password as string,

@@ -58,7 +58,7 @@ export const ModuleAccordion = ({ module }: IModuleAttendance) => {
               spacing={5}
             >
               {module.cohorts &&
-                module.cohorts.map((cohort) => (
+                module?.cohorts.map((cohort) => (
                   <ModuleAccordionData
                     cohortName={cohort.courseName}
                     moduleName={moduleName}
