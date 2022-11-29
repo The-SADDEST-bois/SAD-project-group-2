@@ -9,7 +9,7 @@ import { UseGetAllCourseById } from "./hooks/UseGetAllCourseById/UseGetAllCourse
 import { ICourse } from "../../../types/types";
 import { CourseAccordion } from "./components/CourseAccordion/CourseAccordion";
 
-export const CourseLeaderAttendance = () => {
+const CourseLeaderAttendance = () => {
   const store = useStore();
   const [selectData, setSelectData] = useState("");
   const [courseSelection, setCourseSelection] = useState({} as ICourse);
@@ -28,6 +28,12 @@ export const CourseLeaderAttendance = () => {
       });
     }
   }, [selectData]);
+
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <PageWithSideBar
       leftSection={<DynamicNavBar role={store?.auth?.user?.role as string} />}
@@ -82,3 +88,5 @@ export const CourseLeaderAttendance = () => {
     />
   );
 };
+
+export default CourseLeaderAttendance;

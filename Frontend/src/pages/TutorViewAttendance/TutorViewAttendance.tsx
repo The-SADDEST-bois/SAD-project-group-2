@@ -37,9 +37,11 @@ const TutorViewAttendance = () => {
     }
   }, [dateSelection]);
 
-  const { isLoading, isError, moduleData } = useGetAllModules();
+  const { isLoading, isError, moduleData, } = useGetAllModules();
 
   if (isError) return <Text>Something went wrong</Text>;
+
+  if (isLoading) return <Text>Loading...</Text>;
 
   return (
     <PageWithSideBar
@@ -83,6 +85,7 @@ const TutorViewAttendance = () => {
                 <Text fontSize={"xl"}>Results </Text>
                 {moduleData &&
                   !isLoading &&
+                  !isError &&
                   moduleData?.map((item: IModule) => (
                     <Accordion allowMultiple>
                       <AccordionItem>

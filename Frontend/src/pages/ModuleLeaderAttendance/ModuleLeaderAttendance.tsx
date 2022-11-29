@@ -7,7 +7,7 @@ import { useStore } from "../../contexts/storeProvider";
 import { ModuleAccordion } from "./components/ModuleAccordian/ModuleAccordion";
 import { useGetAllModulesById } from "./hooks/useGetAllModulesById/useGetAllModulesById";
 
-export const ModuleLeaderAttendance = () => {
+const ModuleLeaderAttendance = () => {
   const store = useStore();
   const { moduleData, isError, isLoading } = useGetAllModulesById();
   const [moduleSelection, setModuleSelection] = useState({} as IModule);
@@ -25,6 +25,10 @@ export const ModuleLeaderAttendance = () => {
       });
     }
   }, [selectData]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <PageWithSideBar
@@ -80,3 +84,5 @@ export const ModuleLeaderAttendance = () => {
     />
   );
 };
+
+export default ModuleLeaderAttendance;
