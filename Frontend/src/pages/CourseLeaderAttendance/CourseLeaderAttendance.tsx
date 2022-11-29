@@ -22,10 +22,11 @@ const CourseLeaderAttendance = () => {
         if (item?.courseName == selectData) {
           setCourseSelection(item);
           return;
-        } else {
-          setCourseSelection({} as ICourse);
         }
       });
+      if (selectData == "") {
+        setCourseSelection({} as ICourse);
+      }
     }
   }, [selectData]);
 
