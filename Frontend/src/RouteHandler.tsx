@@ -31,27 +31,17 @@ const RouteHandler = () => {
     if (store?.auth.user.role === Roles.CourseLeader) {
       setRoutes(
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<RegisterNewUser />} />
-          <Route path="/newsession" element={<NewSession />} />
-          <Route path="/tutordashboard" element={<TutorDashboard />} />
+          <Route path="/" element={<h1>Not Implemented</h1>} />
           <Route
-            path="/moduleleaderattendance"
-            element={<ModuleLeaderAttendance />}
+            path="/courseLeaderViewAttendance"
+            element={<h1>Not Implemented</h1>}
           />
           <Route
-            path="/tutorviewattendance"
-            element={<TutorViewAttendance />}
+            path="*"
+            element={
+              <CustomError errorMessage="This route does not exist or you do not have permissions" />
+            }
           />
-          <Route
-            path="/tutorviewattendance"
-            element={<TutorViewAttendance />}
-          />
-          <Route
-            path="/courseleaderattendance"
-            element={<CoureLeaderAttendance />}
-          />
-          <Route path="*" element={<CustomError errorMessage="sixth" />} />
         </Routes>
       );
     }
@@ -117,6 +107,19 @@ const RouteHandler = () => {
             element={
               <CustomError errorMessage="This route does not exist or you do not have permissions" />
             }
+          />
+        </Routes>
+      );
+    }
+
+    if (!store?.auth.user.role) {
+      setRoutes(
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<RegisterNewUser />} />
+          <Route
+            path="*"
+            element={<CustomError errorMessage="Please Log In" />}
           />
         </Routes>
       );
