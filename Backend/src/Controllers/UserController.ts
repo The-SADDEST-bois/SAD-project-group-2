@@ -1,15 +1,33 @@
 import express from "express";
-import mongoose from "mongoose";
-import { userSchema, IUser } from "../Schema";
+import { LoginUser, ReauthenticateUser, RegisterUser, AllStudents } from "../Services/UserServices";
 
-const Schema = mongoose.model<IUser>("userSchema", userSchema);
+const userController = express.Router();
 
-export async function userController(request: express.Request, response: express.Response) {
-    // use mongoose to get all users in the database
-    Schema.findOne({}, (err: unknown, users: IUser) => {
-        if (err) {
-            response.send(err);
-        }
-        response.status(200).send(JSON.stringify(users));
-    });
-}
+// User Controller test endpoint (returns first user in database)
+
+userController.post("/login", async (request: any, response: any) => {
+  
+  return await LoginUser(request, response);
+
+});
+
+userController.post("/reauthenticate", async (request: any, response: any) => {
+
+  return await ReauthenticateUser(request, response);
+
+});
+
+// User Controller post endpoint (adds user to database) (can rename to /createUser if necessary)
+userController.post("/register", async (request: any, response: any) => {
+
+  return await RegisterUser(request, response);
+
+});
+
+userController.get("/allStudents", (request: any, response: any) => {
+
+  return AllStudents(request, response);
+
+});
+
+export default userController;

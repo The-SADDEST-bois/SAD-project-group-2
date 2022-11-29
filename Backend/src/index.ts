@@ -1,43 +1,51 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import * as dotenv from 'dotenv'
-import {userSchema, IUser} from "./Schema";
-import {userController} from "./Controllers/UserController";
-dotenv.config()
+import * as dotenv from "dotenv";
+import UserRouteHandler from "./Routes/UserRouteHandler";
+import SessionRouteHandler from "./Routes/SessionRouteHandler";
+import StudentRouteHandler from "./Routes/StudentRouteHandler";
+import AdvisorRouteHandler from "./Routes/AdvisorRouteHandler";
+import TutorRouteHandler from "./Routes/TutorRouteHandler";
+import ModuleLeaderRouteHandler from "./Routes/ModuleLeaderRouteHandler";
+import CourseLeaderRouteHandler from "./Routes/CourseLeaderRouteHandler";
+
+dotenv.config();
 
 const app = express();
 const port = 8080; // default port to listen
 app.use(cors());
-
-mongoose.connect(
-    process.env.MONGODB_URI
-);
-
-const db = mongoose.connection;
-
-db.on("error", console.log.bind(console, "MongoDB connection error:"));
-
-const Schema = mongoose.model<IUser>("userSchema", userSchema);
-
-const user: IUser = {
-    name: "John",
-    email: "test@test.com",
-}
+app.use(express.json());
 
 // start the Express server
-app.listen( port, () => {
-    // tslint:disable-next-line:no-console
-    console.log( `server started at http://localhost:${ port }` );
-} );
+app.listen(port, () => {
+  // tslint:disable-next-line:no-console
+  console.log(`server started at http://localhost:${port}`);
+});
 
-// define a route handler for the default home page
-app.get( "/", ( req, res ) => {
-    // add user to database
-    const newUser = new Schema(user);
-    newUser.save();
-    res.send( "Hello world!" );
-} );
+// DB Connection Callbacks
+mongoose.connect(process.env.MONGODB_URI).then(() => {
+  console.log("Connected to database at port 27017");
+});
+mongoose.connection.on("error", () => {
+  console.log("Error connecting to database");
+});
 
-// listen for get requests on the / route and return user
-app.get("/user", userController);
+mongoose.connection.on("disconnected", () => {
+  console.log("Disconnected from database");
+});
+
+process.on("SIGINT", () => {
+  mongoose.connection.close(() => {
+    console.log("Disconnected from database due to application termination");
+    process.exit(0);
+  });
+});
+
+app.use("/user", UserRouteHandler);
+app.use("/session", SessionRouteHandler);
+app.use("/student", StudentRouteHandler);
+app.use("/advisor", AdvisorRouteHandler);
+app.use("/tutor", TutorRouteHandler);
+app.use("/moduleLeader", ModuleLeaderRouteHandler);
+app.use("/courseLeader", CourseLeaderRouteHandler);
