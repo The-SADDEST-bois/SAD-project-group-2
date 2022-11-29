@@ -1,12 +1,12 @@
 import express from "express";
 import StatusCode from "../Utils/StatusCodes";
-import { IsTutorRole, IsModuleLeaderRole } from "../Utils/CheckRole";
+import { IsModuleLeaderRole } from "../Utils/CheckRole";
 import { ModulesByModuleLeader, OverallModuleAttendance, OverallCohortAttendance, DeleteSession } from "../Services/ModuleLeaderServices";
 
 const moduleLeaderController = express.Router();
 
 moduleLeaderController.get("/allModules", (request: any, response: any) => {
-  if (!IsTutorRole(request)) {
+  if (!IsModuleLeaderRole(request)) {
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
       message: "You do not have the correct privileges for this request",
