@@ -11,27 +11,22 @@ export const IsAdminRole = (request: string) => {
   return role === Roles.Admin;
 };
 
-export const IsTutorRole = (request: string) => {
-  const role = GetRoleFromRequest(request);
-  return role === Roles.Tutor;
-};
-
 export const IsAdvisorRole = (request: string) => {
   const role = GetRoleFromRequest(request);
   return role === Roles.AcademicAdvisor;
 };
 
-export const IsCourseLeaderRole = (request: string) => {
+export const IsTutorRole = (request: string) => {
   const role = GetRoleFromRequest(request);
-  return role === Roles.CourseLeader;
+  return role === Roles.Tutor || role === Roles.ModuleLeader || role === Roles.CourseLeader;
 };
 
 export const IsModuleLeaderRole = (request: string) => {
   const role = GetRoleFromRequest(request);
-  return role === Roles.ModuleLeader;
+  return role === Roles.ModuleLeader || role === Roles.CourseLeader;
 };
 
-export const isEvalatedRole = (request: string) => {
+export const IsCourseLeaderRole = (request: string) => {
   const role = GetRoleFromRequest(request);
-  return role === Roles.Tutor || role === Roles.CourseLeader || role === Roles.ModuleLeader;
-  }
+  return role === Roles.CourseLeader;
+}
