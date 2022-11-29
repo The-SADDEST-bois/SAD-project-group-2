@@ -3,7 +3,7 @@ import StatusCode from "../Utils/StatusCodes";
 import { StartSession, AllSessions, SessionsByTutor, SessionsByTutorAndDate, SessionAttendance, CreateSession, UpdateSessionAttendance } from "../Services/SessionServices";
 import {
   IsTutorRole,
-  isEvalatedRole,
+  HighPriviledgesRole,
 } from "../Utils/CheckRole";
 const sessionController = express.Router();
 
@@ -33,7 +33,7 @@ sessionController.get("/allSessions", (request: any, response: any) => {
 });
 
 sessionController.get("/sessionByTutor", async (request: any, response: any) => {
-  if (!isEvalatedRole(request)) {
+  if (!HighPriviledgesRole(request)) {
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
       message: "You do not have the correct privileges for this request",
@@ -45,7 +45,7 @@ sessionController.get("/sessionByTutor", async (request: any, response: any) => 
 });
 
 sessionController.get("/sessionByTutorAndDate", async (request: any, response: any) => {
-  if (!isEvalatedRole(request)) {
+  if (!HighPriviledgesRole(request)) {
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
       message: "You do not have the correct privileges for this request",
@@ -57,7 +57,7 @@ sessionController.get("/sessionByTutorAndDate", async (request: any, response: a
 });
 
 sessionController.get("/attendance", async (request: any, response: any) => {
-    if (!isEvalatedRole(request)) {
+    if (!HighPriviledgesRole(request)) {
       return response.status(StatusCode.FORBIDDEN).json({
         error: "Forbidden",
         message: "You do not have the correct privileges for this request"

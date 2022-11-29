@@ -3,13 +3,13 @@ import StatusCode from "../Utils/StatusCodes";
 import { ModulesByTutor, SessionsByModule, SessionsByModuleBetweenDateRange } from "../Services/TutorServices";
 import {
   IsTutorRole,
-  isEvalatedRole,
+  HighPriviledgesRole,
 } from "../Utils/CheckRole";
 
 const tutorController = express.Router();
 
 tutorController.get("/allModules", (request: any, response: any) => {
-  if (!isEvalatedRole(request)) {
+  if (!HighPriviledgesRole(request)) {
     return response.status(StatusCode.FORBIDDEN).json({
       error: "Forbidden",
       message: "You do not have the correct privileges for this request",
