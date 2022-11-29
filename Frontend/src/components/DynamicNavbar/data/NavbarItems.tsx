@@ -6,13 +6,7 @@ export const StudentNavbar: NavbarItems[] = [
   {
     label: "Join Session",
     icon: <HiOutlineCalendar size="40" />,
-    url: "",
-  },
-
-  {
-    label: "View Attendance",
-    icon: <HiOutlineBookOpen size="40" />,
-    url: "",
+    url: "/",
   },
 ];
 
@@ -20,7 +14,7 @@ export const TutorNavbar: NavbarItems[] = [
   {
     label: "View Sessions",
     icon: <HiOutlineCalendar size="40" />,
-    url: "/tutordashboard",
+    url: "/",
   },
 
   {
@@ -32,9 +26,9 @@ export const TutorNavbar: NavbarItems[] = [
 
 export const ModuleLeaderNavbar: NavbarItems[] = [
   {
-    label: "Start Session",
+    label: "View Session",
     icon: <HiOutlineCalendar size="40" />,
-    url: "/tutordashboard",
+    url: "/",
   },
 
   {
@@ -52,7 +46,7 @@ export const ModuleLeaderNavbar: NavbarItems[] = [
 
 export const AcademicAdvisorNavbar: NavbarItems[] = [
   {
-    label: "Start Session",
+    label: "View Session",
     icon: <HiOutlineCalendar size="40" />,
     url: "",
   },
@@ -72,26 +66,26 @@ export const AcademicAdvisorNavbar: NavbarItems[] = [
 
 export const CourseLeaderNavbar: NavbarItems[] = [
   {
-    label: "Start Session",
+    label: "View Session",
     icon: <HiOutlineCalendar size="40" />,
-    url: "",
+    url: "/",
   },
 
   {
     label: "View Session Attendance",
     icon: <HiOutlineBookOpen size="40" />,
-    url: "",
+    url: "/tutorviewattendance",
   },
 
   {
     label: "View Module Attendance",
     icon: <HiOutlineBookOpen size="40" />,
-    url: "",
+    url: "/moduleleaderattendance",
   },
 
   {
     label: "View Course Attendance",
     icon: <HiOutlineBookOpen size="40" />,
-    url: "",
+    url: "/courseleaderattendance",
   },
 ];

@@ -1,6 +1,6 @@
 import express from "express";
 import StatusCode from "../Utils/StatusCodes";
-import { IsCourseLeaderRole } from "../Utils/CheckRole";
+import { IsCourseLeaderRole  } from "../Utils/CheckRole";
 import { CoursesByCourseLeader, OverallCourseAttendance } from "../Services/CourseLeaderServices";
 
 const courseLeaderController = express.Router();

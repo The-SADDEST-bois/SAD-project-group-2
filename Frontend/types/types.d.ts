@@ -117,7 +117,7 @@ export interface IAttendanceUser {
 
 export interface IAttendance {
   attendance: IAttendanceUser[];
-  _id: string;
+  _id?: string;
 }
 
 export interface IData {

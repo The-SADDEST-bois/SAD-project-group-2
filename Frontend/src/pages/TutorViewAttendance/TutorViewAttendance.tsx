@@ -83,7 +83,7 @@ const TutorViewAttendance = () => {
                 <Text fontSize={"xl"}>Results </Text>
                 {moduleData &&
                   !isLoading &&
-                  moduleData.map((item: IModule) => (
+                  moduleData?.map((item: IModule) => (
                     <Accordion allowMultiple>
                       <AccordionItem>
                         <h2>

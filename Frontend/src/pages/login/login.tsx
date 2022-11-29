@@ -54,19 +54,19 @@ const Login = () => {
     }
 
     if (data.user.role === "Student") {
-      navigate("/studentdashboard");
+      navigate("/");
       return;
     }
     if (data.user.role === "Tutor") {
-      navigate("/tutordashboard");
+      navigate("/");
       return;
     }
     if (data.user.role === "ModuleLeader") {
-      navigate("/tutordashboard");
+      navigate("/");
       return;
     }
     if (data.user.role === "CourseLeader") {
-      navigate("/test");
+      navigate("/");
       return;
     }
 
@@ -74,6 +74,7 @@ const Login = () => {
       navigate("/test");
       return;
     }
+    navigate("/");
     console.log("authStore is null");
   };
 
