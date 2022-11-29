@@ -1,31 +1,33 @@
-import { Flex, Select, Text, VStack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { IModule } from "../../../types/types";
+import { Flex, Select, VStack, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { useStore } from "../../contexts/storeProvider";
-import { ModuleAccordion } from "./components/ModuleAccordian/ModuleAccordion";
-import { useGetAllModulesById } from "./hooks/useGetAllModulesById/useGetAllModulesById";
+import { getAllCoursesByCourseLeader } from "../../../api/courseLeaderApi/courseLeaderApi";
+import { UseGetAllCourseById } from "./hooks/UseGetAllCourseById/UseGetAllCourseById";
+import { ICourse } from "../../../types/types";
+import { CourseAccordion } from "./components/CourseAccordion/CourseAccordion";
 
-export const ModuleLeaderAttendance = () => {
+export const CourseLeaderAttendance = () => {
   const store = useStore();
-  const { moduleData, isError, isLoading } = useGetAllModulesById();
-  const [moduleSelection, setModuleSelection] = useState({} as IModule);
   const [selectData, setSelectData] = useState("");
+  const [courseSelection, setCourseSelection] = useState({} as ICourse);
+
+  const { isLoading, isError, CourseObject, refetch } = UseGetAllCourseById();
 
   useEffect(() => {
-    if (moduleData) {
-      moduleData?.map((item) => {
-        if (item.moduleName == selectData) {
-          setModuleSelection(item);
+    if (CourseObject) {
+      CourseObject.map((item: ICourse) => {
+        if (item?.courseName == selectData) {
+          setCourseSelection(item);
           return;
         } else {
-          setModuleSelection({} as IModule);
+          setCourseSelection({} as ICourse);
         }
       });
     }
   }, [selectData]);
-
   return (
     <PageWithSideBar
       leftSection={<DynamicNavBar role={store?.auth?.user?.role as string} />}
@@ -47,7 +49,7 @@ export const ModuleLeaderAttendance = () => {
                 padding="40px"
                 borderRadius={"20px"}
               >
-                <Text fontSize={"xl"}>Select Module</Text>
+                <Text fontSize={"xl"}>Select Course</Text>
                 <Select
                   placeholder="Please Select"
                   onChange={(e: any) => setSelectData(e.target.value)}
@@ -55,10 +57,10 @@ export const ModuleLeaderAttendance = () => {
                   border={"2px"}
                 >
                   {!isLoading &&
-                    moduleData &&
-                    moduleData?.map((module) => (
-                      <option value={module.moduleName}>
-                        {module.moduleName}
+                    !isError &&
+                    CourseObject.map((course: ICourse) => (
+                      <option value={course.courseName}>
+                        {course.courseName}
                       </option>
                     ))}
                 </Select>
@@ -71,7 +73,7 @@ export const ModuleLeaderAttendance = () => {
                 borderRadius={"20px"}
               >
                 <Text fontSize={"xl"}>Results </Text>
-                <ModuleAccordion module={moduleSelection} />
+                <CourseAccordion course={courseSelection} />
               </VStack>
             </VStack>
           </Flex>

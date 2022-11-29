@@ -26,11 +26,17 @@ export const getOverallModuleAttendance = async (moduleName: string) => {
   }
 };
 
-export const getOverallCohortAttendance = async (cohortName: string) => {
+export const getOverallCohortAttendance = async (
+  cohortName: string,
+  moduleName: string
+) => {
   try {
     return await api.get(
       "/moduleLeader/overallCohortAttendance",
-      headerAuthorisationWithParams({ cohortName: cohortName })
+      headerAuthorisationWithParams({
+        cohortName: cohortName,
+        moduleName: moduleName,
+      })
     );
   } catch (error: any) {
     console.log(error);

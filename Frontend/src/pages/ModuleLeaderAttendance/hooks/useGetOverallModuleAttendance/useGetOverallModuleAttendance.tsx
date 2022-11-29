@@ -16,6 +16,5 @@ export const useGetOverallModuleAttendance = ({
   });
 
   const percentageAttendance = data?.data.overallAttendancePercentage;
-  console.log("percentageAttendance= ", percentageAttendance);
   return { isLoading, isError, percentageAttendance, refetch };
 };

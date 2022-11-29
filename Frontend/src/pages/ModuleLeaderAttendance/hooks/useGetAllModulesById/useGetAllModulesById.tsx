@@ -16,5 +16,7 @@ export const useGetAllModulesById = () => {
 
   const moduleData: IModule[] = data?.data;
 
+  console.log("module data = ", moduleData);
+
   return { isLoading, isError, moduleData, refetch };
 };
