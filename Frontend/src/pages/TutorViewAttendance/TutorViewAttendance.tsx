@@ -94,7 +94,11 @@ const TutorViewAttendance = () => {
                             <AccordionIcon />
                           </AccordionButton>
                         </h2>
-                        <AccordianData moduleName={item.moduleName} startDate={startDate} endDate={endDate}/>
+                        <AccordianData
+                          moduleName={item.moduleName}
+                          startDate={startDate}
+                          endDate={endDate}
+                        />
                       </AccordionItem>
                     </Accordion>
                   ))}
@@ -106,6 +110,5 @@ const TutorViewAttendance = () => {
     />
   );
 };
-
 
 export default TutorViewAttendance;

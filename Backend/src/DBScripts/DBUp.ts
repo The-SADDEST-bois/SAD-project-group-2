@@ -55,9 +55,37 @@ const CreateUsers = async () => {
       role: Roles.CourseLeader,
     },
     {
+      firstName: "Mike",
+      lastName: "Wazowski",
+      email: "mike@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.CourseLeader,
+    },
+    {
       firstName: "Jane",
       lastName: "Kane",
       email: "janekane@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.ModuleLeader,
+    },
+    {
+      firstName: "Gary",
+      lastName: "Busey",
+      email: "garyb@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.ModuleLeader,
+    },
+    {
+      firstName: "Moddy",
+      lastName: "Mod",
+      email: "moddy@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.ModuleLeader,
+    },
+    {
+      firstName: "Irene",
+      lastName: "Graham",
+      email: "irene@uni.com",
       password: await bcrypt.hash("password", salt),
       role: Roles.ModuleLeader,
     },
@@ -138,6 +166,83 @@ const CreateUsers = async () => {
       password: await bcrypt.hash("password", salt),
       role: Roles.Student,
     },
+    {
+      firstName: "Percy",
+      lastName: "Pig",
+      email: "percy@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.Student,
+    },
+    {
+      firstName: "David",
+      lastName: "Ruffin",
+      email: "david@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.Student,
+    },
+    {
+      firstName: "Sally",
+      lastName: "Zimmerman",
+      email: "sally@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.Student,
+    },
+    {
+      firstName: "Ricky",
+      lastName: "Martin",
+      email: "ricky@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.Student,
+    },
+    {
+      firstName: "Amanda",
+      lastName: "Fernandez",
+      email: "amanda@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.Student,
+    },
+    {
+      firstName: "Oliver",
+      lastName: "Kahn",
+      email: "oliver@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.Student,
+    },
+    {
+      firstName: "Yvonne",
+      lastName: "Ivanova",
+      email: "yvonne@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.Student,
+    },
+    {
+      firstName: "Greg",
+      lastName: "Rutherford",
+      email: "greg@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.Student,
+    },
+    {
+      firstName: "Quentin",
+      lastName: "Parker",
+      email: "quentin@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.Student,
+    },
+    {
+      firstName: "Hannah",
+      lastName: "Smith",
+      email: "hannah@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.Student,
+    },
+    {
+      firstName: "Terrance",
+      lastName: "Avery",
+      email: "terrance@uni.com",
+      password: await bcrypt.hash("password", salt),
+      role: Roles.Student,
+    },
   ];
   // add each user to the database
   users.forEach(async (user) => {
@@ -180,26 +285,33 @@ const CreateAcademicAdvisors = async () => {
 
 const CreateCourses = async () => {
   // Create Courses to be added to the database
-  const modules = await Modules.find({
-    moduleName: "Software Architecture",
-  }).select("_id moduleName");
-
   const students = await Users.find({ role: Roles.Student }).select(
     "_id firstName lastName"
   );
 
-  const courseLeader = await Users.findOne({ role: Roles.CourseLeader });
+  const firstHalf = students.slice(0, 10);
+  const secondHalf = students.slice(10, 20);
+
+  const courseLeaders = await Users.find({ role: Roles.CourseLeader });
 
   const courses = [
     {
       courseName: "Software Engineering",
       courseLeader: {
-        firstName: courseLeader.firstName,
-        lastName: courseLeader.lastName,
-        _id: courseLeader._id,
+        firstName: courseLeaders[0].firstName,
+        lastName: courseLeaders[0].lastName,
+        _id: courseLeaders[0]._id,
       },
-      students: students,
-      modules: modules,
+      students: firstHalf,
+    },
+    {
+      courseName: "Computer Science",
+      courseLeader: {
+        firstName: courseLeaders[1].firstName,
+        lastName: courseLeaders[1].lastName,
+        _id: courseLeaders[1]._id,
+      },
+      students: secondHalf,
     },
   ];
 
@@ -209,18 +321,17 @@ const CreateCourses = async () => {
 };
 const CreateCohorts = async () => {
   // Create Cohorts to be added to the database
-  const studentsInSoftwareEngineering = await Courses.find({
-    courseName: "Software Engineering",
-  }).select("students");
-
-  const courseIdForSoftwareEngineering = await Courses.findOne({
-    courseName: "Software Engineering",
-  }).select("_id");
+  const studentsFromCourses = await Courses.find().select("students");
+  const courseIds = await Courses.find().select("_id");
 
   const cohorts = [
     {
-      courseId: courseIdForSoftwareEngineering._id,
-      students: studentsInSoftwareEngineering[0].students,
+      courseId: courseIds[0]._id,
+      students: studentsFromCourses[0].students,
+    },
+    {
+      courseId: courseIds[1]._id,
+      students: studentsFromCourses[1].students,
     },
   ];
 
@@ -230,7 +341,7 @@ const CreateCohorts = async () => {
 };
 const CreateModules = async () => {
   // Create Modules to be added to the database
-  const moduleLeader = await Users.findOne({ role: Roles.ModuleLeader });
+  const moduleLeader = await Users.find({ role: Roles.ModuleLeader });
   const tutor = await Users.findOne({ role: Roles.Tutor });
   const softwareEngineeringCourse = await Courses.findOne({
     courseName: "Software Engineering",
@@ -238,14 +349,24 @@ const CreateModules = async () => {
   const softwareEngineeringCohortId = await Cohorts.findOne({
     courseId: softwareEngineeringCourse._id,
   }).select("_id");
+  const computerScienceCourse = await Courses.findOne({
+    courseName: "Computer Science",
+  });
+  const computerScienceCohortId = await Cohorts.findOne({
+    courseId: computerScienceCourse._id,
+  }).select("_id");
+
+  const compSciCourseLeader = await Users.findById(
+    computerScienceCourse.courseLeader._id
+  );
 
   const modules = [
     {
       moduleName: "Software Architecture",
       moduleLeader: {
-        firstName: moduleLeader.firstName,
-        lastName: moduleLeader.lastName,
-        moduleLeaderId: moduleLeader._id,
+        firstName: moduleLeader[0].firstName,
+        lastName: moduleLeader[0].lastName,
+        moduleLeaderId: moduleLeader[0]._id,
       },
       tutors: [
         {
@@ -261,35 +382,145 @@ const CreateModules = async () => {
         },
       ],
     },
+    {
+      moduleName: "Data Structures",
+      moduleLeader: {
+        firstName: moduleLeader[1].firstName,
+        lastName: moduleLeader[1].lastName,
+        moduleLeaderId: moduleLeader[1]._id,
+      },
+      tutors: [
+        {
+          firstName: compSciCourseLeader.firstName,
+          lastName: compSciCourseLeader.lastName,
+          tutorId: compSciCourseLeader._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohortId._id,
+          courseName: computerScienceCourse.courseName,
+        },
+      ],
+    },
+    {
+      moduleName: "Human Factors",
+      moduleLeader: {
+        firstName: moduleLeader[2].firstName,
+        lastName: moduleLeader[2].lastName,
+        moduleLeaderId: moduleLeader[2]._id,
+      },
+      tutors: [
+        {
+          firstName: tutor.firstName,
+          lastName: tutor.lastName,
+          tutorId: tutor._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohortId._id,
+          courseName: softwareEngineeringCourse.courseName,
+        },
+        {
+          cohortId: computerScienceCohortId._id,
+          courseName: computerScienceCourse.courseName,
+        },
+      ],
+    },
+    {
+      moduleName: "Systems Analysis",
+      moduleLeader: {
+        firstName: moduleLeader[3].firstName,
+        lastName: moduleLeader[3].lastName,
+        moduleLeaderId: moduleLeader[3]._id,
+      },
+      tutors: [
+        {
+          firstName: moduleLeader[3].firstName,
+          lastName: moduleLeader[3].lastName,
+          tutorId: moduleLeader[3]._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: softwareEngineeringCohortId._id,
+          courseName: softwareEngineeringCourse.courseName,
+        },
+        {
+          cohortId: computerScienceCohortId._id,
+          courseName: computerScienceCourse.courseName,
+        },
+      ],
+    },
   ];
 
   // add each Module to the database
   await Modules.create(modules);
   console.log("Modules created");
 
-  const moduleToAdd = await Modules.findOne({
-    moduleName: "Software Architecture",
-  });
+  var modulesForSoftwareEngineering = await Modules.find({
+    "cohorts.courseName": "Software Engineering",
+  }).select("moduleName _id");
+
+  var modulesForComputerScience = await Modules.find({
+    "cohorts.courseName": "Computer Science",
+  }).select("moduleName _id");
 
   // add eache Module to courses
-  softwareEngineeringCourse.modules.push({
-    moduleName: moduleToAdd.moduleName,
-    _id: moduleToAdd._id,
-  });
-  await softwareEngineeringCourse.save();
+  await Courses.findOneAndUpdate(
+    { courseName: "Software Engineering" },
+    {
+      $set: {
+        modules: modulesForSoftwareEngineering,
+      },
+    }
+  );
+  await Courses.findOneAndUpdate(
+    { courseName: "Computer Science" },
+    {
+      $set: {
+        modules: modulesForComputerScience,
+      },
+    }
+  );
+
   console.log("Modules added to courses");
 };
 
 const CreateSessions = async () => {
   // Create Sessions to be added to the database
-  const tutor = await Users.findOne({ role: Roles.Tutor });
   const softwareEng = await Courses.findOne({
     courseName: "Software Engineering",
+  });
+  const computerScience = await Courses.findOne({
+    courseName: "Computer Science",
   });
   const softwareEngineeringCohort = await Cohorts.findOne({
     courseId: softwareEng._id,
   });
-  const attendance = softwareEngineeringCohort.students;
+  const computerScienceCohort = await Cohorts.findOne({
+    courseId: computerScience._id,
+  });
+  const softwareEngStudents = softwareEngineeringCohort.students;
+  const computerScienceStudents = computerScienceCohort.students;
+  const firstHalfOfSoftwareEngStudents = softwareEngStudents.slice(0, 5);
+  const secondHalfOfComputerScienceStudents = computerScienceStudents.slice(5);
+  const mixedGroupOfStudents = firstHalfOfSoftwareEngStudents.concat(
+    secondHalfOfComputerScienceStudents
+  );
+  const dataStructures = await Modules.findOne({
+    moduleName: "Data Structures",
+  });
+  const humanFactors = await Modules.findOne({
+    moduleName: "Human Factors",
+  });
+  const systemsAnalysis = await Modules.findOne({
+    moduleName: "Systems Analysis",
+  });
+  const softwareArchitecture = await Modules.findOne({
+    moduleName: "Software Architecture",
+  });
 
   const sessions = [
     {
@@ -297,9 +528,9 @@ const CreateSessions = async () => {
       sessionCode: "324512",
       moduleName: "Software Architecture",
       tutor: {
-        firstName: tutor.firstName,
-        lastName: tutor.lastName,
-        tutorId: tutor._id,
+        firstName: softwareArchitecture.tutors[0].firstName,
+        lastName: softwareArchitecture.tutors[0].lastName,
+        tutorId: softwareArchitecture.tutors[0].tutorId,
       },
       courses: [
         {
@@ -313,7 +544,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: attendance,
+      attendance: softwareEngStudents,
       startDate: new Date("2022/09/25"),
       startTime: new Date("2022/09/25 14:00"),
       duration: 120,
@@ -324,9 +555,9 @@ const CreateSessions = async () => {
       sessionCode: "594212",
       moduleName: "Software Architecture",
       tutor: {
-        firstName: tutor.firstName,
-        lastName: tutor.lastName,
-        tutorId: tutor._id,
+        firstName: softwareArchitecture.tutors[0].firstName,
+        lastName: softwareArchitecture.tutors[0].lastName,
+        tutorId: softwareArchitecture.tutors[0].tutorId,
       },
       courses: [
         {
@@ -340,7 +571,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: attendance,
+      attendance: softwareEngStudents,
       startDate: new Date("2022/10/02"),
       startTime: new Date("2022/10/02 16:00"),
       duration: 120,
@@ -351,9 +582,9 @@ const CreateSessions = async () => {
       sessionCode: "974231",
       moduleName: "Software Architecture",
       tutor: {
-        firstName: tutor.firstName,
-        lastName: tutor.lastName,
-        tutorId: tutor._id,
+        firstName: softwareArchitecture.tutors[0].firstName,
+        lastName: softwareArchitecture.tutors[0].lastName,
+        tutorId: softwareArchitecture.tutors[0].tutorId,
       },
       courses: [
         {
@@ -367,7 +598,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: attendance,
+      attendance: softwareEngStudents,
       startDate: new Date("2022/10/09"),
       startTime: new Date("2022/10/09 16:00"),
       duration: 120,
@@ -378,9 +609,9 @@ const CreateSessions = async () => {
       sessionCode: "092347",
       moduleName: "Software Architecture",
       tutor: {
-        firstName: tutor.firstName,
-        lastName: tutor.lastName,
-        tutorId: tutor._id,
+        firstName: softwareArchitecture.tutors[0].firstName,
+        lastName: softwareArchitecture.tutors[0].lastName,
+        tutorId: softwareArchitecture.tutors[0].tutorId,
       },
       courses: [
         {
@@ -394,7 +625,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: attendance,
+      attendance: softwareEngStudents,
       startDate: new Date("2022/10/16"),
       startTime: new Date("2022/10/16 16:00"),
       duration: 120,
@@ -405,9 +636,9 @@ const CreateSessions = async () => {
       sessionCode: "980129",
       moduleName: "Software Architecture",
       tutor: {
-        firstName: tutor.firstName,
-        lastName: tutor.lastName,
-        tutorId: tutor._id,
+        firstName: softwareArchitecture.tutors[0].firstName,
+        lastName: softwareArchitecture.tutors[0].lastName,
+        tutorId: softwareArchitecture.tutors[0].tutorId,
       },
       courses: [
         {
@@ -421,7 +652,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: attendance,
+      attendance: softwareEngStudents,
       startDate: new Date("2022/10/16"),
       startTime: new Date("2022/10/16 09:00"),
       duration: 120,
@@ -432,9 +663,9 @@ const CreateSessions = async () => {
       sessionCode: "409328",
       moduleName: "Software Architecture",
       tutor: {
-        firstName: tutor.firstName,
-        lastName: tutor.lastName,
-        tutorId: tutor._id,
+        firstName: softwareArchitecture.tutors[0].firstName,
+        lastName: softwareArchitecture.tutors[0].lastName,
+        tutorId: softwareArchitecture.tutors[0].tutorId,
       },
       courses: [
         {
@@ -448,7 +679,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: attendance,
+      attendance: softwareEngStudents,
       startDate: new Date("2022/10/30"),
       startTime: new Date("2022/10/30 16:00"),
       duration: 120,
@@ -459,9 +690,9 @@ const CreateSessions = async () => {
       sessionCode: "230498",
       moduleName: "Software Architecture",
       tutor: {
-        firstName: tutor.firstName,
-        lastName: tutor.lastName,
-        tutorId: tutor._id,
+        firstName: softwareArchitecture.tutors[0].firstName,
+        lastName: softwareArchitecture.tutors[0].lastName,
+        tutorId: softwareArchitecture.tutors[0].tutorId,
       },
       courses: [
         {
@@ -475,7 +706,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: attendance,
+      attendance: softwareEngStudents,
       startDate: new Date("2022/11/06"),
       startTime: new Date("2022/11/06 16:00"),
       duration: 120,
@@ -486,9 +717,9 @@ const CreateSessions = async () => {
       sessionCode: "473289",
       moduleName: "Software Architecture",
       tutor: {
-        firstName: tutor.firstName,
-        lastName: tutor.lastName,
-        tutorId: tutor._id,
+        firstName: softwareArchitecture.tutors[0].firstName,
+        lastName: softwareArchitecture.tutors[0].lastName,
+        tutorId: softwareArchitecture.tutors[0].tutorId,
       },
       courses: [
         {
@@ -502,7 +733,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: attendance,
+      attendance: softwareEngStudents,
       startDate: new Date("2022/11/13"),
       startTime: new Date("2022/11/13 16:00"),
       duration: 120,
@@ -513,9 +744,9 @@ const CreateSessions = async () => {
       sessionCode: "120932",
       moduleName: "Software Architecture",
       tutor: {
-        firstName: tutor.firstName,
-        lastName: tutor.lastName,
-        tutorId: tutor._id,
+        firstName: softwareArchitecture.tutors[0].firstName,
+        lastName: softwareArchitecture.tutors[0].lastName,
+        tutorId: softwareArchitecture.tutors[0].tutorId,
       },
       courses: [
         {
@@ -529,7 +760,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: attendance,
+      attendance: softwareEngStudents,
       startDate: new Date("2022/11/20"),
       startTime: new Date("2022/11/20 16:00"),
       duration: 120,
@@ -540,9 +771,9 @@ const CreateSessions = async () => {
       sessionCode: "123892",
       moduleName: "Software Architecture",
       tutor: {
-        firstName: tutor.firstName,
-        lastName: tutor.lastName,
-        tutorId: tutor._id,
+        firstName: softwareArchitecture.tutors[0].firstName,
+        lastName: softwareArchitecture.tutors[0].lastName,
+        tutorId: softwareArchitecture.tutors[0].tutorId,
       },
       courses: [
         {
@@ -556,7 +787,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: attendance,
+      attendance: softwareEngStudents,
       startDate: new Date("2022/11/27"),
       startTime: new Date("2022/11/27 16:00"),
       duration: 120,
@@ -567,9 +798,9 @@ const CreateSessions = async () => {
       sessionCode: "984523",
       moduleName: "Software Architecture",
       tutor: {
-        firstName: tutor.firstName,
-        lastName: tutor.lastName,
-        tutorId: tutor._id,
+        firstName: softwareArchitecture.tutors[0].firstName,
+        lastName: softwareArchitecture.tutors[0].lastName,
+        tutorId: softwareArchitecture.tutors[0].tutorId,
       },
       courses: [
         {
@@ -583,7 +814,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: attendance,
+      attendance: softwareEngStudents,
       startDate: new Date("2022/12/01"),
       startTime: new Date("2022/12/01 16:00"),
       duration: 120,
@@ -594,9 +825,9 @@ const CreateSessions = async () => {
       sessionCode: "120398",
       moduleName: "Software Architecture",
       tutor: {
-        firstName: tutor.firstName,
-        lastName: tutor.lastName,
-        tutorId: tutor._id,
+        firstName: softwareArchitecture.tutors[0].firstName,
+        lastName: softwareArchitecture.tutors[0].lastName,
+        tutorId: softwareArchitecture.tutors[0].tutorId,
       },
       courses: [
         {
@@ -610,9 +841,944 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: attendance,
+      attendance: softwareEngStudents,
       startDate: new Date("2022/12/08"),
       startTime: new Date("2022/12/08 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "327894",
+      moduleName: "Data Structures",
+      tutor: {
+        firstName: dataStructures.tutors[0].firstName,
+        lastName: dataStructures.tutors[0].lastName,
+        tutorId: dataStructures.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+      ],
+      attendance: computerScienceStudents,
+      startDate: new Date("2022/11/01"),
+      startTime: new Date("2022/11/01 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "987432",
+      moduleName: "Data Structures",
+      tutor: {
+        firstName: dataStructures.tutors[0].firstName,
+        lastName: dataStructures.tutors[0].lastName,
+        tutorId: dataStructures.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+      ],
+      attendance: computerScienceStudents,
+      startDate: new Date("2022/11/08"),
+      startTime: new Date("2022/11/08 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "587921",
+      moduleName: "Data Structures",
+      tutor: {
+        firstName: dataStructures.tutors[0].firstName,
+        lastName: dataStructures.tutors[0].lastName,
+        tutorId: dataStructures.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+      ],
+      attendance: computerScienceStudents,
+      startDate: new Date("2022/11/15"),
+      startTime: new Date("2022/11/15 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "043587",
+      moduleName: "Data Structures",
+      tutor: {
+        firstName: dataStructures.tutors[0].firstName,
+        lastName: dataStructures.tutors[0].lastName,
+        tutorId: dataStructures.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+      ],
+      attendance: computerScienceStudents,
+      startDate: new Date("2022/11/22"),
+      startTime: new Date("2022/11/22 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "609841",
+      moduleName: "Data Structures",
+      tutor: {
+        firstName: dataStructures.tutors[0].firstName,
+        lastName: dataStructures.tutors[0].lastName,
+        tutorId: dataStructures.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+      ],
+      attendance: computerScienceStudents,
+      startDate: new Date("2022/11/29"),
+      startTime: new Date("2022/11/29 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "493829",
+      moduleName: "Data Structures",
+      tutor: {
+        firstName: dataStructures.tutors[0].firstName,
+        lastName: dataStructures.tutors[0].lastName,
+        tutorId: dataStructures.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+      ],
+      attendance: computerScienceStudents,
+      startDate: new Date("2022/12/06"),
+      startTime: new Date("2022/12/06 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "508943",
+      moduleName: "Data Structures",
+      tutor: {
+        firstName: dataStructures.tutors[0].firstName,
+        lastName: dataStructures.tutors[0].lastName,
+        tutorId: dataStructures.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+      ],
+      attendance: computerScienceStudents,
+      startDate: new Date("2022/12/13"),
+      startTime: new Date("2022/12/13 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "213094",
+      moduleName: "Data Structures",
+      tutor: {
+        firstName: dataStructures.tutors[0].firstName,
+        lastName: dataStructures.tutors[0].lastName,
+        tutorId: dataStructures.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+      ],
+      attendance: computerScienceStudents,
+      startDate: new Date("2022/12/20"),
+      startTime: new Date("2022/12/20 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "089921",
+      moduleName: "Data Structures",
+      tutor: {
+        firstName: dataStructures.tutors[0].firstName,
+        lastName: dataStructures.tutors[0].lastName,
+        tutorId: dataStructures.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+      ],
+      attendance: computerScienceStudents,
+      startDate: new Date("2022/12/27"),
+      startTime: new Date("2022/12/27 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "578921",
+      moduleName: "Data Structures",
+      tutor: {
+        firstName: dataStructures.tutors[0].firstName,
+        lastName: dataStructures.tutors[0].lastName,
+        tutorId: dataStructures.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+      ],
+      attendance: computerScienceStudents,
+      startDate: new Date("2023/01/03"),
+      startTime: new Date("2023/01/03 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "487398",
+      moduleName: "Human Factors",
+      tutor: {
+        firstName: humanFactors.tutors[0].firstName,
+        lastName: humanFactors.tutors[0].lastName,
+        tutorId: humanFactors.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2022/11/29"),
+      startTime: new Date("2022/11/29 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "377592",
+      moduleName: "Human Factors",
+      tutor: {
+        firstName: humanFactors.tutors[0].firstName,
+        lastName: humanFactors.tutors[0].lastName,
+        tutorId: humanFactors.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2022/12/06"),
+      startTime: new Date("2022/12/06 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "093824",
+      moduleName: "Human Factors",
+      tutor: {
+        firstName: humanFactors.tutors[0].firstName,
+        lastName: humanFactors.tutors[0].lastName,
+        tutorId: humanFactors.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2022/12/13"),
+      startTime: new Date("2022/12/13 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "896437",
+      moduleName: "Human Factors",
+      tutor: {
+        firstName: humanFactors.tutors[0].firstName,
+        lastName: humanFactors.tutors[0].lastName,
+        tutorId: humanFactors.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2022/12/20"),
+      startTime: new Date("2022/12/20 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "912821",
+      moduleName: "Human Factors",
+      tutor: {
+        firstName: humanFactors.tutors[0].firstName,
+        lastName: humanFactors.tutors[0].lastName,
+        tutorId: humanFactors.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2022/12/27"),
+      startTime: new Date("2022/12/27 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "908329",
+      moduleName: "Human Factors",
+      tutor: {
+        firstName: humanFactors.tutors[0].firstName,
+        lastName: humanFactors.tutors[0].lastName,
+        tutorId: humanFactors.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/01/03"),
+      startTime: new Date("2023/01/03 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "821762",
+      moduleName: "Human Factors",
+      tutor: {
+        firstName: humanFactors.tutors[0].firstName,
+        lastName: humanFactors.tutors[0].lastName,
+        tutorId: humanFactors.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/01/10"),
+      startTime: new Date("2023/01/10 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "182371",
+      moduleName: "Human Factors",
+      tutor: {
+        firstName: humanFactors.tutors[0].firstName,
+        lastName: humanFactors.tutors[0].lastName,
+        tutorId: humanFactors.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/01/17"),
+      startTime: new Date("2023/01/17 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "519082",
+      moduleName: "Human Factors",
+      tutor: {
+        firstName: humanFactors.tutors[0].firstName,
+        lastName: humanFactors.tutors[0].lastName,
+        tutorId: humanFactors.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/01/24"),
+      startTime: new Date("2023/01/24 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "658190",
+      moduleName: "Systems Analysis",
+      tutor: {
+        firstName: systemsAnalysis.tutors[0].firstName,
+        lastName: systemsAnalysis.tutors[0].lastName,
+        tutorId: systemsAnalysis.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/01/31"),
+      startTime: new Date("2023/01/31 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "321894",
+      moduleName: "Systems Analysis",
+      tutor: {
+        firstName: systemsAnalysis.tutors[0].firstName,
+        lastName: systemsAnalysis.tutors[0].lastName,
+        tutorId: systemsAnalysis.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/02/07"),
+      startTime: new Date("2023/02/07 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "120929",
+      moduleName: "Systems Analysis",
+      tutor: {
+        firstName: systemsAnalysis.tutors[0].firstName,
+        lastName: systemsAnalysis.tutors[0].lastName,
+        tutorId: systemsAnalysis.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/02/14"),
+      startTime: new Date("2023/02/14 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "432708",
+      moduleName: "Systems Analysis",
+      tutor: {
+        firstName: systemsAnalysis.tutors[0].firstName,
+        lastName: systemsAnalysis.tutors[0].lastName,
+        tutorId: systemsAnalysis.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/02/21"),
+      startTime: new Date("2023/02/21 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "212271",
+      moduleName: "Systems Analysis",
+      tutor: {
+        firstName: systemsAnalysis.tutors[0].firstName,
+        lastName: systemsAnalysis.tutors[0].lastName,
+        tutorId: systemsAnalysis.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/02/28"),
+      startTime: new Date("2023/02/28 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "758934",
+      moduleName: "Systems Analysis",
+      tutor: {
+        firstName: systemsAnalysis.tutors[0].firstName,
+        lastName: systemsAnalysis.tutors[0].lastName,
+        tutorId: systemsAnalysis.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/03/07"),
+      startTime: new Date("2023/03/07 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "230947",
+      moduleName: "Systems Analysis",
+      tutor: {
+        firstName: systemsAnalysis.tutors[0].firstName,
+        lastName: systemsAnalysis.tutors[0].lastName,
+        tutorId: systemsAnalysis.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/03/14"),
+      startTime: new Date("2023/03/14 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "237842",
+      moduleName: "Systems Analysis",
+      tutor: {
+        firstName: systemsAnalysis.tutors[0].firstName,
+        lastName: systemsAnalysis.tutors[0].lastName,
+        tutorId: systemsAnalysis.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/03/21"),
+      startTime: new Date("2023/03/21 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "208934",
+      moduleName: "Systems Analysis",
+      tutor: {
+        firstName: systemsAnalysis.tutors[0].firstName,
+        lastName: systemsAnalysis.tutors[0].lastName,
+        tutorId: systemsAnalysis.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/03/28"),
+      startTime: new Date("2023/03/28 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "093284",
+      moduleName: "Systems Analysis",
+      tutor: {
+        firstName: systemsAnalysis.tutors[0].firstName,
+        lastName: systemsAnalysis.tutors[0].lastName,
+        tutorId: systemsAnalysis.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupOfStudents,
+      startDate: new Date("2023/04/04"),
+      startTime: new Date("2023/04/04 16:00"),
       duration: 120,
       isOpen: false,
     },

@@ -8,8 +8,11 @@ import CustomError from "./components/CustomError";
 import StudentDashboard from "./pages/StudentDashboard/StudentDashboard";
 import TutorDashboard from "./pages/TutorDashboard/TutorDashboard";
 import TutorViewAttendance from "./pages/TutorViewAttendance/TutorViewAttendance";
+import { ModuleLeaderAttendance } from "./pages/ModuleLeaderAttendance/ModuleLeaderAttendance";
 const TestUseQuery = lazy(() => import("./pages/testusequery/TestUseQuery"));
-const NewSession = lazy(() => import("./pages/StudentDashboard/StudentDashboard"));
+const NewSession = lazy(
+  () => import("./pages/StudentDashboard/StudentDashboard")
+);
 const RegisterNewUser = lazy(() => import("./pages/register/register"));
 
 const RouteHandler = () => {
@@ -51,9 +54,17 @@ const RouteHandler = () => {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<RegisterNewUser />} />
-          <Route path="/test" element={<TestUseQuery />} />
           <Route path="/newsession" element={<NewSession />} />
-          <Route path="*" element={<CustomError errorMessage="fourth" />} />
+          <Route path="/tutordashboard" element={<TutorDashboard />} />
+          <Route
+            path="/moduleleaderattendance"
+            element={<ModuleLeaderAttendance />}
+          />
+          <Route
+            path="/tutorviewattendance"
+            element={<TutorViewAttendance />}
+          />
+          <Route path="*" element={<CustomError errorMessage="sixth" />} />
         </Routes>
       );
     }
