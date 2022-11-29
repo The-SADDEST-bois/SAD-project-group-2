@@ -1,10 +1,4 @@
 import express from "express";
-import Users from "../Models/User";
-import bcrypt from "bcrypt";
-import { accessToken, verifyToken } from "../middleware/jwt";
-import { IUser } from "../Interfaces/IUser";
-import { ITokenData } from "../Interfaces/ITokenData";
-import StatusCode from "../Utils/StatusCodes";
 import { LoginUser, ReauthenticateUser, RegisterUser, GetAllStudents } from "../Services/UserServices";
 
 const userController = express.Router();
