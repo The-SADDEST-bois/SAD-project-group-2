@@ -33,7 +33,15 @@ const RouteHandler = () => {
         <Routes>
           <Route path="/" element={<TutorDashboard />} />
           <Route
-            path="/courseLeaderViewAttendance"
+            path="/tutorviewattendance"
+            element={<TutorViewAttendance />}
+          />
+          <Route
+            path="/moduleLeaderAttendance"
+            element={<ModuleLeaderAttendance />}
+          />
+          <Route
+            path="/courseleaderattendance"
             element={<CourseLeaderAttendance />}
           />
           <Route
@@ -50,7 +58,11 @@ const RouteHandler = () => {
         <Routes>
           <Route path="/" element={<TutorDashboard />} />
           <Route
-            path="/moduleLeaderViewAttendance"
+            path="/tutorviewattendance"
+            element={<TutorViewAttendance />}
+          />
+          <Route
+            path="/moduleLeaderAttendance"
             element={<ModuleLeaderAttendance />}
           />
           <Route

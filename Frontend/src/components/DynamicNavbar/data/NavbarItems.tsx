@@ -28,7 +28,7 @@ export const ModuleLeaderNavbar: NavbarItems[] = [
   {
     label: "View Session",
     icon: <HiOutlineCalendar size="40" />,
-    url: "/tutordashboard",
+    url: "/",
   },
 
   {
@@ -68,7 +68,7 @@ export const CourseLeaderNavbar: NavbarItems[] = [
   {
     label: "View Session",
     icon: <HiOutlineCalendar size="40" />,
-    url: "/tutordashboard",
+    url: "/",
   },
 
   {
