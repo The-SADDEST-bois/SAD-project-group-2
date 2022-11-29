@@ -12,6 +12,7 @@ import { SessionModal } from "../../../components/SessionModal/SessionModal";
 import { useStore } from "../../../contexts/storeProvider";
 import { formatDate } from "../../../utils/formatDate/formatDate";
 import { useGetAllSessionsByModuleAndDateRange } from "../hooks/useGetAllSessionByModuleAndDateRange";
+import { SessionAttendanceIndicators } from "./SessionAttendanceIndicators";
 
 interface IAccordionData {
   moduleName: string;
@@ -34,6 +35,11 @@ export const AccordianData = ({
     setCurrentSession(item);
     onOpen();
   };
+
+  const onModalClose = (): void => {
+    refetch();
+    onClose();
+  }
 
   return (
     <>
@@ -64,9 +70,12 @@ export const AccordianData = ({
                   </Text>
                   {new Date(item.startTime).getTime() <
                   store.staticTime.Date.getTime() ? (
+                    <>
+                    <SessionAttendanceIndicators attendance={item.attendance}/>
                     <Button onClick={(e) => handleSubmit(item)}>
                       Edit Attendance
                     </Button>
+                    </>
                   ) : (
                     ""
                   )}
@@ -76,7 +85,7 @@ export const AccordianData = ({
       </AccordionPanel>
       <SessionModal
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={onModalClose}
         session={currentSession}
       />
     </>
