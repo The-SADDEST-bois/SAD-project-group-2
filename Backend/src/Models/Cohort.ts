@@ -3,6 +3,7 @@ import { ICohort } from "../Interfaces/ICohort";
 
 const cohortSchema = new Schema<ICohort>({
   courseId: { type: Schema.Types.ObjectId, required: false },
+  cohortName: { type: String, required: false },
   students: [
     {
       _id: { type: Schema.Types.ObjectId, required: true },
