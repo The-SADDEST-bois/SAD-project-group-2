@@ -9,7 +9,7 @@ export const useGetAllModulesById = () => {
   const moduleLeaderId = store?.auth.user?._id;
 
   const { isLoading, isError, data, refetch } = useQuery({
-    queryKey: "getModulesByLeaderId",
+    queryKey: ['getModulesByLeaderId', moduleLeaderId],
     queryFn: () => getAllModulesByModuleLeader(moduleLeaderId as string),
     refetchOnWindowFocus: true,
   });

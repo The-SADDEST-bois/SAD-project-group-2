@@ -13,7 +13,7 @@ export const useGetAdvisorAdvisee = () => {
     }
 
     const { isLoading, isError, data, refetch } = useQuery({
-      queryKey: "getAcademicAdvisorAdvisee",
+      queryKey: ['getAcademicAdvisorAdvisee', AcademicAdvisorId],
       queryFn: () => getAdviseesByAdvisorId(AcademicAdvisorId),
       refetchOnWindowFocus: true,
     });

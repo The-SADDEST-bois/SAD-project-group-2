@@ -7,7 +7,7 @@ export const useGetSessionAttendees = (
   userSessionID: string
 ) => {
   const { isLoading, isError, data, refetch } = useQuery({
-    queryKey: "attendees",
+    queryKey: ['attendees', userSessionID],
     queryFn: () => getSessionAttendees(userSessionID as string),
     refetchInterval: 5000,
     enabled: isOpen,

@@ -9,7 +9,7 @@ export const useGetCourseAttendanceByName = ({
   courseName,
 }: IUseGetCourseAttendanceByName) => {
   const { isLoading, isError, data, refetch } = useQuery({
-    queryKey: "getCourseAttendanceByName",
+    queryKey: ['getCourseAttendanceByName', courseName],
     queryFn: () => getOverallCourseAttendance(courseName as string),
     refetchOnWindowFocus: true,
   });

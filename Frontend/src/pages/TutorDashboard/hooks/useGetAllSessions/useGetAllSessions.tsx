@@ -6,7 +6,7 @@ export const useGetAllSessions = () => {
   const store = useStore();
 
   const { isLoading, isError, data, refetch } = useQuery({
-    queryKey: "allSessions",
+    queryKey: ['allSessions', store?.auth.user._id],
     queryFn: () => getAllSessionsByDate(store.auth.user._id as string, store.staticTime.Date),
     refetchOnWindowFocus: true,
   });

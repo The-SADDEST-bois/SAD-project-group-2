@@ -22,24 +22,28 @@ export const AdviseesByAdvisor = async (request: any, response: any) => {
 };
 
 export const OverallAdviseeAttendance = async (request: any, response: any) => {
+  
   const adviseeId = request.query.adviseeId;
   var attendanceFromAdviseeSessions = await Sessions.find({
-    "attendance.studentId": adviseeId,
+    "attendance._id": adviseeId,
   }).select("attendance");
 
   var numberOfSessions = attendanceFromAdviseeSessions.length;
   var numberOfSessionsAttended = 0;
   attendanceFromAdviseeSessions.forEach((session: any) => {
     session.attendance.forEach((attendance: any) => {
-      if (attendance.studentId == adviseeId && attendance.status == 1) {
+      if (attendance._id == adviseeId && attendance.status == 1) {
         numberOfSessionsAttended++;
       }
     });
   });
+  console.log(numberOfSessionsAttended);
 
-  var overallAttendance = numberOfSessionsAttended / numberOfSessions;
+  var overallAttendance =   numberOfSessionsAttended / numberOfSessions;
+
+  overallAttendance = overallAttendance * 100;
 
   return response.status(StatusCode.OK).json({
-    overallAttendance: overallAttendance,
+    overallAttendance: overallAttendance.toFixed(2),
   });
 };

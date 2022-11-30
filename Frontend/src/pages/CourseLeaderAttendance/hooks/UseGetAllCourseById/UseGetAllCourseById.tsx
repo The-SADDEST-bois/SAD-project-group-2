@@ -9,7 +9,7 @@ export const UseGetAllCourseById = () => {
   const courseLeaderId = store?.auth.user._id;
 
   const { isLoading, isError, data, refetch } = useQuery({
-    queryKey: "getCourseByLeaderId",
+    queryKey: ['useGetCourseByLeaderId', courseLeaderId],
     queryFn: () => getAllCoursesByCourseLeader(courseLeaderId as string),
     refetchOnWindowFocus: true,
   });

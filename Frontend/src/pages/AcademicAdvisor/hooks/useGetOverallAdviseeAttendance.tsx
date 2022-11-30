@@ -6,7 +6,7 @@ import { getOverallAdviseeAttendance } from "../../../../api/advisorApi/advisorA
 export const useGetOverallAdviseeAttendance = (_id: string) => {
 
     const { isLoading, isError, data, refetch } = useQuery({
-      queryKey: "useGetOverallAdviseeAttendance",
+      queryKey: ['useGetOverallAdviseeAttendance', _id],
       queryFn: () => getOverallAdviseeAttendance(_id),
       refetchOnWindowFocus: true,
     });

@@ -1,8 +1,6 @@
-import { useEffect } from "react";
-import { useQueries, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import {
   getAllSessionsBetweenDateRange,
-  getAllSessionsPerModule,
 } from "../../../../api/tutorApi/tutorApi";
 import { ISession } from "../../../../types/types";
 

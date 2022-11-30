@@ -1,11 +1,11 @@
 import headerAuthorisationWithParams from "../../src/utils/headerAuthorization/headerAuthorisationWithParams";
 import api from "../config/apiconfig";
 
-export const getOverallAdviseeAttendance = async (advisorId: string) => {
+export const getOverallAdviseeAttendance = async (adviseeId: string) => {
   try {
     return await api.get(
       "/advisor/overallAdviseeAttendance",
-      headerAuthorisationWithParams({ advisorId: advisorId })
+      headerAuthorisationWithParams({ adviseeId: adviseeId })
     );
   } catch (error: any) {
     console.log(error);
