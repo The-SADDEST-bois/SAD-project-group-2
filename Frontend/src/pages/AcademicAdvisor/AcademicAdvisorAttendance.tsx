@@ -4,6 +4,7 @@ import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { useStore } from "../../contexts/storeProvider";
 import { ModuleAccordion } from "../ModuleLeaderAttendance/components/ModuleAccordian/ModuleAccordion";
+import { AdviseeAttendanceIndicators } from "./components/AdviseeAttendanceIndicators";
 import { useGetAdvisorAdvisee } from "./hooks/useGetAdvisorAdvisee";
 
 interface Iadvisee {
@@ -15,23 +16,9 @@ interface Iadvisee {
 const AcademicAdvisorAttendance = () => {
   const store = useStore();
 
-  const [selectData, setSelectData] = useState<string>("");
   const { advisees, isError, isLoading, refetch } = useGetAdvisorAdvisee();
-  const [adviseeSelection, setAdviseeSelection] = useState({} as Iadvisee);
 
-  useEffect(() => {
-    if (advisees) {
-      advisees?.map((item: Iadvisee) => {
-        if (item._id == selectData) {
-          setAdviseeSelection(item);
-          return;
-        }
-      });
-      if (selectData == "") {
-        setAdviseeSelection({} as Iadvisee);
-      }
-    }
-  }, [selectData]);
+  console.log(advisees);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -58,30 +45,17 @@ const AcademicAdvisorAttendance = () => {
                 padding="40px"
                 borderRadius={"20px"}
               >
-                <Text fontSize={"xl"}>Select Student</Text>
-                <Select
-                  placeholder="Please Select"
-                  onChange={(e: any) => setSelectData(e.target.value)}
-                  borderColor="white"
-                  border={"2px"}
-                >
-                  {!isLoading &&
-                    !isError &&
-                    advisees &&
-                    advisees?.map((advisee: Iadvisee) => (
-                      <option value={advisee._id}>{advisee.firstName}</option>
-                    ))}
-                </Select>
-              </VStack>
-
-              <VStack
-                align={"left"}
-                backgroundColor="#A3F5F4"
-                padding="40px"
-                borderRadius={"20px"}
-              >
-                <Text fontSize={"xl"}>Results </Text>
-                <Text>{adviseeSelection.firstName}</Text>
+                {!isLoading &&
+                  !isError &&
+                  advisees.map((item: Iadvisee) => (
+                    <>
+                    <Text>
+                      {item.firstName}
+                      {item.lastName}{" "}
+                      <AdviseeAttendanceIndicators _id={item._id} />
+                    </Text>
+                    </>
+                  ))}
               </VStack>
             </VStack>
           </Flex>

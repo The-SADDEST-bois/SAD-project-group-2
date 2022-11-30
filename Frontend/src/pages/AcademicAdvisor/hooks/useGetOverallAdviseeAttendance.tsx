@@ -11,6 +11,7 @@ export const useGetOverallAdviseeAttendance = (_id: string) => {
       refetchOnWindowFocus: true,
     });
 
-    console.log(data)
-    return { isLoading, isError, data, refetch };
+    
+    const overallAttendance = data?.data?.overallAttendance;
+    return { isLoading, isError, overallAttendance, refetch };
 }
