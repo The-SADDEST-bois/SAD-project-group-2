@@ -13,11 +13,11 @@ export const getOverallAdviseeAttendance = async (advisorId: string) => {
   }
 };
 
-export const getAdviseesByAdvisorId = async (adviseeId: string) => {
+export const getAdviseesByAdvisorId = async (advisorId: string) => {
   try {
     return await api.get(
       "/advisor/adviseesByAdvisorId",
-      headerAuthorisationWithParams({ adviseeId: adviseeId })
+      headerAuthorisationWithParams({ advisorId: advisorId })
     );
   } catch (error: any) {
     console.log(error);

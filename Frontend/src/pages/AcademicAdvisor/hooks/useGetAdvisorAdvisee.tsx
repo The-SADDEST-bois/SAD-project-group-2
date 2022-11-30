@@ -11,12 +11,13 @@ export const useGetAdvisorAdvisee = () => {
     if (!AcademicAdvisorId) {
       throw new Error("No Academic Advisor ID");
     }
-    
+
     const { isLoading, isError, data, refetch } = useQuery({
       queryKey: "getAcademicAdvisorAdvisee",
       queryFn: () => getAdviseesByAdvisorId(AcademicAdvisorId),
       refetchOnWindowFocus: true,
     });
-  
-    return { isLoading, isError, data, refetch };
+
+    const advisees = data?.data;
+    return { isLoading, isError, advisees, refetch };
 }
