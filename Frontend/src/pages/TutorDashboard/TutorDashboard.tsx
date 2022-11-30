@@ -23,12 +23,9 @@ const TutorDashboard = () => {
 
   const allSessions = data as ISession[];
 
-  const handleResponse = (session: ISession, response?: AxiosResponse,) => {
+  const handleResponse = (session: ISession, response?: AxiosResponse) => {
     if (response?.status === 500 || response?.status === 400) {
-      onErrorToast(
-        `Error Starting Session`,
-        response.data.message
-      );
+      onErrorToast(`Error Starting Session`, response.data.message);
       return;
     }
 
@@ -107,7 +104,10 @@ const TutorDashboard = () => {
                       </>
                     </Text>
 
-                    <Button onClick={(e) => handleSubmit(item)}>
+                    <Button
+                      data-cy="joinSessionButton"
+                      onClick={(e) => handleSubmit(item)}
+                    >
                       Start Session
                     </Button>
                   </VStack>
