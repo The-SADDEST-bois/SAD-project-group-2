@@ -108,6 +108,7 @@ const Login = () => {
 
           <Flex direction={"column"} height="75px">
             <Input
+              data-cy="emailInput"
               placeholder="Email"
               type="email"
               value={credentials.email}
@@ -124,6 +125,7 @@ const Login = () => {
 
           <Flex direction={"column"} height="75px">
             <Input
+              data-cy="passwordInput"
               placeholder="Password"
               type={"password"}
               value={credentials.password}
@@ -143,6 +145,7 @@ const Login = () => {
           </Flex>
 
           <StyledButton
+            data-cy="loginSubmit"
             buttonText={"Submit"}
             onClick={handleSubmit}
             isDisabled={!errors.email || errors.password}

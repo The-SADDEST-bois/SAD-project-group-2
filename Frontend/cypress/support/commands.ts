@@ -35,3 +35,26 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add("loginFunction", (email: string) => {
+  cy.intercept(`http://localhost:8080/user/login`).as("loginMocked");
+
+  cy.get('[data-cy="emailInput"]', { timeout: 5000 })
+    .should("be.visible")
+    .type(email);
+  cy.get('[data-cy="passwordInput"]', { timeout: 5000 })
+    .should("be.visible")
+    .type("password");
+
+  cy.get('[data-cy="loginSubmit"]', { timeout: 5000 })
+    .should("be.visible")
+    .click();
+
+  cy.wait("@loginMocked", { timeout: 5000 });
+});
+
+declare namespace Cypress {
+  interface Chainable {
+    loginFunction: (email: string) => void;
+  }
+}
