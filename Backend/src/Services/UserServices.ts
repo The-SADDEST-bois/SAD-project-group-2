@@ -14,8 +14,6 @@ export const LoginUser = async (request: any, response: any) => {
     const user = await Users.findOne({ email });
 
     if (user) {
-      console.log(user);
-      // check user password with hashed password stored in the database
       const validPassword = await bcrypt.compare(
         password as string,
         user.password
@@ -45,11 +43,11 @@ export const LoginUser = async (request: any, response: any) => {
       console.log("NOT VALID");
 
       return response
-        .status(StatusCode.BAD_REQUEST)
+        .status(StatusCode.UNAUTHORIZED)
         .json({ error: "Invalid Password" });
     }
     return response
-      .status(StatusCode.NOT_FOUND)
+      .status(StatusCode.UNAUTHORIZED)
       .json({ error: "User does not exist" });
   } catch (error) {
     console.log(error);

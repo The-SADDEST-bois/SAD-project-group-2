@@ -2,6 +2,7 @@ import { Schema } from "mongoose";
 
 export interface ICohort {
   courseId: Schema.Types.ObjectId;
+  cohortName: string;
   students: [
     {
       firstName: string;

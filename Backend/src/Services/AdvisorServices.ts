@@ -2,7 +2,9 @@ import AcademicAdvisors from "../Models/AcademicAdvisor";
 import Sessions from "../Models/Session";
 import StatusCode from "../Utils/StatusCodes";
 
+
 export const AdviseesByAdvisor = async (request: any, response: any) => {
+
   const advisorId = request.query.advisorId;
 
   try {

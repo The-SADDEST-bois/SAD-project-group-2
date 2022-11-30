@@ -321,17 +321,21 @@ const CreateCourses = async () => {
 };
 const CreateCohorts = async () => {
   // Create Cohorts to be added to the database
-  const studentsFromCourses = await Courses.find().select("students");
-  const courseIds = await Courses.find().select("_id");
+  const softwareEng = await Courses.findOne({
+    courseName: "Software Engineering",
+  });
+  const computerSci = await Courses.findOne({ courseName: "Computer Science" });
 
   const cohorts = [
     {
-      courseId: courseIds[0]._id,
-      students: studentsFromCourses[0].students,
+      courseId: computerSci._id,
+      cohortName: computerSci.courseName,
+      students: computerSci.students,
     },
     {
-      courseId: courseIds[1]._id,
-      students: studentsFromCourses[1].students,
+      courseId: softwareEng._id,
+      cohortName: softwareEng.courseName,
+      students: softwareEng.students,
     },
   ];
 
@@ -488,6 +492,29 @@ const CreateModules = async () => {
   console.log("Modules added to courses");
 };
 
+function CreateStudentAttendance(studentArray: any) {
+  // Create StudentAttendance to be added to the database
+  // random number either 0 or 1
+
+  var attendanceArray: {
+    firstName: any;
+    lastName: any;
+    _id: any;
+    status: number;
+  }[] = [];
+
+  studentArray.forEach((student: any) => {
+    const randomAttendanceStatus = Math.round(Math.random());
+    var attendance = {
+      firstName: student.firstName,
+      lastName: student.lastName,
+      _id: student._id,
+      status: randomAttendanceStatus,
+    };
+    attendanceArray.push(attendance);
+  });
+  return attendanceArray;
+}
 const CreateSessions = async () => {
   // Create Sessions to be added to the database
   const softwareEng = await Courses.findOne({
@@ -497,16 +524,16 @@ const CreateSessions = async () => {
     courseName: "Computer Science",
   });
   const softwareEngineeringCohort = await Cohorts.findOne({
-    courseId: softwareEng._id,
+    cohortName: softwareEng.courseName,
   });
   const computerScienceCohort = await Cohorts.findOne({
-    courseId: computerScience._id,
+    cohortName: computerScience.courseName,
   });
   const softwareEngStudents = softwareEngineeringCohort.students;
   const computerScienceStudents = computerScienceCohort.students;
   const firstHalfOfSoftwareEngStudents = softwareEngStudents.slice(0, 5);
   const secondHalfOfComputerScienceStudents = computerScienceStudents.slice(5);
-  const mixedGroupOfStudents = firstHalfOfSoftwareEngStudents.concat(
+  const mixedGroupStudents = firstHalfOfSoftwareEngStudents.concat(
     secondHalfOfComputerScienceStudents
   );
   const dataStructures = await Modules.findOne({
@@ -523,60 +550,6 @@ const CreateSessions = async () => {
   });
 
   const sessions = [
-    {
-      sessionType: SessionTypes.Lecture,
-      sessionCode: "324512",
-      moduleName: "Software Architecture",
-      tutor: {
-        firstName: softwareArchitecture.tutors[0].firstName,
-        lastName: softwareArchitecture.tutors[0].lastName,
-        tutorId: softwareArchitecture.tutors[0].tutorId,
-      },
-      courses: [
-        {
-          courseName: softwareEng.courseName,
-          courseId: softwareEng._id,
-        },
-      ],
-      cohorts: [
-        {
-          cohortId: softwareEngineeringCohort._id,
-          cohortName: softwareEng.courseName,
-        },
-      ],
-      attendance: softwareEngStudents,
-      startDate: new Date("2022/09/25"),
-      startTime: new Date("2022/09/25 14:00"),
-      duration: 120,
-      isOpen: false,
-    },
-    {
-      sessionType: SessionTypes.Lecture,
-      sessionCode: "594212",
-      moduleName: "Software Architecture",
-      tutor: {
-        firstName: softwareArchitecture.tutors[0].firstName,
-        lastName: softwareArchitecture.tutors[0].lastName,
-        tutorId: softwareArchitecture.tutors[0].tutorId,
-      },
-      courses: [
-        {
-          courseName: softwareEng.courseName,
-          courseId: softwareEng._id,
-        },
-      ],
-      cohorts: [
-        {
-          cohortId: softwareEngineeringCohort._id,
-          cohortName: softwareEng.courseName,
-        },
-      ],
-      attendance: softwareEngStudents,
-      startDate: new Date("2022/10/02"),
-      startTime: new Date("2022/10/02 16:00"),
-      duration: 120,
-      isOpen: false,
-    },
     {
       sessionType: SessionTypes.Lecture,
       sessionCode: "974231",
@@ -598,7 +571,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: softwareEngStudents,
+      attendance: CreateStudentAttendance(softwareEngStudents),
       startDate: new Date("2022/10/09"),
       startTime: new Date("2022/10/09 16:00"),
       duration: 120,
@@ -625,7 +598,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: softwareEngStudents,
+      attendance: CreateStudentAttendance(softwareEngStudents),
       startDate: new Date("2022/10/16"),
       startTime: new Date("2022/10/16 16:00"),
       duration: 120,
@@ -652,7 +625,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: softwareEngStudents,
+      attendance: CreateStudentAttendance(softwareEngStudents),
       startDate: new Date("2022/10/16"),
       startTime: new Date("2022/10/16 09:00"),
       duration: 120,
@@ -679,7 +652,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: softwareEngStudents,
+      attendance: CreateStudentAttendance(softwareEngStudents),
       startDate: new Date("2022/10/30"),
       startTime: new Date("2022/10/30 16:00"),
       duration: 120,
@@ -706,7 +679,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: softwareEngStudents,
+      attendance: CreateStudentAttendance(softwareEngStudents),
       startDate: new Date("2022/11/06"),
       startTime: new Date("2022/11/06 16:00"),
       duration: 120,
@@ -733,7 +706,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: softwareEngStudents,
+      attendance: CreateStudentAttendance(softwareEngStudents),
       startDate: new Date("2022/11/13"),
       startTime: new Date("2022/11/13 16:00"),
       duration: 120,
@@ -760,7 +733,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: softwareEngStudents,
+      attendance: CreateStudentAttendance(softwareEngStudents),
       startDate: new Date("2022/11/20"),
       startTime: new Date("2022/11/20 16:00"),
       duration: 120,
@@ -787,7 +760,7 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: softwareEngStudents,
+      attendance: CreateStudentAttendance(softwareEngStudents),
       startDate: new Date("2022/11/27"),
       startTime: new Date("2022/11/27 16:00"),
       duration: 120,
@@ -822,7 +795,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
-      sessionCode: "120398",
+      sessionCode: "984523",
       moduleName: "Software Architecture",
       tutor: {
         firstName: softwareArchitecture.tutors[0].firstName,
@@ -868,9 +841,9 @@ const CreateSessions = async () => {
           cohortName: computerScience.courseName,
         },
       ],
-      attendance: computerScienceStudents,
-      startDate: new Date("2022/11/01"),
-      startTime: new Date("2022/11/01 16:00"),
+      attendance: CreateStudentAttendance(computerScienceStudents),
+      startDate: new Date("2022/10/08"),
+      startTime: new Date("2022/10/08 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -895,9 +868,9 @@ const CreateSessions = async () => {
           cohortName: computerScience.courseName,
         },
       ],
-      attendance: computerScienceStudents,
-      startDate: new Date("2022/11/08"),
-      startTime: new Date("2022/11/08 16:00"),
+      attendance: CreateStudentAttendance(computerScienceStudents),
+      startDate: new Date("2022/10/15"),
+      startTime: new Date("2022/10/15 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -922,9 +895,9 @@ const CreateSessions = async () => {
           cohortName: computerScience.courseName,
         },
       ],
-      attendance: computerScienceStudents,
-      startDate: new Date("2022/11/15"),
-      startTime: new Date("2022/11/15 16:00"),
+      attendance: CreateStudentAttendance(computerScienceStudents),
+      startDate: new Date("2022/10/22"),
+      startTime: new Date("2022/10/22 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -949,9 +922,9 @@ const CreateSessions = async () => {
           cohortName: computerScience.courseName,
         },
       ],
-      attendance: computerScienceStudents,
-      startDate: new Date("2022/11/22"),
-      startTime: new Date("2022/11/22 16:00"),
+      attendance: CreateStudentAttendance(computerScienceStudents),
+      startDate: new Date("2022/10/29"),
+      startTime: new Date("2022/10/29 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -976,9 +949,9 @@ const CreateSessions = async () => {
           cohortName: computerScience.courseName,
         },
       ],
-      attendance: computerScienceStudents,
-      startDate: new Date("2022/11/29"),
-      startTime: new Date("2022/11/29 16:00"),
+      attendance: CreateStudentAttendance(computerScienceStudents),
+      startDate: new Date("2022/11/05"),
+      startTime: new Date("2022/11/05 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1003,9 +976,9 @@ const CreateSessions = async () => {
           cohortName: computerScience.courseName,
         },
       ],
-      attendance: computerScienceStudents,
-      startDate: new Date("2022/12/06"),
-      startTime: new Date("2022/12/06 16:00"),
+      attendance: CreateStudentAttendance(computerScienceStudents),
+      startDate: new Date("2022/11/12"),
+      startTime: new Date("2022/11/12 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1030,9 +1003,9 @@ const CreateSessions = async () => {
           cohortName: computerScience.courseName,
         },
       ],
-      attendance: computerScienceStudents,
-      startDate: new Date("2022/12/13"),
-      startTime: new Date("2022/12/13 16:00"),
+      attendance: CreateStudentAttendance(computerScienceStudents),
+      startDate: new Date("2022/11/19"),
+      startTime: new Date("2022/11/19 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1057,9 +1030,9 @@ const CreateSessions = async () => {
           cohortName: computerScience.courseName,
         },
       ],
-      attendance: computerScienceStudents,
-      startDate: new Date("2022/12/20"),
-      startTime: new Date("2022/12/20 16:00"),
+      attendance: CreateStudentAttendance(computerScienceStudents),
+      startDate: new Date("2022/11/26"),
+      startTime: new Date("2022/11/26 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1085,8 +1058,8 @@ const CreateSessions = async () => {
         },
       ],
       attendance: computerScienceStudents,
-      startDate: new Date("2022/12/27"),
-      startTime: new Date("2022/12/27 16:00"),
+      startDate: new Date("2022/12/01"),
+      startTime: new Date("2022/12/01 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1112,8 +1085,8 @@ const CreateSessions = async () => {
         },
       ],
       attendance: computerScienceStudents,
-      startDate: new Date("2023/01/03"),
-      startTime: new Date("2023/01/03 16:00"),
+      startDate: new Date("2022/12/08"),
+      startTime: new Date("2022/12/08 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1146,9 +1119,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2022/11/29"),
-      startTime: new Date("2022/11/29 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/10/08"),
+      startTime: new Date("2022/10/08 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1181,9 +1154,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2022/12/06"),
-      startTime: new Date("2022/12/06 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/10/15"),
+      startTime: new Date("2022/10/15 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1216,9 +1189,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2022/12/13"),
-      startTime: new Date("2022/12/13 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/10/22"),
+      startTime: new Date("2022/10/22 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1251,9 +1224,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2022/12/20"),
-      startTime: new Date("2022/12/20 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/10/29"),
+      startTime: new Date("2022/10/29 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1286,9 +1259,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2022/12/27"),
-      startTime: new Date("2022/12/27 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/11/05"),
+      startTime: new Date("2022/11/05 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1321,9 +1294,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/01/03"),
-      startTime: new Date("2023/01/03 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/11/12"),
+      startTime: new Date("2022/11/12 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1356,9 +1329,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/01/10"),
-      startTime: new Date("2023/01/10 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/11/19"),
+      startTime: new Date("2022/11/19 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1391,9 +1364,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/01/17"),
-      startTime: new Date("2023/01/17 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/11/26"),
+      startTime: new Date("2022/11/26 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1426,9 +1399,44 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/01/24"),
-      startTime: new Date("2023/01/24 16:00"),
+      attendance: mixedGroupStudents,
+      startDate: new Date("2022/12/01"),
+      startTime: new Date("2022/12/01 16:00"),
+      duration: 120,
+      isOpen: false,
+    },
+    {
+      sessionType: SessionTypes.Lecture,
+      sessionCode: "519082",
+      moduleName: "Human Factors",
+      tutor: {
+        firstName: humanFactors.tutors[0].firstName,
+        lastName: humanFactors.tutors[0].lastName,
+        tutorId: humanFactors.tutors[0].tutorId,
+      },
+      courses: [
+        {
+          courseName: computerScience.courseName,
+          courseId: computerScience._id,
+        },
+        {
+          courseName: softwareEng.courseName,
+          courseId: softwareEng._id,
+        },
+      ],
+      cohorts: [
+        {
+          cohortId: computerScienceCohort._id,
+          cohortName: computerScience.courseName,
+        },
+        {
+          cohortId: softwareEngineeringCohort._id,
+          cohortName: softwareEng.courseName,
+        },
+      ],
+      attendance: mixedGroupStudents,
+      startDate: new Date("2022/12/08"),
+      startTime: new Date("2022/12/08 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1461,9 +1469,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/01/31"),
-      startTime: new Date("2023/01/31 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/10/10"),
+      startTime: new Date("2022/10/10 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1496,9 +1504,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/02/07"),
-      startTime: new Date("2023/02/07 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/10/17"),
+      startTime: new Date("2022/10/17 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1531,9 +1539,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/02/14"),
-      startTime: new Date("2023/02/14 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/10/24"),
+      startTime: new Date("2022/10/24 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1566,9 +1574,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/02/21"),
-      startTime: new Date("2023/02/21 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/10/31"),
+      startTime: new Date("2022/10/31 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1601,9 +1609,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/02/28"),
-      startTime: new Date("2023/02/28 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/11/07"),
+      startTime: new Date("2022/11/07 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1636,9 +1644,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/03/07"),
-      startTime: new Date("2023/03/07 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/11/14"),
+      startTime: new Date("2022/11/14 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1671,9 +1679,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/03/14"),
-      startTime: new Date("2023/03/14 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/11/21"),
+      startTime: new Date("2022/11/21 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1706,9 +1714,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/03/21"),
-      startTime: new Date("2023/03/21 16:00"),
+      attendance: CreateStudentAttendance(mixedGroupStudents),
+      startDate: new Date("2022/11/28"),
+      startTime: new Date("2022/11/28 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1741,9 +1749,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/03/28"),
-      startTime: new Date("2023/03/28 16:00"),
+      attendance: mixedGroupStudents,
+      startDate: new Date("2022/12/01"),
+      startTime: new Date("2022/12/01 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1776,9 +1784,9 @@ const CreateSessions = async () => {
           cohortName: softwareEng.courseName,
         },
       ],
-      attendance: mixedGroupOfStudents,
-      startDate: new Date("2023/04/04"),
-      startTime: new Date("2023/04/04 16:00"),
+      attendance: mixedGroupStudents,
+      startDate: new Date("2022/12/11"),
+      startTime: new Date("2022/12/11 16:00"),
       duration: 120,
       isOpen: false,
     },
@@ -1804,8 +1812,11 @@ const main = async () => {
   await CreateModules();
   await Break();
   await CreateSessions();
-  await Break().then(process.exit());
-  console.log("Database seeded");
+  await Break();
+  await Break().then(() => {
+    console.log("Database seeded");
+    process.exit(0);
+  });
 };
 
 main();
