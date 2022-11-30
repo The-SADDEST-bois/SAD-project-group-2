@@ -49,3 +49,5 @@ app.use("/advisor", AdvisorRouteHandler);
 app.use("/tutor", TutorRouteHandler);
 app.use("/moduleLeader", ModuleLeaderRouteHandler);
 app.use("/courseLeader", CourseLeaderRouteHandler);
+
+export { app };

@@ -3,6 +3,7 @@ import Sessions from "../Models/Session";
 import StatusCode from "../Utils/StatusCodes";
 
 export const AdviseesByAdvisor = (request: any, response: any) => {
+  //console.log(response);
   const advisorId = request.query.advisorId;
 
   var GetAdviseesQuery = AcademicAdvisors.find({
