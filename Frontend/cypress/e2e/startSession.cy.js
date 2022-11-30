@@ -5,7 +5,7 @@ describe("Starting a session", () => {
     cy.visit("http://127.0.0.1:5173/");
   });
 
-  it("should sucessfully start a session", () => {
+  it("should sucessfully start a session if session is there", () => {
     cy.loginFunction("georgeporgy@uni.com");
     cy
       .intercept(
@@ -21,5 +21,11 @@ describe("Starting a session", () => {
     cy.wait("@startSession").then((response) => {
       expect(response.state).to.equal("Complete");
     });
+  });
+
+  it("should not find a session if there are no sessions", () => {
+    cy.loginFunction("janekane@uni.com");
+
+    cy.get('[data-cy="joinSessionButton"]').should("not.exist");
   });
 });
