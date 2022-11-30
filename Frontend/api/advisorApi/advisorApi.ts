@@ -24,21 +24,3 @@ export const getAdviseesByAdvisorId = async (advisorId: string) => {
     return error.response;
   }
 };
-
-export const getAdviseeAttendanceByModule = async (
-  adviseeId: string,
-  moduleName: string
-) => {
-  try {
-    return await api.get(
-      "/advisor/adviseeAttendanceByModule",
-      headerAuthorisationWithParams({
-        adviseeId: adviseeId,
-        moduleName: moduleName,
-      })
-    );
-  } catch (error: any) {
-    console.log(error);
-    return error.response;
-  }
-};

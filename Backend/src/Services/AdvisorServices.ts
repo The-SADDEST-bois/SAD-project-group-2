@@ -43,31 +43,3 @@ export const OverallAdviseeAttendance = async (request: any, response: any) => {
     overallAttendance: overallAttendance,
   });
 };
-
-export const AdviseeAttendanceByModule = async (
-  request: any,
-  response: any
-) => {
-  const adviseeId = request.query.adviseeId;
-  const moduleName = request.query.moduleName;
-  var attendanceFromAdviseeSessions = await Sessions.find({
-    "attendance.studentId": adviseeId,
-    moduleName: moduleName,
-  }).select("attendance");
-
-  var numberOfSessions = attendanceFromAdviseeSessions.length;
-  var numberOfSessionsAttended = 0;
-
-  attendanceFromAdviseeSessions.forEach((session: any) => {
-    session.attendance.forEach((attendance: any) => {
-      if (attendance.studentId == adviseeId && attendance.status == 1) {
-        numberOfSessionsAttended++;
-      }
-    });
-  });
-
-  var overallAttendance = numberOfSessionsAttended / numberOfSessions;
-  return response.status(StatusCode.OK).json({
-    overallAttendance: overallAttendance,
-  });
-};
