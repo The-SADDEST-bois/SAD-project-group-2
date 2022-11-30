@@ -20,7 +20,7 @@ export const AdviseeAttendanceIndicators = ({_id}: Idstring) => {
 
   return (
     <>
-      <h2>{overallAttendance}</h2>
+      <h2>{overallAttendance}%</h2>
     </>
   );
 };
