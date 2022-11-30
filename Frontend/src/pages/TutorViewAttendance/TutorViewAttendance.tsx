@@ -29,15 +29,15 @@ const TutorViewAttendance = () => {
       setStartDate(undefined);
       setEndDate(undefined);
     } else if (dateSelection == "Semester 1") {
-      setStartDate(new Date("2022/01/01"));
-      setEndDate(new Date("2022/10/16"));
+      setStartDate(new Date("2022/10/01"));
+      setEndDate(new Date("2022/11/15"));
     } else if (dateSelection == "Semester 2") {
-      setStartDate(new Date("2022/10/17"));
+      setStartDate(new Date("2022/11/16"));
       setEndDate(new Date("2023/01/01"));
     }
   }, [dateSelection]);
 
-  const { isLoading, isError, moduleData, } = useGetAllModules();
+  const { isLoading, isError, moduleData } = useGetAllModules();
 
   if (isError) return <Text>Something went wrong</Text>;
 

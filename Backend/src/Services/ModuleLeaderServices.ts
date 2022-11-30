@@ -72,6 +72,7 @@ export const OverallCohortAttendance = async (request: any, response: any) => {
     }).select("attendance");
 
     var cohortAttendance: any[] = [];
+
     studentsInCohortIds.forEach((studentId) => {
       attendanceFromSessionsByModule.forEach((session) => {
         session.attendance.forEach((student: any) => {
@@ -84,12 +85,13 @@ export const OverallCohortAttendance = async (request: any, response: any) => {
 
     var numberOfStudents = cohortAttendance.length;
     var numberOfAttended = cohortAttendance.filter(
-      (status: string | number) => status === 1
+      (status) => status === 1
     ).length;
     const overallAttendancePercentage = (
       (numberOfAttended / numberOfStudents) *
       100
     ).toFixed(2);
+
     return response.status(StatusCode.OK).json({
       overallAttendancePercentage: overallAttendancePercentage,
     });
