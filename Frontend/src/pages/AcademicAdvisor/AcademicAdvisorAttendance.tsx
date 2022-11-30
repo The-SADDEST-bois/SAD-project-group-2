@@ -1,4 +1,4 @@
-import { Flex, VStack, Select, Text } from "@chakra-ui/react";
+import { Flex, VStack, Select, Text, HStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
@@ -48,13 +48,15 @@ const AcademicAdvisorAttendance = () => {
                 {!isLoading &&
                   !isError &&
                   advisees.map((item: Iadvisee) => (
-                    <>
-                    <Text>
-                      {item.firstName}
-                      {item.lastName}{" "}
-                      <AdviseeAttendanceIndicators _id={item._id} />
-                    </Text>
-                    </>
+                    <Flex justifyContent={"space-evenly"}>
+                      <HStack width={"full"}>
+                        <Text>
+                          {item.firstName}
+                          {item.lastName}
+                        </Text>
+                      </HStack>
+                        <AdviseeAttendanceIndicators _id={item._id} />
+                    </Flex>
                   ))}
               </VStack>
             </VStack>
