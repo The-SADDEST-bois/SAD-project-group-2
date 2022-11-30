@@ -23,7 +23,7 @@ import { setStudentAttendance } from "../../../api/sessionApi/sessionApi";
 import { useToasts } from "../../hooks/useToasts/useToasts";
 import { useGetSessionAttendees } from "../../pages/TutorDashboard/hooks/useGetSessionAttendees/useGetSessionAttendees";
 import { AxiosResponse } from "axios";
-import { calculateSessionAttendanceReport } from "../../utils/calculateAttendance/calculateAttendance"; 
+import { calculateSessionAttendanceReport } from "../../utils/calculateAttendance/calculateAttendance";
 
 export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
   const { onSuccessToast, onErrorToast } = useToasts();
@@ -108,6 +108,7 @@ export const SessionModal = ({ isOpen, onClose, session }: ISessionModal) => {
                         {user.firstName} {user.lastName}
                       </Text>
                       <Select
+                        data-cy="attendanceIndicator"
                         width={"70px"}
                         value={user.status}
                         onChange={(e) =>
