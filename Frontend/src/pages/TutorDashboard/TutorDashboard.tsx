@@ -33,6 +33,25 @@ const TutorDashboard = () => {
     setCurrentSession(session);
     onOpen();
   };
+  
+  const setSessionClosed = () => {
+    mutation.mutate(
+      { ...currentSession, isOpen: false },
+      {
+        onSuccess: (response) => {
+          if (response.status === 500 || response.status === 400) {
+            onErrorToast(`Error Closing Session`, response.data.message);
+            return;
+          }
+          onClose();
+        },
+        onError: (error) => {
+          onErrorToast("Error Starting Session");
+          console.log(error);
+        },
+      }
+    );
+  }
 
   const mutation = useMutation({
     mutationFn: setSessionOpen,
@@ -40,7 +59,7 @@ const TutorDashboard = () => {
 
   const handleSubmit = (session: ISession) => {
     mutation.mutate(
-      { ...session, isOpen: !session.isOpen },
+      { ...session, isOpen: true },
       {
         onSuccess: (response) => {
           handleResponse(session, response);
@@ -116,7 +135,7 @@ const TutorDashboard = () => {
 
             <SessionModal
               isOpen={isOpen}
-              onClose={onClose}
+              onClose={setSessionClosed}
               session={currentSession}
             />
           </Flex>
