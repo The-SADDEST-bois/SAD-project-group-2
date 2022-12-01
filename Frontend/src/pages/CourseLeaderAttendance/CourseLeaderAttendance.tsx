@@ -1,6 +1,5 @@
 import { Flex, Select, VStack, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { useQuery } from "react-query";
 import { DynamicNavBar } from "../../components/DynamicNavbar/DynamicNavBar";
 import { PageWithSideBar } from "../../components/PageWithSideBar/PageWithSideBar";
 import { useStore } from "../../contexts/storeProvider";
@@ -22,10 +21,11 @@ const CourseLeaderAttendance = () => {
         if (item?.courseName == selectData) {
           setCourseSelection(item);
           return;
-        } else {
-          setCourseSelection({} as ICourse);
         }
       });
+      if (selectData == "") {
+        setCourseSelection({} as ICourse);
+      }
     }
   }, [selectData]);
 

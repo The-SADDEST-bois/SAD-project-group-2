@@ -18,7 +18,7 @@ export const IsAdvisorRole = (request: string) => {
 
 export const IsTutorRole = (request: string) => {
   const role = GetRoleFromRequest(request);
-  return role === Roles.Tutor || role === Roles.ModuleLeader || role === Roles.CourseLeader;
+  return role === Roles.Tutor || role === Roles.ModuleLeader || role === Roles.CourseLeader || role === Roles.AcademicAdvisor;
 };
 
 export const IsModuleLeaderRole = (request: string) => {

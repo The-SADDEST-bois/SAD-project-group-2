@@ -48,19 +48,19 @@ export const AcademicAdvisorNavbar: NavbarItems[] = [
   {
     label: "View Session",
     icon: <HiOutlineCalendar size="40" />,
-    url: "",
+    url: "/",
   },
 
   {
     label: "View Attendance",
     icon: <HiOutlineBookOpen size="40" />,
-    url: "",
+    url: "/tutorviewattendance",
   },
 
   {
     label: "View Advisee Attendance",
     icon: <HiOutlineBookOpen size="40" />,
-    url: "",
+    url: "/academicAdvisorViewAttendance",
   },
 ];
 

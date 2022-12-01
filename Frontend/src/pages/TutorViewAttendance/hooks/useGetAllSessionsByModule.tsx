@@ -7,7 +7,7 @@ export const useGetAllSessionsByModule = (moduleName: string) => {
   const store = useStore();
 
   const { isLoading, isError, data, refetch } = useQuery({
-    queryKey: "allSessionsByModule",
+    queryKey: ['allSessionsByModule', moduleName, store?.auth.user._id],
     queryFn: () => getAllSessionsPerModule(moduleName),
     refetchOnWindowFocus: true,
   });

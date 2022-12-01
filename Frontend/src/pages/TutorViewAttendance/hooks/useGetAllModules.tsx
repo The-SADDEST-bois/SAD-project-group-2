@@ -7,7 +7,7 @@ export const useGetAllModules = () => {
   const store = useStore();
 
   const { isLoading, isError, data, refetch, } = useQuery({
-    queryKey: "allModules",
+    queryKey: ['allModules', store?.auth.user._id],
     queryFn: () => getAllModulesByTutor(store.auth.user._id as string),
     refetchOnWindowFocus: true,
   });

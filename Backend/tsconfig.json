@@ -12,9 +12,13 @@
             "*": [
                 "node_modules/*"
             ]
-        }
+        },
+        "types": [
+            "reflect-metadata",
+            "jest",
+            "node",
+        ]
     },
     "include": [
-        "src/**/*"
-, "types"    ]
+        "src/**/*", "types", "tests"    ]
 }

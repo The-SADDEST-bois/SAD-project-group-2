@@ -19,10 +19,11 @@ const ModuleLeaderAttendance = () => {
         if (item.moduleName == selectData) {
           setModuleSelection(item);
           return;
-        } else {
-          setModuleSelection({} as IModule);
         }
       });
+      if (selectData == "") {
+        setModuleSelection({} as IModule);
+      }
     }
   }, [selectData]);
 

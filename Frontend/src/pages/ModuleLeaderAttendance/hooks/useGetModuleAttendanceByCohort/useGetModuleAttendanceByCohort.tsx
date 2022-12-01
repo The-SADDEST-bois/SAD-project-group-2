@@ -12,7 +12,7 @@ export const useGetModuleAttendanceByCohort = ({
   moduleName,
 }: IuseGetModuleAttendanceByCohort) => {
   const { isLoading, isError, data, refetch } = useQuery({
-    queryKey: "allModulesByCohort",
+    queryKey: ['useGetModuleAttendanceByCohort', cohortName, moduleName],
     queryFn: () => getOverallCohortAttendance(cohortName, moduleName),
     refetchOnWindowFocus: true,
   });
