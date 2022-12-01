@@ -19,8 +19,6 @@ export const LoginUser = async (request: any, response: any) => {
         user.password
       );
       if (validPassword) {
-        console.log("VALID");
-
         const cleanUser: IUser = {
           _id: user._id,
           firstName: user.firstName,
@@ -39,9 +37,6 @@ export const LoginUser = async (request: any, response: any) => {
           .json({ messasge: "Success", user: cleanUser, accessToken: newToken })
           .send();
       }
-
-      console.log("NOT VALID");
-
       return response
         .status(StatusCode.UNAUTHORIZED)
         .json({ error: "Invalid Password" });
@@ -50,7 +45,6 @@ export const LoginUser = async (request: any, response: any) => {
       .status(StatusCode.UNAUTHORIZED)
       .json({ error: "User does not exist" });
   } catch (error) {
-    console.log(error);
     return response
       .status(StatusCode.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
@@ -77,7 +71,6 @@ export const ReauthenticateUser = async (request: any, response: any) => {
       password: "",
       role: user.role,
     };
-    console.log("REAUTHENTICATE", Date.now());
     return response
       .status(StatusCode.OK)
       .json({ messasge: "Success", user: cleanUser })
@@ -93,14 +86,10 @@ export const RegisterUser = async (request: any, response: any) => {
   const userObj = request.body;
   const salt = await bcrypt.genSalt(10);
   userObj.password = await bcrypt.hash(userObj.password, salt);
-
   Users.create(userObj, (err: any, document: any) => {
     if (err) {
-      console.log("error registering", err);
       return response.status(StatusCode.BAD_REQUEST).send(err);
     }
-
-    console.log("successful register", document);
     return response.status(StatusCode.OK).send("ok");
   });
 };
@@ -108,12 +97,10 @@ export const RegisterUser = async (request: any, response: any) => {
 export const AllStudents = (request: any, response: any) => {
   Users.find({ role: "Student" }, (err: any, document: any) => {
     if (err) {
-      console.log("error getting students", err);
       return response
         .status(err.status || StatusCode.BAD_REQUEST)
         .json({ error: "Error getting students", message: err });
     }
-    console.log("successful student retrieval", document);
     return response.status(StatusCode.OK).json(document);
   });
 };
