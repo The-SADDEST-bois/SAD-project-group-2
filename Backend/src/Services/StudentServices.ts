@@ -6,7 +6,6 @@ import StatusCode from "../Utils/StatusCodes";
 export const RegisterStudentAttendance = (request: any, response: any) => {
   const body = request.body;
   const { sessionCode, userId } = body;
-  console.log("SessionCode: " + sessionCode + " UserId: " + userId);
 
   const filter = {
     sessionCode: sessionCode,
@@ -32,7 +31,6 @@ export const RegisterStudentAttendance = (request: any, response: any) => {
         message: err,
       });
     }
-    console.log("Document: ", document);
     var result = DocumentResultManager(document);
 
     if (result === DocumentStatus.PreviouslyUpdated) {
@@ -46,7 +44,6 @@ export const RegisterStudentAttendance = (request: any, response: any) => {
         message: "Unable to join this session",
       });
     }
-    console.log("Joined session");
     return response.status(StatusCode.OK).json({
       message: "Successfully joined session",
     });
