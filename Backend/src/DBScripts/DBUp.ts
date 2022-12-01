@@ -795,7 +795,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
-      sessionCode: "984523",
+      sessionCode: "805934",
       moduleName: "Software Architecture",
       tutor: {
         firstName: softwareArchitecture.tutors[0].firstName,
@@ -1407,7 +1407,7 @@ const CreateSessions = async () => {
     },
     {
       sessionType: SessionTypes.Lecture,
-      sessionCode: "519082",
+      sessionCode: "994782",
       moduleName: "Human Factors",
       tutor: {
         firstName: humanFactors.tutors[0].firstName,
