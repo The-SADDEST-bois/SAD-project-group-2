@@ -7,6 +7,7 @@ import StatusCode from "../Utils/StatusCodes";
 import { accessToken, verifyToken } from "../middleware/jwt";
 
 export const LoginUser = async (request: any, response: any) => {
+  console.log(request.body);
   try {
     const body = request.body.data;
     const { email, password } = body;
@@ -90,10 +91,11 @@ export const ReauthenticateUser = async (request: any, response: any) => {
 };
 
 export const RegisterUser = async (request: any, response: any) => {
+  console.log(request.body);
   const userObj = request.body;
   const salt = await bcrypt.genSalt(10);
   userObj.password = await bcrypt.hash(userObj.password, salt);
-
+  console.log(userObj.password);
   Users.create(userObj, (err: any, document: any) => {
     if (err) {
       console.log("error registering", err);
