@@ -18,7 +18,7 @@ export const CourseAccordionData = ({ moduleName }: ICourseAccordionData) => {
     >
       {!isLoading && !isError && percentageAttendance && (
         <>
-          <Text>{moduleName} Cohort</Text>
+          <Text>{moduleName}</Text>
           <Text fontWeight={"bolder"}>{percentageAttendance}%</Text>
         </>
       )}

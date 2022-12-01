@@ -78,12 +78,6 @@ export const CourseLeaderNavbar: NavbarItems[] = [
   },
 
   {
-    label: "View Module Attendance",
-    icon: <HiOutlineBookOpen size="40" />,
-    url: "/moduleleaderattendance",
-  },
-
-  {
     label: "View Course Attendance",
     icon: <HiOutlineBookOpen size="40" />,
     url: "/courseleaderattendance",
