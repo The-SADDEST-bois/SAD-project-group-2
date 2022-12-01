@@ -4,11 +4,9 @@ import chaiHttp from "chai-http";
 import { app } from "../src/index";
 import chai, { expect } from "chai";
 
-// AdvisorId: 638635700a36b0ced11107fe
-
 chai.use(chaiHttp);
 
-describe("LoginServices ", () => {
+describe("LoginServices ", async () => {
   // mocha, chai, testing for login using chaiHttp
   it("should return 200 ok if valid user", async () => {
     const result = await chai
@@ -35,7 +33,6 @@ describe("LoginServices ", () => {
       });
     expect(result.status).to.equal(401);
   });
-
 });
              
 describe("should register a user", () => {
@@ -44,19 +41,14 @@ describe("should register a user", () => {
       .request(app)
       .post("/user/register")
       .send({
-        
-          email: "testt@uni.com",
-          password: "passwordd",
+          email: "test@uni.com",
+          password: "password",
           role: "tutor",
           firstName: "fred",
           lastName: "johns",
-        
       });
     expect(result.status).to.equal(200);
   });
-
-
-
 });
 
 describe("return all students", () => {
@@ -67,9 +59,4 @@ describe("return all students", () => {
       //console.log(result);
     expect(result.status).to.equal(200);
   });
-
-
-
 });
-
-
